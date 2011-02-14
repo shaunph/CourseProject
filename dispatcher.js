@@ -61,6 +61,7 @@ function send_obj(response, filename, type) {
 	    fullpath = img_root + filename;
     } else {
 	    error_500(response);
+            util.log("\t\tfile type not recognized: " + type);
     }
     path.exists(fullpath, function(exists) {
        if (exists) {
@@ -69,6 +70,7 @@ function send_obj(response, filename, type) {
            util.pump(fs.createReadStream(fullpath), response, function() {});
        } else {
 	   error_500(response);
+           util.log("\t\tfile reported to exist, but can't be found: " + filename);
        }
     });
 }
