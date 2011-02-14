@@ -56,11 +56,12 @@ function resolve(req, res) {
 function send_obj(response, filename, type) {
     var fullpath;
     if (type == "text/html") {
-	    fullpath = page_root + filename;
+	   fullpath = page_root + filename;
     } else if (type == "image/jpeg") {
-	    fullpath = img_root + filename;
+	   fullpath = img_root + filename;
     } else {
-	    error_500(response);
+           error_500(response);
+           util.log("\t-> file type not recognized: " + type);
     }
     path.exists(fullpath, function(exists) {
        if (exists) {
@@ -69,6 +70,7 @@ function send_obj(response, filename, type) {
            util.pump(fs.createReadStream(fullpath), response, function() {});
        } else {
 	   error_500(response);
+           util.log("\t-> file reported to exist, but can't be found: " + filename);
        }
     });
 }
