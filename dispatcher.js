@@ -75,10 +75,20 @@ function send_obj(response, filename, type) {
     });
 }
 
-/* For now, use some unpriviledged port */
-http.createServer(resolve).listen(port);
+function init(args) {
+	if (args.length != 3) {
+		console.log("Usage: node dispatcher <port>");
+	} else {
+		/* dies with exception if args[3] is not a number */
+		port = Number(args[3]);
+		http.createServer(resolve).listen(port);
 
-/* Intelligently report the hostname and port. Assumes we are using a UNIX environment. */
-exec("uname -n", function(error, stdout, stderr) {
-	util.log("Server running at " + stdout.slice(0, stdout.length-1) + ":" + port);
-});
+		/* TODO: put this back when node is upgraded using os.getHostName() */
+		/* Intelligently report the hostname and port. Assumes we are using a UNIX environment. */
+		//exec("uname -n", function(error, stdout, stderr) {
+		//	util.log("Server running at " + stdout.slice(0, stdout.length-1) + ":" + port);
+		//});
+	}
+}
+
+init(process.argv);
