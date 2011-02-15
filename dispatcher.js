@@ -80,7 +80,7 @@ function init(args) {
 		console.log("Usage: node dispatcher <port>");
 	} else {
 		/* dies with exception if args[3] is not a number */
-		port = Number(args[3]);
+		port = Number(args[2]);
 		http.createServer(resolve).listen(port);
 
 		/* TODO: put this back when node is upgraded using os.getHostName() */
