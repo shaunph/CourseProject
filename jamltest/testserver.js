@@ -3,7 +3,9 @@ var fs = require('fs');
 var url = require('url');
 var path = require('path');
 var pages = require('../pagemaker')
-var port = 1025;
+var port1 = 1025;
+var port2 = 10080;
+var port3 = 10800;
 
 function SendPage(response, page)
 {
@@ -77,7 +79,41 @@ hserver = http.createServer( function (request, response)
 //		fs.readdir(".", function (err,files) { console.log(files);});
 	});
 
-hserver.listen(port);
+if (process.argv.length >= 3)
+	{ hserver.listen(process.argv[2]); }
+else try
+{
+	hserver.listen(port1);
+	console.log("Server Running on port " + port1);
+}
+catch (e1)
+{
+	console.log("failed to listen on port " + port1);
+	console.log(e1);
+	hserver.close();
+	try
+	{
+		hserver.listen(port2);
+		console.log("Server Running on port " + port2);
+	}
+	catch (e2)
+	{
+		console.log("failed to listen on port " + port2);
+		console.log(e2);
+		hserver.close();
+		try
+		{
+			hserver.listen(port3);
+			console.log("Server Running on port " + port3);
+		}
+		catch (e3)
+		{
+			console.log("failed to listen on port " + port3);
+			console.log(e3);
+			hserver.close();
+		}
+	}
+}
 
 page1.setContent("Jean-Claude Camille François Van Varenberg (born 18 October 1960), professionally known as Jean-Claude Van Damme (French pronunciation: [ʒɑ̃ klod vɑ̃ dam]), is a Belgian martial artist and actor.[1] Van Damme is best known for his martial arts action movies.[2] His most successful films include Bloodsport (1988), Kickboxer (1989), Double Impact (1991), Universal Soldier (1992), Hard Target (1993), Timecop (1994), and JCVD (2008).[3]" 
 +"Due to his physique and his Belgian background, he is known as 'The Muscles from Brussels.'After studying martial arts intensively from the age of ten, Van Damme achieved national success in Belgium as a martial artist and bodybuilder, earning the 'Mr. Belgium' bodybuilding title.[4]"
@@ -92,4 +128,3 @@ page3.setContent("Developed under the project code MX-607 at Wright Field in Ohi
 +"<br><img src='http://upload.wikimedia.org/wikipedia/en/thumb/f/f8/JB-4_in_shop.png/300px-JB-4_in_shop.png'><br>"
 +"The JB-4 utilised television/radio-command guidance, with an AN/AXT-2 transmitter broadcasting a television signal from a camera in the missile's nose to a remote operator. The operator, viewing the transmitted picture, would then transmit commands to the missile via radio, correcting the missile's course to ensure striking the target.[1]");
 
-console.log("Server Running");
