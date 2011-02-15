@@ -3,9 +3,7 @@ var fs = require('fs');
 var url = require('url');
 var path = require('path');
 var pages = require('../pagemaker')
-var port1 = 1025;
-var port2 = 10080;
-var port3 = 10800;
+var ports = [1025, 10080,10800];
 
 function SendPage(response, page)
 {
@@ -79,40 +77,32 @@ hserver = http.createServer( function (request, response)
 //		fs.readdir(".", function (err,files) { console.log(files);});
 	});
 
-if (process.argv.length >= 3)
-	{ hserver.listen(process.argv[2]); }
-else try
+
+function startServer(server, port)
 {
-	hserver.listen(port1);
-	console.log("Server Running on port " + port1);
-}
-catch (e1)
-{
-	console.log("failed to listen on port " + port1);
-	console.log(e1);
-	hserver.close();
 	try
 	{
-		hserver.listen(port2);
-		console.log("Server Running on port " + port2);
+		server.listen(port);
 	}
-	catch (e2)
+	catch (e1)
 	{
-		console.log("failed to listen on port " + port2);
-		console.log(e2);
+		console.log("failed to listen on port " + port);
+		console.log(e1);
 		hserver.close();
-		try
-		{
-			hserver.listen(port3);
-			console.log("Server Running on port " + port3);
-		}
-		catch (e3)
-		{
-			console.log("failed to listen on port " + port3);
-			console.log(e3);
-			hserver.close();
-		}
+		return 0;
 	}
+
+	console.log("listening on port " + port);
+	return 1;
+}
+
+if (process.argv.length >= 3)
+	{ startServer(hserver,process.argv[2]); }
+else
+{
+	i = 0;
+	while (startServer(hserver,ports[i]) == 0 && i < ports.length)
+		{ i++; }
 }
 
 page1.setContent("Jean-Claude Camille François Van Varenberg (born 18 October 1960), professionally known as Jean-Claude Van Damme (French pronunciation: [ʒɑ̃ klod vɑ̃ dam]), is a Belgian martial artist and actor.[1] Van Damme is best known for his martial arts action movies.[2] His most successful films include Bloodsport (1988), Kickboxer (1989), Double Impact (1991), Universal Soldier (1992), Hard Target (1993), Timecop (1994), and JCVD (2008).[3]" 
