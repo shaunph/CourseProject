@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Sign Up</title>
+		<script type="text/javascript" src="js/jquery-1.5.min.js"></script>
+		<script type="text/javascript" src="js/signup.js"></script>
+		
+	</head>
+	<body>
+		<form action="signup-request.html" id="signupForm" method="post">
+		
+			<label>Email: <br /><input type=email id=Email oninput="verify('Email');" required></label> <br />
+			
+			<label>Confirm Email: <br /><input type=email id=EmailConf oninput="verify('Email');" required>
+				<div id="EmailValid" style="display:inline; color:#00ff00;"></div>
+			</label><br />
+			
+			<label>Username (optional): <br /><input id=userName></label><br />
+			
+			<label>Password: <br /><input type=password id=Password oninput="verify('Password');" required >
+				<div id=PasswordStrength style="display:inline; color:#ff0000;"></div>
+			</label><br />
+			
+			<label>Confirm Password: <br /><input type=Password id=PasswordConf oninput="verify('Password');" required>
+				<div id="PasswordValid" style="display:inline; color:#00ff00;"></div>
+			</label><br />
+			
+			<br /><input id="submitButton" type=submit value="Sign up" disabled=disabled><br />
+		</form>
+	</body>
+</html>
