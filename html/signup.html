@@ -9,19 +9,19 @@
 	<body>
 		<form action="signup-request.html" id="signupForm" method="post">
 		
-			<label>Email: <br /><input type=email id=Email oninput="verify('Email');" required></label> <br />
+			<label>Email: <br /><input type=email id=Email onkeyup="verify('Email');" required></label> <br />
 			
-			<label>Confirm Email: <br /><input type=email id=EmailConf oninput="verify('Email');" required>
+			<label>Confirm Email: <br /><input type=email id=EmailConf onkeyup="verify('Email');" required>
 				<div id="EmailValid" style="display:inline;"></div>
 			</label><br />
 			
 			<label>Username (optional): <br /><input id=userName></label><br />
 			
-			<label>Password: <br /><input type=password id=Password oninput="verify('Password');" required >
+			<label>Password: <br /><input type=password id=Password onkeyup="verify('Password');" required >
 				<div id=PasswordStrength style="display:inline;"></div>
 			</label><br />
 			
-			<label>Confirm Password: <br /><input type=Password id=PasswordConf oninput="verify('Password');" required>
+			<label>Confirm Password: <br /><input type=Password id=PasswordConf onkeyup="verify('Password');" required>
 				<div id="PasswordValid" style="display:inline;"></div>
 			</label><br />
 			
