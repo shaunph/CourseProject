@@ -8,7 +8,8 @@ var http = require('http'),
 var port = 5678;
 var page_root = "html",
     img_root = "html/img",
-    error_root = "html/error_pages";
+    error_root = "html/error_pages",
+	js_root = "html/js";
 
 function error_404(response, filename)
 {
@@ -45,10 +46,10 @@ function resolve(req, res) {
 	case "/signup.html":	//The signup page.
 		send_obj(res, pathname, "text/html");			
 		break;
-	case "/js/signup.js":	//The signup page.
+	case "/signup.js":	//The signup page.
 		send_obj(res, pathname, "text/javascript");
 		break;
-	case "/js/jquery-1.5.min.js":	//The signup page.
+	case "/jquery-1.5.min.js":	//The signup page.
 		send_obj(res, pathname, "text/javascript");
 		break;
 	/* END */
@@ -71,6 +72,8 @@ function send_obj(response, filename, type) {
 	   fullpath = page_root + filename;
     } else if (type == "image/jpeg") {
 	   fullpath = img_root + filename;
+    } else if (type == "text/javascript") {
+	   fullpath = js_root + filename;
     } else {
            error_500(response);
            util.log("\t-> file type not recognized: " + type);
