@@ -26,7 +26,7 @@ function verify(field) {
 		}
 		else if(first.length < 8) {
 			$('#'+field+'Strength').html("Moderate");
-			$('#'+field+'Strength').css('color', '#ffff00');
+			$('#'+field+'Strength').css('color', '#DDDD00');
 		}
 		else {
 			$('#'+field+'Strength').html("Good");
