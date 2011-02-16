@@ -2,7 +2,7 @@ var http = require('http');
 var fs = require('fs');
 var url = require('url');
 var path = require('path');
-var pages = require('../pagemaker')
+var pages = require('../../js/pagemaker')
 var ports = [1025, 10080,10800];
 
 function SendPage(response, page)
