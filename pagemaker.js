@@ -85,7 +85,7 @@ StandardPage = function()
 	this.menu = new Array();
 	this.content = "<!-- needs some content -->";
 	this.css = {href: "style.css", rel:"stylesheet", type: "text/css"};
-
+	
 	/*
 	 * setContent(String newcontent) sets the content for the page.
 	 *	This will be in the form of HTML, and will be placed in it's 
@@ -95,6 +95,14 @@ StandardPage = function()
 	this.setContent = function(newcontent) 
 		{ this.content = newcontent; }
 
+	/*
+	 * addContent(String newContent) adds the newContent to the current
+	 * content that is already there.
+	 */
+	this.addContent = function(newcontent) {
+		this.content += newcontent;
+	}
+	
 	/*
 	 * setTitle(String newtitle) sets the title for the page
 	 *

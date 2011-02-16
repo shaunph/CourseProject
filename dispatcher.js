@@ -94,21 +94,22 @@ function send_obj(response, filename, type) {
 			
 			
 			var page = new StandardPage();
+			//need a way to get the title from the page
 			page.setTitle("Testing");
-		   
+			
+			//need a way to remove the <head> from the page
+			//and instead put it into: 
+			//page.addHead(data);
+			
 			//create header
 
 			//create file input stream
 			var istream = fs.createReadStream(fullpath);
-			var content;
 			istream.on('data', function(data) {
-				content += data;	//write data
+				page.addContent(data);
 			});
 			istream.on('end', function() {
-			
-				page.setContent(content);
-				response.write(page.toHTML());
-				response.end();
+				response.end(page.toHTML());
 			});
 			//if there was an error handle it.
 			istream.on('error', function(error) {
