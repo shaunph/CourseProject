@@ -40,9 +40,18 @@ function resolve(req, res) {
 	case "/test.jpg":
 	    send_obj(res, "/test.jpg", "image/jpeg");
 	    break;
+	
+	/* START: Files needed for the signup page */
 	case "/signup.html":	//The signup page.
-		send_obj(res, "/signup.html", "text/html");
+		send_obj(res, pathname, "text/html");			
 		break;
+	case "/js/signup.js":	//The signup page.
+		send_obj(res, pathname, "text/javascript");
+		break;
+	case "/js/jquery-1.5.min.js":	//The signup page.
+		send_obj(res, pathname, "text/javascript");
+		break;
+	/* END */
 
 	/* reported to exist, but doesn't actually exist */
         case "/server_error":
