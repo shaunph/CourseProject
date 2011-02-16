@@ -38,6 +38,15 @@ var jaml = require('./jaml');
 
 
 /*
+ * 'script' Jaml function- takes a script={String url} object 
+ *	as argument, formats a reference in the page head to this file
+ */
+Jaml.register('script', function(file)
+		{
+			script({type:'text/javascript', src:file.url });
+		});
+
+/*
  * 'menu' Jaml function- takes a menu={String url, String display} object 
  *	as argument, and formats a link for the menu div of the page
  */
@@ -61,7 +70,8 @@ Jaml.register('stdpage', function(page)
 		html(
 			head(
 				title(page.title.toString()),
-				link(page.css)
+				link(page.css),
+				Jaml.render('script', page.script)
 				),
 			body(
 				div({id:"header"},
@@ -83,6 +93,7 @@ StandardPage = function()
 {
 	this.title = "<!-- needs a title -->";
 	this.menu = new Array();
+	this.script = new Array();
 	this.content = "<!-- needs some content -->";
 	this.css = {href: "style.css", rel:"stylesheet", type: "text/css"};
 
@@ -113,6 +124,15 @@ StandardPage = function()
 		}
 
 	/*
+	 * addScript(String newurl)
+	 *	adds a new reference to a javascript file at the url 'newurl'
+	 */
+	this.addScript = function(newurl) 
+		{ 
+			this.script[this.script.length] = { url:newurl }; 
+		}
+
+	/*
 	 * toHTML() - returns the page data, rendered in the form of HTML, 
 	 *	by Jaml.
 	 *
@@ -123,7 +143,8 @@ StandardPage = function()
 				{title: this.title, 
 					menu: this.menu, 
 					content: this.content,
-					css: this.css}); 
+					css: this.css,
+					script: this.script}); 
 		}
 
 	/*
