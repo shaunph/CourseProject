@@ -40,6 +40,9 @@ function resolve(req, res) {
 	case "/test.jpg":
 	    send_obj(res, "/test.jpg", "image/jpeg");
 	    break;
+	case "/signup.html":	//The signup page.
+		send_obj(res, "/signup.html", "text/html");
+		break;
 
 	/* reported to exist, but doesn't actually exist */
         case "/server_error":
