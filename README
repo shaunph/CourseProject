@@ -1,3 +1,25 @@
 University of Calgary
 CPSC 301 (W11)
 Course Project
+
+To run the server (in a UNIX environment with the bash shell), use
+
+$ ./runserver <port>
+
+where port is a positive integer > 1023. To run the server on a different
+environment, use
+
+$ node js/dispatcher.js <node>
+
+To interact with the server with your internet browser, browse host:port
+where host is the hostname of the machine you are running the server
+from, and port is the port you specified. For example, if running
+the server on csc.cpsc.ucalgary.ca with port 5678, browse to
+
+csc.cpsc.ucalgary.ca:5678
+
+or even just
+
+csc:5678
+
+if you are running your browser on a machine which is within the cpsc network.
