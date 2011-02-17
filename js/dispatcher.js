@@ -13,15 +13,9 @@ var cssRoot = "html",
     jsRoot = "html/js",
     pageRoot = "html";
     
-function error404(response, filename) {
-    response.writeHead(404, {"Content-Type": "text/html"});
-    util.pump(fs.createReadStream(errorRoot + "/404.html"), response, function(){});
-}
-
-function error500(response)
-{
-    response.writeHead(500, {"Content-Type": "text/html"});
-    util.pump(fs.createReadStream(errorRoot + "/500.html"), response, function(){});
+function error(response, code) {
+    response.writeHead(code, {"Content-Type": "text/html"});
+    util.pump(fs.createReadStream(errorRoot + "/" + code + ".html"), response, function(){});
 }
 
 function log(request, statusCode, fileMatch) {
@@ -41,48 +35,45 @@ function resolve(request, response) {
     switch(pathname) {
         case "/":
             fileMatch = pageRoot + "/main.html";
-            statusCode = sendObj(request, response, fileMatch, "text/html");
+            sendObj(request, response, fileMatch, "text/html");
             break;
         case "/test.jpg":
             fileMatch = imgRoot + "/test.jpg";
-            statusCode = sendObj(request, response, fileMatch, "image/jpeg");
+            sendObj(request, response, fileMatch, "image/jpeg");
             break;
         case "/style.css":
             fileMatch = cssRoot + "/style.css";
-            statusCode = sendObj(request, response, pathname, "text/css");
+            sendObj(request, response, fileMatch, "text/css");
             break;
 
         /* START: Files needed for the signup page */
-        case "/signup.html":	//The signup page.
+        case "/signup.html":
             fileMatch = pageRoot + "/signup.html";
-            statusCode = sendObj(request, response, fileMatch, "text/html");
+            sendObj(request, response, fileMatch, "text/html");
             break;
-        case "/signup.js":	//The signup page.
+        case "/signup.js":
             fileMatch = jsRoot + "/signup.js";
-            statusCode = sendObj(request, response, fileMatch, "text/javascript");
+            sendObj(request, response, fileMatch, "text/javascript");
             break;
-        case "/jquery-1.5.min.js":	//The signup page.
+        case "/jquery-1.5.min.js":
             fileMatch = jsRoot + "/jquery-1.5.min.js";
-            statusCode = sendObj(request, response, fileMatch, "text/javascript");
+            sendObj(request, response, fileMatch, "text/javascript");
             break;
         /* END */
 
         /* reported to exist, but doesn't actually exist */
         case "/server_error":
             fileMatch = pageRoot + "/server_error.html";
-            statusCode = sendObj(request, response, fileMatch, "text/html");
+            sendObj(request, response, fileMatch, "text/html");
             break;
 
         /* Nothing was found, 404 */
         default:
-            statusCode = 404;
-            error404(response, pathname);
+            error(response, 404);
             break;
     }
 }
 
-				   
-			 
 function sendObj(request, response, file, type) {
     var statusCode = 200;
     path.exists(file, function(exists) {
@@ -117,7 +108,7 @@ function sendObj(request, response, file, type) {
             util.pump(fs.createReadStream(file), response, function() {});
         } else {
             log(request, 500, file);
-            error500(response);
+            error(response, 500);
             console.log("ERROR: file reported to exist, but can't be found: " + file);
         }
     });
