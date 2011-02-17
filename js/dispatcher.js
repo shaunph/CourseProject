@@ -38,7 +38,7 @@ function resolve(request, response) {
     /* register your new pages here, until the database is working */
     var pages = [["/main.html", "text/html"],
                  ["/jquery-1.5.min.js", "text/javascript"],
-		 ["/server_error.html", "text/html"],
+                 ["/server_error.html", "text/html"],
                  ["/signup.html", "text/html"],
                  ["/signup.js", "text/javascript"],
                  ["/style.css", "text/css"],
