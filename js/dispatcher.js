@@ -7,15 +7,13 @@ var exec = require('child_process').exec,
     url = require('url'),
     util = require('util');
 
-var cssRoot = "html",
-    errorRoot = "html/error_pages",
-    imgRoot = "html/img",
-    jsRoot = "html/js",
-    pageRoot = "html";
+var docRoot = "static/",
+    errorRoot = "static/error_pages/";
     
-function error(response, code) {
+function error(request, response, code, file) {
+    log(request, code, file);
     response.writeHead(code, {"Content-Type": "text/html"});
-    util.pump(fs.createReadStream(errorRoot + "/" + code + ".html"), response, function(){});
+    util.pump(fs.createReadStream(errorRoot + code + ".html"), response, function(){});
 }
 
 function log(request, statusCode, fileMatch) {
@@ -27,50 +25,36 @@ function log(request, statusCode, fileMatch) {
    no corresponding object is found, respond with a 404 error page. In case
    an unresolvable exception is encountered, repond with a 500 error page. */
 function resolve(request, response) {
+    var pathname = url.parse(request.url).pathname;
     var fileMatch;
-    pathname = url.parse(request.url).pathname;
 
-    /* presumably the requested path will be searched for in a database, for now
-    let's use a simple switch statement */
-    switch(pathname) {
-        case "/":
-            fileMatch = pageRoot + "/main.html";
-            sendObj(request, response, fileMatch, "text/html");
-            break;
-        case "/test.jpg":
-            fileMatch = imgRoot + "/test.jpg";
-            sendObj(request, response, fileMatch, "image/jpeg");
-            break;
-        case "/style.css":
-            fileMatch = cssRoot + "/style.css";
-            sendObj(request, response, fileMatch, "text/css");
-            break;
+    if (pathname == "/") { pathname = "/main.html"; }
 
-        /* START: Files needed for the signup page */
-        case "/signup.html":
-            fileMatch = pageRoot + "/signup.html";
-            sendObj(request, response, fileMatch, "text/html");
-            break;
-        case "/signup.js":
-            fileMatch = jsRoot + "/signup.js";
-            sendObj(request, response, fileMatch, "text/javascript");
-            break;
-        case "/jquery-1.5.min.js":
-            fileMatch = jsRoot + "/jquery-1.5.min.js";
-            sendObj(request, response, fileMatch, "text/javascript");
-            break;
-        /* END */
+    var extension = pathname.split(".").pop();
+    if (extension == "jpg" || extension == "png" || extension == "gif") {
+	    extension = "img";
+    }
 
-        /* reported to exist, but doesn't actually exist */
-        case "/server_error":
-            fileMatch = pageRoot + "/server_error.html";
-            sendObj(request, response, fileMatch, "text/html");
-            break;
+    /* register your new pages here, until the database is working */
+    var pages = [["/main.html", "text/html"],
+                 ["/jquery-1.5.min.js", "text/javascript"],
+		 ["/server_error.html", "text/html"],
+                 ["/signup.html", "text/html"],
+                 ["/signup.js", "text/javascript"],
+                 ["/style.css", "text/css"],
+                 ["/test.jpg", "image/jpg"]];
 
-        /* Nothing was found, 404 */
-        default:
-            error(response, 404);
-            break;
+    match = 0;
+    for (p in pages) {
+	    if (pages[p][0] == pathname) {
+                match++;
+                fileMatch = docRoot + extension + pathname;
+                sendObj(request, response, fileMatch, pages[p][1]);
+		break;
+	    }
+    } 
+    if (!match) {
+        error(request, response, 404, fileMatch);
     }
 }
 
@@ -107,8 +91,7 @@ function sendObj(request, response, file, type) {
 
             util.pump(fs.createReadStream(file), response, function() {});
         } else {
-            log(request, 500, file);
-            error(response, 500);
+            error(request, response, 500, file);
             console.log("ERROR: file reported to exist, but can't be found: " + file);
         }
     });
