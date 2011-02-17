@@ -43,17 +43,17 @@ function resolve(request, response) {
     if (pathname == "/") { pathname = "/main.html"; }
     var extension = pathname.split(".").pop();
     if (extension == "jpg" || extension == "png" || extension == "gif") {
-	    extension = "img";
+        extension = "img";
     }
 
     match = 0;
     for (p in pages) {
-	    if (pages[p][0] == pathname) {
-                match++;
-                fileMatch = docRoot + extension + pathname;
-                sendObj(request, response, fileMatch, pages[p][1]);
-		break;
-	    }
+        if (pages[p][0] == pathname) {
+            match++;
+            fileMatch = docRoot + extension + pathname;
+            sendObj(request, response, fileMatch, pages[p][1]);
+            break;
+        }
     } 
     if (!match) {
         error(request, response, 404, fileMatch);
@@ -114,7 +114,7 @@ function init(args) {
         http.createServer(resolve).listen(port);
 
         console.log("server listening on " + os.hostname() + ":" + port);
-	console.log("date/time\t  remote ip\tstatus\trequest  ->  resolution");
+        console.log("date/time\t  remote ip\tstatus\trequest  ->  resolution");
     }
 }
 
