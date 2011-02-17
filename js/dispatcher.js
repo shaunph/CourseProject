@@ -3,7 +3,7 @@ var http = require('http'),
     util = require('util'),
     path = require('path'),
     fs = require('fs'),
-	pagemaker = require('./pagemaker'),
+    pagemaker = require('./pagemaker'),
     exec = require('child_process').exec;
 
 var port = 5678;
@@ -129,6 +129,12 @@ function init(args) {
 	if (args.length != 3) {
 		console.log("Usage: node dispatcher <port>");
 	} else {
+		/* if node is run from the js dir, cd back to the project root */
+		dirArray = process.cwd().split("/");
+		if (dirArray.pop() == "js") {
+			process.chdir(dirArray.join("/"));
+		}
+		
 		/* dies with exception if args[2] is not a number */
 		port = Number(args[2]);
 		http.createServer(resolve).listen(port);
