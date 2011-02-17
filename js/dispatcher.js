@@ -9,7 +9,17 @@ var exec = require('child_process').exec,
 
 var docRoot = "static/",
     errorRoot = "static/error_pages/";
-    
+
+/* register your new pages here, until the database is working */
+var pages = [["/main.html", "text/html"],
+             ["/jquery-1.5.min.js", "text/javascript"],
+             ["/server_error.html", "text/html"],
+             ["/signup.html", "text/html"],
+             ["/signup.js", "text/javascript"],
+             ["/style.css", "text/css"],
+             ["/test.jpg", "image/jpg"]];
+
+   
 function error(request, response, code, file) {
     log(request, code, file);
     response.writeHead(code, {"Content-Type": "text/html"});
@@ -28,21 +38,13 @@ function resolve(request, response) {
     var pathname = url.parse(request.url).pathname;
     var fileMatch;
 
+    /* some miscellaneous work: redirect / to /main.html, look for images
+       right place */
     if (pathname == "/") { pathname = "/main.html"; }
-
     var extension = pathname.split(".").pop();
     if (extension == "jpg" || extension == "png" || extension == "gif") {
 	    extension = "img";
     }
-
-    /* register your new pages here, until the database is working */
-    var pages = [["/main.html", "text/html"],
-                 ["/jquery-1.5.min.js", "text/javascript"],
-                 ["/server_error.html", "text/html"],
-                 ["/signup.html", "text/html"],
-                 ["/signup.js", "text/javascript"],
-                 ["/style.css", "text/css"],
-                 ["/test.jpg", "image/jpg"]];
 
     match = 0;
     for (p in pages) {
@@ -65,7 +67,7 @@ function sendObj(request, response, file, type) {
             log(request, 200, file);
             response.writeHead(200, {'Content-Type': type});
 
-            /* use page generation for pages
+            /* TODO: use page generation for pages
 
             var page = new StandardPage();
             //need a way to get the title from the page
