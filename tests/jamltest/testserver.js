@@ -49,6 +49,8 @@ page2.standardMenus();
 page3 = new StandardPage();
 page3.setTitle("Page 3");
 page3.standardMenus();
+page3.addScript("js/mapfunc.js");
+page3.addScript("http://maps.google.com/maps/api/js?sensor=false");
 
 hserver = http.createServer( function (request, response)
 	{
@@ -114,7 +116,6 @@ page2.setContent("There are many genera of wolf spider, ranging in body size fro
 + "<br><img width=400 src='http://upload.wikimedia.org/wikipedia/commons/5/55/Lycosidae_female_carrying_young.jpg'><br>"
 +"Their eyes reflect light well, allowing someone with a flashlight to easily hunt for them at night. Flashing a beam of light over the spider will produce eyeshine. The light from the flashlight has been reflected from the spider's eyes directly back toward its source, producing a 'glow' that is easily noticed. This is also especially helpful because the wolf spiders are nocturnal and will be out hunting for food, making it easier to find them.");
 
-page3.setContent("Developed under the project code MX-607 at Wright Field in Ohio,[1][2] the JB-4 was a modification of the GB-4 glide bomb,[1][3] which had entered service with the U.S. Army Air Forces in 1944.[4] Fitted with a Ford PJ31 pulsejet engine, the JB-4 was intended to give an improved standoff range as opposed to its unpowered predecessor.[1] In addition, the addition of an engine made the missile capable of being ground-launched as well.[1]"
-+"<br><img src='http://upload.wikimedia.org/wikipedia/en/thumb/f/f8/JB-4_in_shop.png/300px-JB-4_in_shop.png'><br>"
-+"The JB-4 utilised television/radio-command guidance, with an AN/AXT-2 transmitter broadcasting a television signal from a camera in the missile's nose to a remote operator. The operator, viewing the transmitted picture, would then transmit commands to the missile via radio, correcting the missile's course to ensure striking the target.[1]");
-
+page3.setContent("<div id='button_div' style='width:80%; height:10%'>"
+	+ "<input type=button onClick='initialize()' value='Load Map'/></div>"
+	+ "<div id='map_canvas' style='width:80%; height:80%'></div>");
