@@ -2,6 +2,7 @@ sqlite = require('./../lib/node-sqlite/sqlite');
 
 var dbLocation = "../db/main.db";
 
+//TODO: add error checking (email invalid)
 function addTask(taskName, creatorEmail) {
 
 	var db = new sqlite.Database();
@@ -43,6 +44,7 @@ function addTask(taskName, creatorEmail) {
 	});
 }
 
+//TODO: add error checking (email invalid, nickname taken)
 function addUser(userEmail, userNickname, userPassword) {
 	
 	var db = new sqlite.Database();
@@ -84,3 +86,32 @@ function addUser(userEmail, userNickname, userPassword) {
 	});
 }
 
+//TODO: add error checking (email doesn't exist, taskid doesn't exist, etc.)
+function addComment(commentText, commentTaskid, commenterEmail) {
+
+	var db = new sqlite.Database();
+
+	db.open(dbLocation, function(error) {
+			if(error) {
+				console.log("error opening DB!!!");
+				throw error;
+			}
+
+			var sql = "INSERT INTO comment (thecomment,taskid,email) " +
+					"VALUES (?,?,?)";
+
+			db.execute(sql, [commentText, commentTaskid, commenterEmail],
+					function(error, rows) {
+						if(error)
+							throw error;
+
+						console.log("comment added");
+					}
+			);
+	});
+
+	db.close(function(error) {
+		if(error)
+			throw error;
+	});
+}
