@@ -25,7 +25,7 @@ db.open("../db/main.db", function (error) {
 		"email TEXT PRIMARY KEY," +
 		"nickname TEXT," +
 		"password TEXT)",
-		function (error){
+		function (error) {
 			if(error) {
 				console.log("Error creating user table.");
 				throw error;

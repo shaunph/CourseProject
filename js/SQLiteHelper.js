@@ -86,7 +86,6 @@ function addUser(userEmail, userNickname, userPassword) {
 	});
 }
 
-//TODO: add error checking (email doesn't exist, taskid doesn't exist, etc.)
 function addComment(commentText, commentTaskid, commenterEmail) {
 
 	var db = new sqlite.Database();
@@ -97,17 +96,42 @@ function addComment(commentText, commentTaskid, commenterEmail) {
 				throw error;
 			}
 
-			var sql = "INSERT INTO comment (thecomment,taskid,email) " +
-					"VALUES (?,?,?)";
+			var sql = "SELECT * FROM user WHERE email = ?";
 
-			db.execute(sql, [commentText, commentTaskid, commenterEmail],
-					function(error, rows) {
-						if(error)
-							throw error;
+			db.execute(sql, [commenterEmail], function(error, rows) {
+				if(error)
+					throw error;
 
-						console.log("comment added");
+				if(rows.length != 1) {
+					console.log("user email not found.");
+					return;
+				}
+
+				sql = "SELECT * FROM task WHERE taskid = ?";
+
+				db.execute(sql, [commentTaskid], function(error, rows) {
+					if(error)
+						throw error;
+
+					if(rows.length != 1) {
+						console.log("taskid not found.");
+						return;
 					}
-			);
+
+						sql = "INSERT INTO comment (thecomment,taskid,email) "+
+								"VALUES (?,?,?)";
+
+						db.execute(sql,
+								[commentText, commentTaskid, commenterEmail],
+								function(error, rows) {
+									if(error)
+										throw error;
+
+									console.log("comment added");
+								}
+						);
+				});
+			});
 	});
 
 	db.close(function(error) {
