@@ -1,11 +1,11 @@
 sqlite = require('./../lib/node-sqlite/sqlite');
 
 var dbLocation = "../db/main.db";
+var db;
 
-//TODO: add error checking (email invalid)
-function addTask(taskName, creatorEmail) {
+function accessDB(sql, executionArgs, inputFunction) {
 
-	var db = new sqlite.Database();
+	db = new sqlite.Database();
 
 	db.open(dbLocation, function(error) {
 			if(error) {
@@ -13,129 +13,115 @@ function addTask(taskName, creatorEmail) {
 				throw error;
 			}
 
-			var sql = "SELECT * FROM task";
-			db.execute(sql, function(error, rows) {
-				if(error)
-					throw error;
-
-				for(i = 0; i < rows.length; i++) {
-					if(rows[i].taskname == taskName) {
-						console.log("task already exists.");
-						return;
-					}
-				}
-				
-				sql = "INSERT INTO task (taskid,taskname,creator) VALUES (?,?,?)";
-
-				db.execute(sql, [rows.length, taskName, creatorEmail],
-					function(error, rows) {
-						if(error) 
-							throw error;
-
-						console.log("task added.");
-					}
-				);
-			});
+			if(executionArgs == null)
+				db.execute(sql, inputFunction);
+			else
+				db.execute(sql, executionArgs, inputFunction);
 	});
 
 	db.close(function(error) {
 		if(error)
 			throw error;
+	});
+}
+
+//TODO: add error checking (email invalid)
+function addTask(taskName, creatorEmail) {
+
+	var sql = "SELECT * FROM task";
+
+	accessDB(sql, null, function(error, rows) {
+		if(error)
+			throw error;
+
+		for(i = 0; i < rows.length; i++) {
+			if(rows[i].taskname.toLowerCase == taskName.toLowerCase) {
+				console.log("task already exists.");
+				return;
+			}
+		}
+		
+		sql = "INSERT INTO task (taskid,taskname,creator) VALUES (?,?,?)";
+
+		db.execute(sql, [rows.length, taskName, creatorEmail],
+			function(error, rows) {
+				if(error) 
+					throw error;
+
+				console.log("task added.");
+			}
+		);
 	});
 }
 
 //TODO: add error checking (email invalid, nickname taken)
 function addUser(userEmail, userNickname, userPassword) {
 	
-	var db = new sqlite.Database();
+	var sql = "SELECT * FROM user WHERE email = ? OR nickname = ?";
 
-	db.open(dbLocation, function(error) {
-			if(error) {
-				console.log("error opening DB!!!");
+	accessDB(sql, [userEmail, userNickname], function(error, rows) {
+			if(error)
 				throw error;
+
+			if(rows.length != 0) {
+				console.log("email already exists.");
+				return;
+			} else {
+				sql = "INSERT INTO user (email,nickname,password) " +
+						"VALUES (?,?,?)";
+
+				db.execute(sql, [userEmail, userNickname, userPassword],
+						function(error, rows) {
+							if(error)
+								throw error;
+
+							console.log("user added");
+						}
+				);
 			}
-
-			var sql = "SELECT * FROM user WHERE email = ? OR nickname = ?";
-
-			db.execute(sql, [userEmail, userNickname], function(error, rows) {
-					if(error)
-						throw error;
-
-					if(rows.length != 0) {
-						console.log("email already exists.");
-						return;
-					} else {
-						sql = "INSERT INTO user (email,nickname,password) " +
-								"VALUES (?,?,?)";
-
-						db.execute(sql, [userEmail, userNickname, userPassword],
-								function(error, rows) {
-									if(error)
-										throw error;
-
-									console.log("user added");
-								}
-						);
-					}
-			});
-	});
-
-	db.close(function(error) {
-		if(error)
-			throw error;
 	});
 }
 
 function addComment(commentText, commentTaskid, commenterEmail) {
 
-	var db = new sqlite.Database();
+	var sql = "SELECT * FROM user WHERE email = ?";
 
-	db.open(dbLocation, function(error) {
-			if(error) {
-				console.log("error opening DB!!!");
+	accessDB(sql, [commenterEmail], function(error, rows) {
+			if(error)
 				throw error;
+
+			if(rows.length != 1) {
+				console.log("user email not found.");
+				return;
 			}
 
-			var sql = "SELECT * FROM user WHERE email = ?";
+			sql = "SELECT * FROM task WHERE taskid = ?";
 
-			db.execute(sql, [commenterEmail], function(error, rows) {
+			db.execute(sql, [commentTaskid], function(error, rows) {
 				if(error)
 					throw error;
 
 				if(rows.length != 1) {
-					console.log("user email not found.");
+					console.log("taskid not found.");
 					return;
 				}
 
-				sql = "SELECT * FROM task WHERE taskid = ?";
+				sql = "INSERT INTO comment (thecomment,taskid,email) " +
+						"VALUES (?,?,?)";
 
-				db.execute(sql, [commentTaskid], function(error, rows) {
-					if(error)
-						throw error;
+				db.execute(sql,
+						[commentText, commentTaskid, commenterEmail],
+						function(error, rows) {
+							if(error)
+								throw error;
 
-					if(rows.length != 1) {
-						console.log("taskid not found.");
-						return;
-					}
-
-						sql = "INSERT INTO comment (thecomment,taskid,email) "+
-								"VALUES (?,?,?)";
-
-						db.execute(sql,
-								[commentText, commentTaskid, commenterEmail],
-								function(error, rows) {
-									if(error)
-										throw error;
-
-									console.log("comment added");
-								}
-						);
-				});
+							console.log("comment added");
+						}
+				);
 			});
 	});
-
-	db.close(function(error) {
-		if(error)
-			throw error;
-	});
 }
+/*
+addTask("tasknammy", "masud@gmail.ca");
+addUser("masud@hotmail.com", "masudio", "coyote");
+addComment("hi im a comment", 0, "masud@hotmail.com");*/
