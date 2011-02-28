@@ -15,7 +15,7 @@ sqlite = require('./../lib/node-sqlite/sqlite');
 
 var db = sqlite.Database();
 
-db.open("../db/main.db", function (error) {
+db.open("../tests/main.db", function (error) {
 	if(error) {
 		console.log(error);
 		throw error;

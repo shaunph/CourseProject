@@ -1,8 +1,8 @@
 sqlite = require('./../lib/node-sqlite/sqlite');
 fs = require('fs');
 
-var dbLocation = "../db/main.db";
-var logLocation = "../db/log.txt";
+var dbLocation = "../tests/main.db";
+var logLocation = "../tests/log.txt";
 var db;
 
 function writeLog(logLine) {
@@ -26,7 +26,7 @@ function accessDB(sql, executionArgs, inputFunction) {
 
 	db.open(dbLocation, function(error) {
 			if(error) {
-				writeLog("error opening DB!!!");
+				writeLog("func: accessDB, error opening DB!!!");
 				throw error;
 			}
 
@@ -57,7 +57,8 @@ function addTask(taskName, creatorEmail) {
 
 		for(i = 0; i < rows.length; i++) {
 			if(rows[i].taskname.toLowerCase == taskName.toLowerCase) {
-				writeLog("task " + taskName + " already exists.");
+				writeLog("func: addTask, task " + taskName +
+						" already exists.");
 				return -1; // error code for caller
 			}
 		}
@@ -90,7 +91,7 @@ function addUser(userEmail, userNickname, userPassword) {
 			}
 
 			if(rows.length != 0) {
-				writeLog("email " + userEmail + " already exists.");
+				writeLog("func: addUser, email " + userEmail + " already exists.");
 				return -1; // error code for caller
 			} else {
 				sql = "INSERT INTO user (email,nickname,password) " +
@@ -123,7 +124,8 @@ function addComment(commentText, commentTaskid, commenterEmail) {
 			}
 
 			if(rows.length != 1) {
-				writeLog("user email " + commenterEmail + " not found.");
+				writeLog("func: addComment, user email " +
+					commenterEmail + " not found.");
 				return -1; // error code for caller
 			}
 
@@ -136,7 +138,8 @@ function addComment(commentText, commentTaskid, commenterEmail) {
 				}
 
 				if(rows.length != 1) {
-					writeLog("taskid " + commentTaskid + " not found.");
+					writeLog("func: addComment, taskid " +
+						commentTaskid + " not found.");
 					return -1; // error code for caller
 				}
 
@@ -158,3 +161,7 @@ function addComment(commentText, commentTaskid, commenterEmail) {
 			});
 	});
 }
+
+addTask("tasky", "email@something.com");
+addUser("email@something.com", "nicknamehere!", "passwordy");
+addComment("im a comment!!!", 0, "email@something.com");
