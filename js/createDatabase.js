@@ -17,7 +17,7 @@ var db = sqlite.Database();
 
 db.open("../db/main.db", function (error) {
 	if(error) {
-		console.log("Tonight. YOU.");
+		console.log(error);
 		throw error;
 	}
 

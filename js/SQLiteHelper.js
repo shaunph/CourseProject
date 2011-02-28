@@ -1,7 +1,24 @@
 sqlite = require('./../lib/node-sqlite/sqlite');
+fs = require('fs');
 
 var dbLocation = "../db/main.db";
+var logLocation = "../db/log.txt";
 var db;
+
+function writeLog(logLine) {
+
+	var logStream = fs.createWriteStream(logLocation,
+							{flags: 'w',
+							flags: 'a',
+							encoding: 'binary',
+							mode: 0666}
+						);
+	logStream.write(new Date() + "\n\t" + logLine + "\n");
+
+	logStream.on('drain', function() {
+				logStream.end();
+	});
+}
 
 function accessDB(sql, executionArgs, inputFunction) {
 
@@ -9,7 +26,7 @@ function accessDB(sql, executionArgs, inputFunction) {
 
 	db.open(dbLocation, function(error) {
 			if(error) {
-				console.log("error opening DB!!!");
+				writeLog("error opening DB!!!");
 				throw error;
 			}
 
@@ -20,8 +37,10 @@ function accessDB(sql, executionArgs, inputFunction) {
 	});
 
 	db.close(function(error) {
-		if(error)
+		if(error) {
+			writeLog(error);
 			throw error;
+		}
 	});
 }
 
@@ -31,13 +50,15 @@ function addTask(taskName, creatorEmail) {
 	var sql = "SELECT * FROM task";
 
 	accessDB(sql, null, function(error, rows) {
-		if(error)
+		if(error) {
+			writeLog(error);
 			throw error;
+		}
 
 		for(i = 0; i < rows.length; i++) {
 			if(rows[i].taskname.toLowerCase == taskName.toLowerCase) {
-				console.log("task already exists.");
-				return;
+				writeLog("task " + taskName + " already exists.");
+				return -1; // error code for caller
 			}
 		}
 		
@@ -45,10 +66,13 @@ function addTask(taskName, creatorEmail) {
 
 		db.execute(sql, [rows.length, taskName, creatorEmail],
 			function(error, rows) {
-				if(error) 
+				if(error) {
+					writeLog(error);
 					throw error;
+				}
 
-				console.log("task added.");
+				writeLog("task " + taskName + " by " +
+					creatorEmail + " added.");
 			}
 		);
 	});
@@ -60,22 +84,28 @@ function addUser(userEmail, userNickname, userPassword) {
 	var sql = "SELECT * FROM user WHERE email = ? OR nickname = ?";
 
 	accessDB(sql, [userEmail, userNickname], function(error, rows) {
-			if(error)
+			if(error) {
+				writeLog(error);
 				throw error;
+			}
 
 			if(rows.length != 0) {
-				console.log("email already exists.");
-				return;
+				writeLog("email " + userEmail + " already exists.");
+				return -1; // error code for caller
 			} else {
 				sql = "INSERT INTO user (email,nickname,password) " +
 						"VALUES (?,?,?)";
 
 				db.execute(sql, [userEmail, userNickname, userPassword],
 						function(error, rows) {
-							if(error)
+							if(error) {
+								writeLog(error);
 								throw error;
+							}
 
-							console.log("user added");
+							writeLog("user " + userEmail + ", " +
+								userNickname +", with password " +
+								userPassword + " added.");
 						}
 				);
 			}
@@ -87,23 +117,27 @@ function addComment(commentText, commentTaskid, commenterEmail) {
 	var sql = "SELECT * FROM user WHERE email = ?";
 
 	accessDB(sql, [commenterEmail], function(error, rows) {
-			if(error)
+			if(error) {
+				writeLog(error);
 				throw error;
+			}
 
 			if(rows.length != 1) {
-				console.log("user email not found.");
-				return;
+				writeLog("user email " + commenterEmail + " not found.");
+				return -1; // error code for caller
 			}
 
 			sql = "SELECT * FROM task WHERE taskid = ?";
 
 			db.execute(sql, [commentTaskid], function(error, rows) {
-				if(error)
+				if(error) {
+					writeLog(error);
 					throw error;
+				}
 
 				if(rows.length != 1) {
-					console.log("taskid not found.");
-					return;
+					writeLog("taskid " + commentTaskid + " not found.");
+					return -1; // error code for caller
 				}
 
 				sql = "INSERT INTO comment (thecomment,taskid,email) " +
@@ -112,16 +146,19 @@ function addComment(commentText, commentTaskid, commenterEmail) {
 				db.execute(sql,
 						[commentText, commentTaskid, commenterEmail],
 						function(error, rows) {
-							if(error)
+							if(error) {
+								writeLog(error);
 								throw error;
+							}
 
-							console.log("comment added");
+							writeLog("comment for taskid " + commentTaskid +
+								" by " + commenterEmail + " added.");
 						}
 				);
 			});
 	});
 }
-/*
+
 addTask("tasknammy", "masud@gmail.ca");
 addUser("masud@hotmail.com", "masudio", "coyote");
-addComment("hi im a comment", 0, "masud@hotmail.com");*/
+addComment("hi im a comment", 0, "masud@hotmail.com");
