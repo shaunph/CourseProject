@@ -158,7 +158,3 @@ function addComment(commentText, commentTaskid, commenterEmail) {
 			});
 	});
 }
-
-addTask("tasknammy", "masud@gmail.ca");
-addUser("masud@hotmail.com", "masudio", "coyote");
-addComment("hi im a comment", 0, "masud@hotmail.com");
