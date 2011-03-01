@@ -1,13 +1,15 @@
 sqlite = require('./../lib/node-sqlite/sqlite');
 fs = require('fs');
+path = require('path');
 
-var dbLocation = "../tests/main.db";
-var logLocation = "../tests/log.txt";
+var dbLocation = "../db/main.db"; // database location in file system
+var dbLogLocation = "../db/log.txt"; // database log
 var db;
 
 function writeLog(logLine) {
 
-	var logStream = fs.createWriteStream(logLocation,
+	console.log(logLine);
+	var logStream = fs.createWriteStream(dbLogLocation,
 							{flags: 'w',
 							flags: 'a',
 							encoding: 'binary',
@@ -22,12 +24,19 @@ function writeLog(logLine) {
 
 function accessDB(sql, executionArgs, inputFunction) {
 
+	path.exists(dbLocation, function(exists) {
+		if(!exists) {
+			console.log("Database doesn't exist. First run createDatabase.js");
+			throw error;
+		}
+	});
+
 	db = new sqlite.Database();
 
 	db.open(dbLocation, function(error) {
 			if(error) {
-				writeLog("func: accessDB, error opening DB!!!");
-				throw error;
+				writeLog(new Date() + "\n\tfunc: accessDB" + error + "\n");
+				return -2; // error code for caller
 			}
 
 			if(executionArgs == null)
@@ -39,7 +48,7 @@ function accessDB(sql, executionArgs, inputFunction) {
 	db.close(function(error) {
 		if(error) {
 			writeLog(error);
-			throw error;
+			return -2; // error code for caller
 		}
 	});
 }
@@ -52,7 +61,7 @@ function addTask(taskName, creatorEmail) {
 	accessDB(sql, null, function(error, rows) {
 		if(error) {
 			writeLog(error);
-			throw error;
+			return -2;
 		}
 
 		for(i = 0; i < rows.length; i++) {
@@ -69,7 +78,7 @@ function addTask(taskName, creatorEmail) {
 			function(error, rows) {
 				if(error) {
 					writeLog(error);
-					throw error;
+					return -2; // error code for caller
 				}
 
 				writeLog("task " + taskName + " by " +
@@ -87,7 +96,7 @@ function addUser(userEmail, userNickname, userPassword) {
 	accessDB(sql, [userEmail, userNickname], function(error, rows) {
 			if(error) {
 				writeLog(error);
-				throw error;
+				return -2; // error code for caller
 			}
 
 			if(rows.length != 0) {
@@ -101,7 +110,7 @@ function addUser(userEmail, userNickname, userPassword) {
 						function(error, rows) {
 							if(error) {
 								writeLog(error);
-								throw error;
+								return -2; // error code for caller
 							}
 
 							writeLog("user " + userEmail + ", " +
@@ -120,7 +129,7 @@ function addComment(commentText, commentTaskid, commenterEmail) {
 	accessDB(sql, [commenterEmail], function(error, rows) {
 			if(error) {
 				writeLog(error);
-				throw error;
+				return -2; // error code for caller
 			}
 
 			if(rows.length != 1) {
@@ -134,7 +143,7 @@ function addComment(commentText, commentTaskid, commenterEmail) {
 			db.execute(sql, [commentTaskid], function(error, rows) {
 				if(error) {
 					writeLog(error);
-					throw error;
+					return -2; // error code for caller
 				}
 
 				if(rows.length != 1) {
@@ -151,7 +160,7 @@ function addComment(commentText, commentTaskid, commenterEmail) {
 						function(error, rows) {
 							if(error) {
 								writeLog(error);
-								throw error;
+								return -2; // error code for caller
 							}
 
 							writeLog("comment for taskid " + commentTaskid +
@@ -162,6 +171,3 @@ function addComment(commentText, commentTaskid, commenterEmail) {
 	});
 }
 
-addTask("tasky", "email@something.com");
-addUser("email@something.com", "nicknamehere!", "passwordy");
-addComment("im a comment!!!", 0, "email@something.com");

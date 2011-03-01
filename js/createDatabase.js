@@ -12,10 +12,14 @@
 */
 
 sqlite = require('./../lib/node-sqlite/sqlite');
+fs = require('fs');
 
 var db = sqlite.Database();
+var dbLocation = "../db/main.db"; // location of database
 
-db.open("../tests/main.db", function (error) {
+fs.mkdir('../db', 0777);
+
+db.open(dbLocation, function (error) {
 	if(error) {
 		console.log(error);
 		throw error;
