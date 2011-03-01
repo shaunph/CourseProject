@@ -72,9 +72,9 @@ function addTask(taskName, creatorEmail) {
 			}
 		}
 		
-		sql = "INSERT INTO task (taskid,taskname,creator) VALUES (?,?,?)";
+		sql = "INSERT INTO task (taskname,creator) VALUES (?,?)";
 
-		db.execute(sql, [rows.length, taskName, creatorEmail],
+		db.execute(sql, [taskName, creatorEmail],
 			function(error, rows) {
 				if(error) {
 					writeLog(error);

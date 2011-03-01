@@ -39,7 +39,7 @@ db.open(dbLocation, function (error) {
 	});
 
 	db.execute("CREATE TABLE task (" +
-		"taskid NUMBER," +
+		"taskid INTEGER PRIMARY KEY AUTOINCREMENT," +
 		"taskname TEXT," +
 		"creator TEXT)", // "FOREIGN KEY (creator) REFERENCES user (email))"
 		function (error) {
