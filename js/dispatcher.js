@@ -7,19 +7,9 @@ var exec = require('child_process').exec,
     url = require('url'),
     util = require('util');
 
-var docRoot = "static/",
+var docRoot = "static",
     errorRoot = "static/error_pages/";
 
-/* register your new pages here, until the database is working */
-var pages = [["/main.html", "text/html"],
-             ["/jquery-1.5.min.js", "text/javascript"],
-             ["/server_error.html", "text/html"],
-             ["/signup.html", "text/html"],
-             ["/signup.js", "text/javascript"],
-             ["/style.css", "text/css"],
-             ["/test.jpg", "image/jpg"]];
-
-   
 function error(request, response, code, file) {
     log(request, code, file);
     response.writeHead(code, {"Content-Type": "text/html"});
@@ -31,33 +21,19 @@ function log(request, statusCode, fileMatch) {
     util.log(strings.join("\t"));
 }
 
-/* Upon receiving a request, try to match it with a response object. If
-   no corresponding object is found, respond with a 404 error page. In case
+/* Upon receiving a request, try to match it with a file. If
+   no corresponding file is found, respond with a 404 error page. In case
    an unresolvable exception is encountered, repond with a 500 error page. */
 function resolve(request, response) {
     var pathname = url.parse(request.url).pathname;
-    var fileMatch;
 
-    /* some miscellaneous work: redirect / to /main.html, look for images
-       right place */
-    if (pathname == "/") { pathname = "/main.html"; }
-    var extension = pathname.split(".").pop();
-    if (extension == "jpg" || extension == "png" || extension == "gif") {
-        extension = "img";
-    }
+    /* some miscellaneous work: redirect / to /index.html */
+    if (pathname == "/") { pathname = "/index.html"; }
 
-    match = 0;
-    for (p in pages) {
-        if (pages[p][0] == pathname) {
-            match++;
-            fileMatch = docRoot + extension + pathname;
-            sendObj(request, response, fileMatch, pages[p][1]);
-            break;
-        }
-    } 
-    if (!match) {
-        error(request, response, 404, fileMatch);
-    }
+	var type = getMIMEType(pathname);
+	
+	pathname = docRoot + pathname;
+	sendObj(request, response, pathname, type);
 }
 
 function sendObj(request, response, file, type) {
@@ -93,10 +69,43 @@ function sendObj(request, response, file, type) {
 
             util.pump(fs.createReadStream(file), response, function() {});
         } else {
-            error(request, response, 500, file);
-            console.log("ERROR: file reported to exist, but can't be found: " + file);
+			error(request, response, 404, file);
         }
     });
+}
+
+/* A simple function to try to map a file extension to a MIME type */
+function getMIMEType(pathname) {
+	var extension = pathname.split(".").pop();
+	var type;
+
+	switch(extension)
+	{
+		case 'html':
+			type = 'text/html';
+			break;
+		case 'css':
+			type = 'text/css';
+			break;
+		case 'js':
+			type = 'application/javascript';
+			break;
+		case 'jpg':
+			type = 'image/jpeg';
+			break;
+		case 'gif':
+			type = 'image/gif';
+			break;
+		case 'png':
+			type = 'image/png';
+			break;
+		default:	//if no MIME type is found, just send the data as text
+			type = 'text/plain';
+			console.log("WARNING: File type unknown: " + extension);
+			break;
+	}
+	
+	return type;
 }
 
 function init(args) {
