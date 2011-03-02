@@ -5,7 +5,9 @@ var exec = require('child_process').exec,
     pagemaker = require('./pagemaker'),
     path = require('path'),
     url = require('url'),
-    util = require('util');
+    util = require('util'),
+	db = require('./SQLiteHelper'),
+	qs = require('querystring');
 
 var docRoot = "static/",
     errorRoot = "static/error_pages/";
@@ -41,11 +43,22 @@ function log(request, statusCode, fileMatch) {
     util.log(strings.join("\t"));
 }
 
-function checkAvailable(request) {
+function checkAvailable(request, callback) {
 
-	var params = url.parse(request.url, true).query;
-			
-	return "Available";
+	var params = url.parse(request.url,true).query;		
+	
+	for(key in params){
+
+		util.log(key+":"+params[key]+" available");
+		var res = db.checkAvailable(key, params[key], function (res) {
+			if(res == 1) {
+				callback("Available!!");
+			}
+			else {
+				callback("Unavailable");
+			}
+		});
+	}	
 }
 
 /* Upon receiving a request, try to match it with a response object. If
@@ -74,10 +87,15 @@ function resolve(request, response) {
 				break;
 			}
 			else if(typeof pages[p][1] == "function") {
-				log(request, 200, pages[p][1].toString().split(")")[0]);	//log the function that was called
-				response.writeHead(200, {'Content-Type': "text/html"});
-				response.write( pages[p][1](request));	//here is where we call the function with the request as the parameter.
-				response.end();
+				log(request, 200, pages[p][1].toString().split("{")[0]);	//log the function that was called
+				
+				pages[p][1](request, function(res) {
+					response.writeHead(200, {'Content-Type': "text/html"});
+					response.write(res);	//here is where we call the function with the request as the parameter.
+					response.end();
+				});
+				
+				
 			}
         }
     } 

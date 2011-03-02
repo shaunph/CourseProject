@@ -122,6 +122,25 @@ function addUser(userEmail, userNickname, userPassword) {
 	});
 }
 
+exports.checkAvailable = function(field, entry, callback) {
+	var sql = "SELECT * FROM user WHERE ? = ?";	//TODO: This may be optimised or formatted better?
+	var avail=0;
+	accessDB(sql, [field, entry], function(error, rows) {
+		if(error) {
+			writeLog(error);
+			callback(-3);
+		}
+		
+		if(rows.length != 0) {
+			writeLog("func: checkEmailAvail, "+field+": "+entry+ "already exists.\n");
+			callback(-1);
+		}
+		else {
+			callback(1);
+		}
+	});
+}
+
 function addComment(commentText, commentTaskid, commenterEmail) {
 
 	var sql = "SELECT * FROM user WHERE email = ?";
