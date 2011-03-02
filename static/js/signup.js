@@ -84,8 +84,12 @@ function setSubmitButton() {
 
 function checkAvailability(field, entry) {
 
+
 	var entry = $('input[id="'+field+'"]').val();
-	$.get(field+'Available?'+field+'='+entry, function(data) {
+	$.get('Available?'+field+'='+entry, function(data) {
+	
+		alert("Here");
+	
 		$('#'+field+'Available').html(data);
 		if(data.search("Available") >= 0) {
 			if(field == 'Email')

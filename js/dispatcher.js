@@ -15,8 +15,9 @@ var pages = [["/main.html", "text/html"],
              ["/jquery-1.5.min.js", "text/javascript"],
              ["/server_error.html", "text/html"],
              ["/signup.html", "text/html"],
-             ["/signup.js", "text/javascript"],
+             ["/Available", checkAvailable],	
              ["/signup-request.html", "text/javascript"],
+             ["/signup.js", "text/javascript"],
              ["/style.css", "text/css"],
              ["/test.jpg", "image/jpg"]];
 
@@ -30,6 +31,10 @@ function error(request, response, code, file) {
 function log(request, statusCode, fileMatch) {
     strings = new Array(request.socket.remoteAddress, statusCode, request.url + "  ->  " + fileMatch);
     util.log(strings.join("\t"));
+}
+
+function checkAvailable(field, entry) {
+	return "Available";
 }
 
 /* Upon receiving a request, try to match it with a response object. If
@@ -52,8 +57,21 @@ function resolve(request, response) {
         if (pages[p][0] == pathname) {
             match++;
             fileMatch = docRoot + extension + pathname;
-            sendObj(request, response, fileMatch, pages[p][1]);
-            break;
+			
+			if(typeof pages[p][1] == "string") {
+				sendObj(request, response, fileMatch, pages[p][1]);
+				break;
+			}
+			else if(typeof pages[p][1] == "function") {
+				if(pages[p][0] == "Available") {
+					var params = url.parse(request.url, true).query;
+					
+					log(request, 200, "checkAvail(...) function");
+					response.writeHead(200, {'Content-Type': "text/html"});
+					response.write( checkAvailable(params.fiels, params.entry));
+					response.end();
+				}
+			}
         }
     } 
     if (!match) {
