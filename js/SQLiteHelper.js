@@ -2,8 +2,8 @@ sqlite = require('./../lib/node-sqlite/sqlite');
 fs = require('fs');
 path = require('path');
 
-var dbLocation = "../db/main.db"; // database location in file system
-var dbLogLocation = "../db/log.txt"; // database log
+var dbLocation = "./db/main.db"; // database location in file system
+var dbLogLocation = "./db/log.txt"; // database log
 var db;
 
 function writeLog(logLine) {
@@ -54,7 +54,7 @@ function accessDB(sql, executionArgs, inputFunction) {
 }
 
 //TODO: add error checking (email invalid)
-function addTask(taskName, creatorEmail) {
+exports.addTask = function(taskName, creatorEmail) {
 
 	var sql = "SELECT * FROM task";
 
@@ -89,7 +89,7 @@ function addTask(taskName, creatorEmail) {
 }
 
 //TODO: add error checking (email invalid, nickname taken)
-function addUser(userEmail, userNickname, userPassword) {
+exports.addUser = function(userEmail, userNickname, userPassword) {
 	
 	var sql = "SELECT * FROM user WHERE email = ? OR nickname = ?";
 
@@ -141,7 +141,7 @@ exports.checkAvailable = function(field, entry, callback) {
 	});
 }
 
-function addComment(commentText, commentTaskid, commenterEmail) {
+exports.addComment = function(commentText, commentTaskid, commenterEmail) {
 
 	var sql = "SELECT * FROM user WHERE email = ?";
 
