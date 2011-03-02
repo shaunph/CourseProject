@@ -16,6 +16,14 @@ var pages = [["/main.html", "text/html"],
              ["/server_error.html", "text/html"],
              ["/signup.html", "text/html"],
              ["/Available", checkAvailable],	
+			 /*
+				So this is what i was thinking.  You put the function you want/need to call as the second parameter
+				then in the resolve function it checks to see if the second element is a string or a function
+				if its a string it calls sendObj if its a function it calls the function.  If the function needs parameters
+				whether passed in the url or in the document, the function must take the request as the parameter 
+				then manipulate the request to get the requested data... doing this will minimize the amount of if then else
+				or switch statements in the resolve method.
+			 */
              ["/signup-request.html", "text/javascript"],
              ["/signup.js", "text/javascript"],
              ["/style.css", "text/css"],
@@ -33,7 +41,10 @@ function log(request, statusCode, fileMatch) {
     util.log(strings.join("\t"));
 }
 
-function checkAvailable(field, entry) {
+function checkAvailable(request) {
+
+	var params = url.parse(request.url, true).query;
+			
 	return "Available";
 }
 
@@ -63,14 +74,10 @@ function resolve(request, response) {
 				break;
 			}
 			else if(typeof pages[p][1] == "function") {
-				if(pages[p][0] == "Available") {
-					var params = url.parse(request.url, true).query;
-					
-					log(request, 200, "checkAvail(...) function");
-					response.writeHead(200, {'Content-Type': "text/html"});
-					response.write( checkAvailable(params.fiels, params.entry));
-					response.end();
-				}
+				log(request, 200, pages[p][1].toString().split(")")[0]);	//log the function that was called
+				response.writeHead(200, {'Content-Type': "text/html"});
+				response.write( pages[p][1](request));	//here is where we call the function with the request as the parameter.
+				response.end();
 			}
         }
     } 

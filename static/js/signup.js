@@ -88,20 +88,26 @@ function checkAvailability(field, entry) {
 	var entry = $('input[id="'+field+'"]').val();
 	$.get('Available?'+field+'='+entry, function(data) {
 	
-		alert("Here");
-	
 		$('#'+field+'Available').html(data);
 		if(data.search("Available") >= 0) {
 			if(field == 'Email')
 				signUpEmailAvail = true;
 			else if (field == 'Username')
 				signUpUserAvail = true;
+				
+			$('#'+field+'Available').html("Available!");
+			$('#'+field+'Available').css('color', '#00ff00');		//green
+
 		}
 		else {
 			if(field == 'Email')
 				signUpEmailAvail = false;
 			else if (field == 'Username')
 				signUpUserAvail = false;
+			
+			$('#'+field+'Available').html("Not Available!");
+			$('#'+field+'Available').css('color', '#ff0000');		//green
+
 		}
 			
 	});
