@@ -18,6 +18,7 @@ var pages = [
              ["/signup.html", "text/html"],
              ["/signup.js", "text/javascript"],
              ["/style.css", "text/css"],
+			 ["/test.jpg", "image/jpg"],
 			 ["/task.js", "text/javascript"],
 			 ["/taskpage.html", "text/html"],
 			 ["/taskpage.js", "text/javascript"]
