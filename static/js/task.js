@@ -8,7 +8,7 @@
 		myTask.save();
 
 	To create a new Task, use:
-		var myNewTask = new Task(taskName, id, description, priority, status, user, date);
+		var myNewTask = new Task(taskName, description, priority, status, user, date);
 	Note that this task is not in the database yet, call myNewTask.save() to do so.
 */
 
@@ -16,17 +16,16 @@
 /* Create a task object.
 	
 	taskName 	- Name of the task (String)
-	id		 	- ID number of the task (Integer)
 	description - Description of the task (String)
 	priority	- Priority in relation to other tasks (["Low", "Medium", "High"])
 	status		- Current completion status (["Not started", "Work in progress", "Completed"])
 	user		- The creator of the task (String)
 	date		- Date when task was created (Date)
 */
-function Task(taskName, id, description, priority, status, user, date) {
+function Task(taskName, description, priority, status, user, date) {
 
 	this.taskName = taskName;
-	this.id = id;
+	this.id = undefined;
 	this.description = description;
 	this.priority = priority;
 	this.status = status;
@@ -107,5 +106,6 @@ function save() {
 			 	update this task in the database.
 			 If the calling task is not in the database (ie a new task),
 				store a new task into the database.
-	*/	 
+			    Then set the calling task's id with the one generated from the DB
+	*/
 }
