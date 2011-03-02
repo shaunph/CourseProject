@@ -16,6 +16,7 @@ var pages = [["/main.html", "text/html"],
              ["/server_error.html", "text/html"],
              ["/signup.html", "text/html"],
              ["/signup.js", "text/javascript"],
+             ["/signup-request.html", "text/javascript"],
              ["/style.css", "text/css"],
              ["/test.jpg", "image/jpg"]];
 
