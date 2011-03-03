@@ -7,10 +7,10 @@ var exec = require('child_process').exec,
     url = require('url'),
     util = require('util');
 
-var docRoot = "static/",
+var docRoot = "static",
     errorRoot = "static/error_pages/";
 
-/* register your new pages here, until the database is working */
+/* register your new pages here, until the database is working
 var pages = [["/main.html", "text/html"],
              ["/jquery-1.5.min.js", "text/javascript"],
              ["/server_error.html", "text/html"],
@@ -20,6 +20,15 @@ var pages = [["/main.html", "text/html"],
              ["/test.jpg", "image/jpg"],
              ["/profile/imgup.js", "text/javascript"],
              ["/profile/imguptest.html", "text/html"]];
+             */
+             var extTypes = [];
+             extTypes["html"]="text/html";
+             extTypes["htm"]="text/html";
+             extTypes["js"]="text/javascript";
+             extTypes["css"]="text/css";
+             extTypes["jpg"]="image/jpg";
+             extTypes["jpeg"]="image/jpg";
+             
 
    
 function error(request, response, code, file) {
@@ -53,26 +62,18 @@ function resolveGet(request, response) {
 
     /* some miscellaneous work: redirect / to /main.html, look for images
        right place */
-    if (pathname == "/") { 
-        pathname = "/main.html"; 
+    if (pathname.charAt(pathname.length-1) == "/") { 
+        pathname += "main.html"; 
     }
     var extension = pathname.split(".").pop();
+    /*
     if (extension == "jpg" || extension == "png" || extension == "gif") {
         extension = "img";
     }
-
-    match = 0;
-    for (p in pages) {
-        if (pages[p][0] == pathname) {
-            match++;
-            fileMatch = docRoot + extension + pathname;
-            sendObj(request, response, fileMatch, pages[p][1]);
-            break;
-        }
-    } 
-    if (!match) {
-        error(request, response, 404, fileMatch);
-    }
+    */
+    fileMatch = docRoot + pathname;
+    sendObj(request, response, fileMatch, extTypes[extension]);
+    
 }
 
 /* 
@@ -90,7 +91,7 @@ Author: Mitchell Ludwig
 */
 function resolvePost(request, response) {
     console.log("File posted with: " + process.cwd() + "/" + docRoot + "js" + url.parse(request.url).pathname);
-    var handler = require(process.cwd() + "/" + docRoot + "js" + url.parse(request.url).pathname);
+    var handler = require(process.cwd() + "/" + docRoot + url.parse(request.url).pathname);
     handler.postReq(request,response);
 }
 
@@ -127,7 +128,7 @@ function sendObj(request, response, file, type) {
 
             util.pump(fs.createReadStream(file), response, function() {});
         } else {
-            error(request, response, 500, file);
+            error(request, response, 404, file);
             console.log("ERROR: file reported to exist, but can't be found: " + file);
         }
     });
