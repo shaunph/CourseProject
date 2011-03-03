@@ -18,8 +18,8 @@ var pages = [["/main.html", "text/html"],
              ["/signup.js", "text/javascript"],
              ["/style.css", "text/css"],
              ["/test.jpg", "image/jpg"],
-             ["/imgup.js", "text/javascript"],
-             ["/imguptest.html", "text/html"]];
+             ["/profile/imgup.js", "text/javascript"],
+             ["/profile/imguptest.html", "text/html"]];
 
    
 function error(request, response, code, file) {
