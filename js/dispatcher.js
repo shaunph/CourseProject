@@ -73,14 +73,15 @@ function postHandler(request, callback) {
 		For some reason the below segment of code doesnt work... It just doesnt do anything.
 	
 	*/
-	if (request.method == 'POST') {
+	if (request.method == 'POST') {		//this conditional works fine, and detects that its a POST.
 	
-		request.on('data', function(chunk) {
+		request.on('data', function(chunk) {	//but here it doesn't receive any data.
 			util.log("next chunk: "+chunk);
 			_CONTENT+= chunk;
 		});
 
 		request.on('end', function() {
+			util.log("end of post request found.");
 			_REQUEST = qs.parse(_CONTENT);
 			callback(_REQUEST);
 		});
