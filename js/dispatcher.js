@@ -6,8 +6,9 @@ var exec = require('child_process').exec,
     path = require('path'),
     url = require('url'),
     util = require('util');
-
+	
 var docRoot = "static",
+	dynamicRoot = "dynamic/",
     errorRoot = "static/error_pages/";
 
 function error(request, response, code, file) {
@@ -30,46 +31,48 @@ function resolve(request, response) {
     /* some miscellaneous work: redirect / to /index.html */
     if (pathname == "/") { pathname = "/index.html"; }
 
-	var type = getMIMEType(pathname);
-	
-	pathname = docRoot + pathname;
-	sendObj(request, response, pathname, type);
+	// if the path splits at a ".", we assume it has a file extension
+	// and in turn assume it is static content.
+	if (pathname.split(".").length != 1)
+	{
+		var type = getMIMEType(pathname);
+		
+		pathname = docRoot + pathname;
+		sendStaticObj(request, response, pathname, type);
+	}
+	else
+	{
+		var split = pathname.split("/"),
+			route = split[1],
+			params = split.slice(2);
+			scriptName = dynamicRoot + route + ".js";
+		
+		sendDynamicObj(request, response, scriptName, params);
+	}
 }
 
-function sendObj(request, response, file, type) {
-    var statusCode = 200;
+function sendStaticObj(request, response, file, type) {
     path.exists(file, function(exists) {
         if (exists) {
             log(request, 200, file);
+			
             response.writeHead(200, {'Content-Type': type});
-
-            /* TODO: use page generation for pages
-
-            var page = new StandardPage();
-            //need a way to get the title from the page
-            page.setTitle("Testing");
-
-            //need a way to remove the <head> from the page
-            //and instead put it into: 
-            //page.addHead(data);
-
-            //create header
-
-            //create file input stream
-            var istream = fs.createReadStream(fullpath);
-            istream.on('data', function(data) {
-                page.addContent(data);
-            });
-            istream.on('end', function() {
-                response.end(page.toHTML());
-            });
-            //if there was an error handle it.
-            istream.on('error', function(error) {});
-            */
-
             util.pump(fs.createReadStream(file), response, function() {});
         } else {
 			error(request, response, 404, file);
+        }
+    });
+}
+
+function sendDynamicObj(request, response, scriptName, parameters) {
+    path.exists(scriptName, function(exists) {
+        if (exists) {
+            log(request, 200, scriptName);
+			
+            var script = require("../" + scriptName);	//Path must relative to dispatcher.js
+			script.send(response, parameters);
+        } else {
+			error(request, response, 404, scriptName);
         }
     });
 }
@@ -101,7 +104,6 @@ function getMIMEType(pathname) {
 			break;
 		default:	//if no MIME type is found, just send the data as text
 			type = 'text/plain';
-			console.log("WARNING: File type unknown: " + extension);
 			break;
 	}
 	
