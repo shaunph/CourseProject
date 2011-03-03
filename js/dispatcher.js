@@ -11,13 +11,18 @@ var docRoot = "static/",
     errorRoot = "static/error_pages/";
 
 /* register your new pages here, until the database is working */
-var pages = [["/main.html", "text/html"],
+var pages = [
+			 ["/main.html", "text/html"],
              ["/jquery-1.5.min.js", "text/javascript"],
              ["/server_error.html", "text/html"],
              ["/signup.html", "text/html"],
              ["/signup.js", "text/javascript"],
              ["/style.css", "text/css"],
-             ["/test.jpg", "image/jpg"]];
+			 ["/test.jpg", "image/jpg"],
+			 ["/task.js", "text/javascript"],
+			 ["/taskpage.html", "text/html"],
+			 ["/taskpage.js", "text/javascript"]
+			];
 
    
 function error(request, response, code, file) {
@@ -51,6 +56,7 @@ function resolve(request, response) {
         if (pages[p][0] == pathname) {
             match++;
             fileMatch = docRoot + extension + pathname;
+			
             sendObj(request, response, fileMatch, pages[p][1]);
             break;
         }
