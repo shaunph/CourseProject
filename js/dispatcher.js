@@ -10,7 +10,7 @@ var exec = require('child_process').exec,
 var docRoot = "static",
     errorRoot = "static/error_pages/";
 
-/* register your new pages here, until the database is working
+/* register your new pages here, until the database is working */
 var pages = [["/main.html", "text/html"],
              ["/jquery-1.5.min.js", "text/javascript"],
              ["/server_error.html", "text/html"],
@@ -20,16 +20,14 @@ var pages = [["/main.html", "text/html"],
              ["/test.jpg", "image/jpg"],
              ["/profile/imgup.js", "text/javascript"],
              ["/profile/imguptest.html", "text/html"]];
-             */
-             var extTypes = [];
-             extTypes["html"]="text/html";
-             extTypes["htm"]="text/html";
-             extTypes["js"]="text/javascript";
-             extTypes["css"]="text/css";
-             extTypes["jpg"]="image/jpg";
-             extTypes["jpeg"]="image/jpg";
-             
 
+var extTypes = [];
+extTypes["html"]="text/html";
+extTypes["htm"]="text/html";
+extTypes["js"]="text/javascript";
+extTypes["css"]="text/css";
+extTypes["jpg"]="image/jpg";
+extTypes["jpeg"]="image/jpg";
    
 function error(request, response, code, file) {
     log(request, code, file);

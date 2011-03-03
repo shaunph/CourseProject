@@ -1,0 +1,21 @@
+<html>
+<head>
+	<script src="filterUpload.js" type="text/javascript"></script>
+</head>
+
+<body>
+
+<script>
+	PrintAcceptedExts();
+</script>
+
+<p>
+<form method=post name=upform action="/fileUpload/uploadFile.js" enctype="multipart/form-data">
+	<input type="hidden" name="MAX_FILE_SIZE" value="500" />
+	<input type=file name=uploadfile>
+	<br />
+	<input type=button name="Submit" value="Submit" onclick="LimitAttach(this.form, this.form.uploadfile.value)">
+</form>
+
+</body>
+</html>
