@@ -18,13 +18,15 @@ var pages = [["/main.html", "text/html"],
              ["/server_error.html", "text/html"],
              ["/signup.html", "text/html"],
              ["/Available", checkAvailable],	
+             ["/signupRequest", signupRequest],	
 			 /*
 				So this is what i was thinking.  You put the function you want/need to call as the second parameter
 				then in the resolve function it checks to see if the second element is a string or a function
 				if its a string it calls sendObj if its a function it calls the function.  If the function needs parameters
 				whether passed in the url or in the document, the function must take the request as the parameter 
 				then manipulate the request to get the requested data... doing this will minimize the amount of if then else
-				or switch statements in the resolve method.
+				or switch statements in the resolve method.  Also your function needs a call back function due to asynchonisity.
+				and to tell the resolver what to send to the users.
 			 */
              ["/signup-request.html", "text/javascript"],
              ["/signup.js", "text/javascript"],
@@ -48,8 +50,6 @@ function checkAvailable(request, callback) {
 	var params = url.parse(request.url,true).query;		
 	
 	for(key in params){
-
-		util.log(key+":"+params[key]+" available");
 		var res = db.checkAvailable(key, params[key], function (res) {
 			if(res == 1) {
 				callback("Available!!");
@@ -59,6 +59,43 @@ function checkAvailable(request, callback) {
 			}
 		});
 	}	
+}
+
+
+//copied from http://www.toxiccoma.com/random/nodejs-0195-http-post-handling-of-form-data
+function postHandler(request, callback) {
+
+    var _REQUEST = { };
+    var _CONTENT = '';
+
+	/*
+	
+		For some reason the below segment of code doesnt work... It just doesnt do anything.
+	
+	*/
+	if (request.method == 'POST') {
+	
+		request.on('data', function(chunk) {
+			util.log("next chunk: "+chunk);
+			_CONTENT+= chunk;
+		});
+
+		request.on('end', function() {
+			_REQUEST = qs.parse(_CONTENT);
+			callback(_REQUEST);
+		});
+    }
+};
+
+
+function signupRequest(request, callback) {
+
+	postHandler(request, function(data) {
+		for(key in data) {
+			util.log(key+" "+data[key]);
+		}
+		callback("Success");	//this is the screen that the user will see upon success full signup
+	});
 }
 
 /* Upon receiving a request, try to match it with a response object. If
@@ -87,15 +124,12 @@ function resolve(request, response) {
 				break;
 			}
 			else if(typeof pages[p][1] == "function") {
-				log(request, 200, pages[p][1].toString().split("{")[0]);	//log the function that was called
-				
-				pages[p][1](request, function(res) {
+				pages[p][1](request, function(res) {//here is where we call the function with the request and callback as the parameters.
 					response.writeHead(200, {'Content-Type': "text/html"});
-					response.write(res);	//here is where we call the function with the request as the parameter.
+					response.write(res);	
 					response.end();
 				});
-				
-				
+				log(request, 200, pages[p][1].toString().split("{")[0]);	//log the function that was called				
 			}
         }
     } 
