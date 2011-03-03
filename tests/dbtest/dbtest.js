@@ -13,7 +13,7 @@ var dbLocation = "db/main.db"; // database location in file system
  * output currently directed to the console.
  *
  */
-var dbtest = new function(){
+dbtest = new function(){
 	this.tests = [];
 	this.current = 0;
 
@@ -116,6 +116,34 @@ function addUserTest(){
 }
 
 /*
+ * userExistsTest()
+ *
+ * tests whether or not a users existence can be verified
+ *
+ */
+function userExistsTest(){
+	dbtest.addToLog("checking if new user exists...");
+	slh.userExists("test@thisdomainshouldnotexist.com", 
+		function(error){
+			if (error.status == 0){
+				if (error.exists){
+					dbtest.addToLog("user exists\n");
+					dbtest.callNext();
+				}
+				else{
+					dbtest.addToLog("user does not exist\n");
+					dbtest.callNext();
+				}
+			}
+			else {
+				dbtest.addToLog("failed to check user("
+					+ error.detail.message +")\n");
+				dbtest.callNext();
+			}
+	});
+}
+
+/*
  * removeUserTest()
  *
  * tests whether or not a user can be removed(the same user as above)
@@ -149,6 +177,7 @@ function printLog() {
 
 dbtest.addTest(dbExists);
 dbtest.addTest(addUserTest);
+dbtest.addTest(userExistsTest);
 dbtest.addTest(removeUserTest);
 dbtest.addTest(printLog);
 dbtest.run();

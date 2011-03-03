@@ -129,6 +129,25 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 }
 
 
+exports.userExists = function (userEmail, callback) {
+	var sql = "SELECT * FROM user WHERE email = ?";
+
+	accessDB(sql, [userEmail], function(error, rows) {
+			if(error) {
+				writeLog(error);
+				if (callback != null) { callback({status:-2, detail:error}); }
+			}
+			else if(rows.length != 0) {
+				writeLog("user: " + userEmail + " exists.");
+				if (callback != null) { callback({status:0, exists:true, detail:error}); }
+			}
+			else {
+				writeLog("user: " + userEmail + " does not exist.");
+				if (callback != null) { callback({status:0, exists:false, detail:error}); }
+			}
+	});
+}
+
 exports.removeUser = function (userEmail, callback) {
 	var sql = "DELETE FROM user WHERE email = ?";
 
