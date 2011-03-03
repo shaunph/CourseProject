@@ -1,3 +1,16 @@
+/**
+	Before using these functions, must create the database by first
+	running from command line: node createDatabase.js
+
+	To add a task, use the function
+		addTask(String taskName, String creatorEmail)
+	To add a user, use the function
+		addUser(String userEmail, String userNickname, String userPassword)
+	To add a comment, use the function
+		addComment(String commentText, int taskid, Strnig commenterEmail)
+*/
+
+
 sqlite = require('./../lib/node-sqlite/sqlite');
 fs = require('fs');
 path = require('path');

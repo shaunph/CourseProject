@@ -1,4 +1,6 @@
 /**
+	To create the database, run from command line: node createDatabase.js
+
 	This code will create the database tables used on the website.
 	Should only be run when changes are made, and after the old
 	database has been deleted.
