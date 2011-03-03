@@ -10,6 +10,8 @@
 		addComment(String commentText, int taskid, Strnig commenterEmail)
 */
 
+//TODO: figure out why "out of memory" error occurs sometimes, but not always
+
 
 sqlite = require('./../lib/node-sqlite/sqlite');
 fs = require('fs');
@@ -184,3 +186,39 @@ function addComment(commentText, commentTaskid, commenterEmail) {
 	});
 }
 
+/**
+	Parameter1: a function that takes in 2 arguments, the first
+		being an error object, the second being an array of row
+		objects representing the tuples returned from the
+		database.
+
+	Usage example:
+		
+	getTable("user", function (error, rows) {
+		if(error)
+			throw error;
+
+		for(i = 0; i < rows.length; i++) {
+			console.log(rows[i].email + " " +
+				rows[i].nickname + " " +
+				rows[i].password);
+		}
+	});
+*/
+function getTable(tableName, inputFunction) {
+	var sql = "SELECT * FROM " + tableName;
+
+	db = new sqlite.Database();
+
+	db.open(dbLocation, function(error) {
+		if(error)
+			throw error;
+
+		db.execute(sql, inputFunction);
+	});
+
+	db.close(function(error) {
+		if(error)
+			throw error;
+	});
+}
