@@ -69,7 +69,7 @@ function accessDB(sql, executionArgs, inputFunction) {
 }
 
 //TODO: add error checking (email invalid)
-function addTask(taskName, creatorEmail) {
+exports.addTask = function(taskName, creatorEmail) {
 
 	var sql = "SELECT * FROM task";
 
@@ -104,7 +104,7 @@ function addTask(taskName, creatorEmail) {
 }
 
 //TODO: add error checking (email invalid, nickname taken)
-function addUser(userEmail, userNickname, userPassword) {
+exports.addUser = function(userEmail, userNickname, userPassword) {
 	
 	var sql = "SELECT * FROM user WHERE email = ? OR nickname = ?";
 
@@ -137,7 +137,7 @@ function addUser(userEmail, userNickname, userPassword) {
 	});
 }
 
-function addComment(commentText, commentTaskid, commenterEmail) {
+exports.addComment = function(commentText, commentTaskid, commenterEmail) {
 
 	var sql = "SELECT * FROM user WHERE email = ?";
 
@@ -187,7 +187,9 @@ function addComment(commentText, commentTaskid, commenterEmail) {
 }
 
 /**
-	Parameter1: a function that takes in 2 arguments, the first
+	Parameter1: Table name.
+
+	Parameter2: a function that takes in 2 arguments, the first
 		being an error object, the second being an array of row
 		objects representing the tuples returned from the
 		database.
@@ -205,8 +207,45 @@ function addComment(commentText, commentTaskid, commenterEmail) {
 		}
 	});
 */
-function getTable(tableName, inputFunction) {
+exports.getTable = function(tableName, inputFunction) {
 	var sql = "SELECT * FROM " + tableName;
+
+	db = new sqlite.Database();
+
+	db.open(dbLocation, function(error) {
+		if(error)
+			throw error;
+
+		db.execute(sql, inputFunction);
+	});
+
+	db.close(function(error) {
+		if(error)
+			throw error;
+	});
+}
+
+/**
+	Parameter1: taskid for the task whose comments the caller wants.
+
+	Parameter2: a function that takes in 2 arguments, the first
+		being an error object, the second being an array of row
+		objects representing the tuples returned from the
+		database.
+
+	Usage example:
+		
+	
+	getCommentsForTask(1, function(error, rows) {
+		for(i = 0; i < rows.length; i++) {
+			console.log(rows[i].thecomment);
+			console.log(rows[i].taskid);
+			console.log(rows[i].email);
+		}
+	});
+*/
+exports.getCommentsForTask = function(taskid, inputFunction) {
+	var sql = "SELECT * FROM comment WHERE taskid = " + taskid;
 
 	db = new sqlite.Database();
 
