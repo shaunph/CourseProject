@@ -83,6 +83,11 @@ function postHandler(request, callback) {
 		request.on('end', function() {
 			util.log("end of post request found.");
 			_REQUEST = qs.parse(_CONTENT);
+			
+			//experimental code
+			util.log("Trailers: "+request.trailers);	//does this contain the post data?
+			//experimental code
+			
 			callback(_REQUEST);
 		});
     }
