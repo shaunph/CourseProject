@@ -31,16 +31,6 @@ exports.postReq = function (request, response) {
     });
     //Once everything is received
     request.on('end', function () {
-	/* 
-        The Buffer object is preferred for binary data over the string object because
-        it is significantly faster and is capable of handling input similar to utf8
-        characters without unintended side effects.
-        The Buffer works directly on bytes, and the algorithm for building the dataBuffer
-        object is O(n), rather than O(n^2) with the equivalent code allString += chunk
-        This is because bops.join is called only once, as opposed to allString += chunk, 
-        which is O(n), and is called O(n) times (once per chunk).
-        For larger files, (5MB+), the Buffer object is a required alternative.
-        */	
         //Make one huge data Buffer that holds the entire HTTP request data section
         var dataBuffer = bops.join(allChunks);
         //Extract the file from the data Buffer.
