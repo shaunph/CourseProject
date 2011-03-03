@@ -1,13 +1,13 @@
-var exec = require('child_process').exec;
-    fs = require('fs');
-    http = require('http');
-    os = require('os');
-    pagemaker = require('./pagemaker');
-    path = require('path');
-    url = require('url');
+var exec = require('child_process').exec,
+    fs = require('fs'),
+    http = require('http'),
+    os = require('os'),
+    pagemaker = require('./pagemaker'),
+    path = require('path'),
+    url = require('url'),
     util = require('util');
 
-var docRoot = "static/";
+var docRoot = "static/",
     errorRoot = "static/error_pages/";
 
 /* register your new pages here, until the database is working */

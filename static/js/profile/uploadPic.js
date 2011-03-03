@@ -5,13 +5,13 @@ write the actual file, once one can determine the current user
 decide where to store profile pics.
 */
 
-var exec = require('child_process').exec;
-    fs = require('fs');
-    http = require('http');
-    os = require('os');
-    path = require('path');
-    url = require('url');
-    util = require('util');
+var exec = require('child_process').exec,
+    fs = require('fs'),
+    http = require('http'),
+    os = require('os'),
+    path = require('path'),
+    url = require('url'),
+    util = require('util'),
     bops = require('bufferOps.js'); //Useful operations on Buffer objects
     
 /*
