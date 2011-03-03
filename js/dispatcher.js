@@ -1,13 +1,13 @@
-var exec = require('child_process').exec,
-    fs = require('fs'),
-    http = require('http'),
+var exec = require('child_process').exec;
+    fs = require('fs');
+    http = require('http');
     os = require('os');
-    pagemaker = require('./pagemaker'),
-    path = require('path'),
-    url = require('url'),
+    pagemaker = require('./pagemaker');
+    path = require('path');
+    url = require('url');
     util = require('util');
 
-var docRoot = "static/",
+var docRoot = "static/";
     errorRoot = "static/error_pages/";
 
 /* register your new pages here, until the database is working */
@@ -17,7 +17,9 @@ var pages = [["/main.html", "text/html"],
              ["/signup.html", "text/html"],
              ["/signup.js", "text/javascript"],
              ["/style.css", "text/css"],
-             ["/test.jpg", "image/jpg"]];
+             ["/test.jpg", "image/jpg"],
+             ["/imgup.js", "text/javascript"],
+             ["/imguptest.html", "text/html"]];
 
    
 function error(request, response, code, file) {
@@ -35,12 +37,25 @@ function log(request, statusCode, fileMatch) {
    no corresponding object is found, respond with a 404 error page. In case
    an unresolvable exception is encountered, repond with a 500 error page. */
 function resolve(request, response) {
+    //If the user is posting data, call the POST resolver
+    if(request.method=='POST') {
+        resolvePost(request, response);
+    //If the user is retreiving data, call the GET resolver
+    } else if (request.method=='GET') {
+        resolveGet(request,response);
+    }
+}
+
+function resolveGet(request, response) {
+
     var pathname = url.parse(request.url).pathname;
     var fileMatch;
 
     /* some miscellaneous work: redirect / to /main.html, look for images
        right place */
-    if (pathname == "/") { pathname = "/main.html"; }
+    if (pathname == "/") { 
+        pathname = "/main.html"; 
+    }
     var extension = pathname.split(".").pop();
     if (extension == "jpg" || extension == "png" || extension == "gif") {
         extension = "img";
@@ -58,6 +73,25 @@ function resolve(request, response) {
     if (!match) {
         error(request, response, 404, fileMatch);
     }
+}
+
+/* 
+resolvePost is used to resolve a post request. All file uploads will be handled as follows:
+
+In the HTML:
+<form method=post name=upform action="/dir1/dir2/script.js">
+
+will result in a form post calling postReq in the file: ./static/js/dir1/dir2/script.js
+
+the code in the postReq function in script.js will handle the upload from there.
+No posted data is even glanced at by the dispatcher.
+
+Author: Mitchell Ludwig
+*/
+function resolvePost(request, response) {
+    console.log("File posted with: " + process.cwd() + "/" + docRoot + "js" + url.parse(request.url).pathname);
+    var handler = require(process.cwd() + "/" + docRoot + "js" + url.parse(request.url).pathname);
+    handler.postReq(request,response);
 }
 
 function sendObj(request, response, file, type) {
@@ -117,5 +151,6 @@ function init(args) {
         console.log("date/time\t  remote ip\tstatus\trequest  ->  resolution");
     }
 }
+
 
 init(process.argv);
