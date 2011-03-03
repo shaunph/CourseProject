@@ -144,6 +144,51 @@ function userExistsTest(){
 }
 
 /*
+ * addTaskTest()
+ *
+ * tests whether or not a task can be added.
+ *
+ */
+function addTaskTest(){
+	dbtest.addToLog("attempting to add a task...");
+	slh.addTask("Find out where that noise is coming from",
+		"test@thisdomainshouldnotexist.com", 
+		function(error){
+			if (error.status == 0){
+				dbtest.addToLog("user task added successfully\n");
+				dbtest.callNext();
+			}
+			else {
+				dbtest.addToLog("failed to add task("
+					+ error.detail.message +")\n");
+				dbtest.callNext();
+			}
+	});
+}
+
+/*
+ * removeTaskTest()
+ *
+ * tests whether or not a task can be removed
+ *
+ */
+function removeTaskTest(){
+	dbtest.addToLog("attempting to remove task...");
+	slh.removeTask("Find out where that noise is coming from", 
+		function(error){
+			if (error.status == 0){
+				dbtest.addToLog("task removed successfully\n");
+				dbtest.callNext();
+			}
+			else {
+				dbtest.addToLog("failed to remove task("
+					+ error.detail.message +")\n");
+				dbtest.callNext();
+			}
+	});
+}
+
+/*
  * removeUserTest()
  *
  * tests whether or not a user can be removed(the same user as above)
@@ -178,6 +223,8 @@ function printLog() {
 dbtest.addTest(dbExists);
 dbtest.addTest(addUserTest);
 dbtest.addTest(userExistsTest);
+dbtest.addTest(addTaskTest);
+dbtest.addTest(removeTaskTest);
 dbtest.addTest(removeUserTest);
 dbtest.addTest(printLog);
 dbtest.run();

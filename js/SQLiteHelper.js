@@ -56,13 +56,14 @@ function accessDB(sql, executionArgs, inputFunction) {
 }
 
 //TODO: add error checking (email invalid)
-exports.addTask = function (taskName, creatorEmail) {
+exports.addTask = function (taskName, creatorEmail,callback) {
 
 	var sql = "SELECT * FROM task";
 
 	accessDB(sql, null, function(error, rows) {
 		if(error) {
 			writeLog(error);
+			if (callback != null) { callback({status:-2, detail:error}); }
 			return -2;
 		}
 
@@ -70,6 +71,7 @@ exports.addTask = function (taskName, creatorEmail) {
 			if(rows[i].taskname.toLowerCase == taskName.toLowerCase) {
 				writeLog("func: addTask, task " + taskName +
 						" already exists.");
+				if (callback != null) { callback({status:-1, detail:{message:"task already exists."}}); }
 				return -1; // error code for caller
 			}
 		}
@@ -80,16 +82,36 @@ exports.addTask = function (taskName, creatorEmail) {
 			function(error, rows) {
 				if(error) {
 					writeLog(error);
+					if (callback != null) { callback({status:-2, detail:error}); }
 					return -2; // error code for caller
 				}
 
 				writeLog("task " + taskName + " by " +
 					creatorEmail + " added.");
+				if (callback != null) { callback({status:0, detail:error}); }
 			}
 		);
 	});
 }
 
+//TODO: add error checking (email invalid)
+exports.removeTask = function (taskName, callback) {
+
+	var sql = "DELETE FROM task WHERE taskname = ?";
+
+	accessDB(sql, [taskName], function(error) {
+		if(error) {
+			writeLog(error);
+			if (callback != null) { callback({status:-2, detail:error}); }
+			return -2;
+		}
+		else{
+			writeLog("Task: " + taskName + "successfully removed.");
+			if (callback != null) { callback({status:0, detail:error}); }
+		}
+
+	});
+}
 //TODO: add error checking (email invalid, nickname taken)
 exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 	
