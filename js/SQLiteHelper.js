@@ -100,13 +100,11 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 			if(error) {
 				writeLog(error);
 				callback(-2);
-				return -2; // error code for caller
 			}
 
 			if(rows.length != 0) {
 				writeLog("func: addUser, email " + userEmail + " already exists.");
 				callback(-1);
-				return -1; // error code for caller
 			} else {
 				sql = "INSERT INTO user (email,nickname,password) " +
 						"VALUES (?,?,?)";
@@ -124,12 +122,19 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 								userPassword + " added.");
 						}
 				);
+				callback(1);
 			}
 	});
-	callback(1);
 }
 
 exports.checkAvailable = function(field, entry, callback) {
+	if(field == "Email")
+		field = "email";
+	if(field == "Username")
+		field = "user";
+
+	writeLog("Checking for: "+field+" : "+entry);
+
 	var sql = "SELECT * FROM user WHERE ? = ?";	//TODO: This may be optimised or formatted better?
 	var avail=0;
 	accessDB(sql, [field, entry], function(error, rows) {
