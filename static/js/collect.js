@@ -29,7 +29,8 @@ function clicked() {
 	var ETL = document.getElementById("phrase5");
 	var com = document.getElementById("phrase6");
 	var date = new Date();
-
+	
+	//NOTE: .checked is a boolean value that indicates if a button is checked (true = checked, false = unchecked)
 	if(document.getElementById("low").checked){
 		pri = document.getElementById("low").value;
 	}
@@ -40,6 +41,8 @@ function clicked() {
 		pri = document.getElementById("high").value;
 	}
 	t = new Task(tnom, desc, pri, "open", nom, date);
+	//TODO: Task name check into DB to check for like named tasks
+	t.save();
 	window.alert("<<success>> " + date);
 	document.location="index.html";
 }
