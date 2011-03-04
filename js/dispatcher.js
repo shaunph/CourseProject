@@ -91,6 +91,10 @@ function signupRequest(request, callback) {
 			if(ret == 1) {
 				callback("Signup Successfull<br /><a href=\"/login.html\">Click here to login</a>");
 			}
+			else if(ret == -1) {
+				callback("That user already exists <br />"+
+					 "<a href=\"signup.html\">Click here to try again<\a>");
+			}
 			else {
 				callback("There was an error with the signup process <br />"+
 					 "<a href=\"signup.html\">Click here to try again<\a>");

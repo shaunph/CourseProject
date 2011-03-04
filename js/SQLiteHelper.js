@@ -128,16 +128,16 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 }
 
 exports.checkAvailable = function(field, entry, callback) {
-	if(field == "Email")
-		field = "email";
+	var sql;	
+	if(field == "Email") 
+		sql = "SELECT * FROM user WHERE email = ?";
 	if(field == "Username")
-		field = "user";
+		sql = "SELECT * FROM user WHERE nickname = ?";
 
 	writeLog("Checking for: "+field+" : "+entry);
 
-	var sql = "SELECT * FROM user WHERE ? = ?";	//TODO: This may be optimised or formatted better?
 	var avail=0;
-	accessDB(sql, [field, entry], function(error, rows) {
+	accessDB(sql, [entry], function(error, rows) {
 		if(error) {
 			writeLog(error);
 			callback(-3);
