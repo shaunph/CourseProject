@@ -73,7 +73,7 @@ function sendDynamicObj(request, response, scriptName, parameters) {
             log(request, 200, scriptName);
 			
             var script = require("../" + scriptName);	//Path must relative to dispatcher.js
-			script.send(response, parameters);
+			script.send(response, parameters, request);
         } else {
 			error(request, response, 404, scriptName);
         }
