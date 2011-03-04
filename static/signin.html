@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!--
+For now sign-up will be a feature of only the main page and logout will be a 
+feature of every page. Later we may want to let non-signed in users see other
+parts of the webpage but control what they are able to do unless they sign-in;
+in which case we would have them be able to sign-up from every page. 
+Later sign-up and logout should occupy a common spot on a task bar that is
+often seen on most websites in the top right hand corner of every page.
+-->
+
+<!--Until mostly working, this will be a seperate page from main-->
+<html>
+	<!-------------------->
+	<!--Remove head when implementing with other pages, keep imports-->
+	<!-------------------->
+	<head>
+		<title>Sign-In Page</title>
+		<!--Import the accompanying js file for the html and the jquery js-->
+			<!--First import is commented out until signin.js is more polished-->
+			<!--<script type="text/javascript" src="js/signin.js"></script>-->
+		<script type="text/javascript" src="js/jquery-1.5.min.js"></script>
+	</head>
+
+	<body>
+		<p>Sign-in</p>
+		<!--Form for sign-in input -->
+		<form action="signin-request.html" id="signInData" method="post">
+			<!--Email/Nickname label assigned to a text field-->
+			<label for="identity">Email/Nickname:</label>
+			<!--When dealing with the post data, find out if id and name are
+			both needed -->
+			<input type="text" id="identity" name="identity" />
+			<br />
+			<!--Password label assigned to a password text field-->
+			<label for="passwordIn">Password:</label>
+			<input type="password" id="passwordIn" name="passwordIn" />			
+			<br />
+			<!--Once signin.js is implemented with the database this
+			input will need to be enabled -->
+			<input type="submit" id="loginButton" value="Login"
+				disabled=disabled /><br />
+		</form>
+	</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
