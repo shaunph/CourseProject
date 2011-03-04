@@ -95,7 +95,7 @@ function checkAvailability(field, entry) {
 			else if (field == 'Username')
 				signUpUserAvail = true;
 				
-			$('#'+field+'Available').html("Available!");
+			//$('#'+field+'Available').html("Available!");
 			$('#'+field+'Available').css('color', '#00ff00');		//green
 
 		}
@@ -105,7 +105,7 @@ function checkAvailability(field, entry) {
 			else if (field == 'Username')
 				signUpUserAvail = false;
 			
-			$('#'+field+'Available').html("Not Available!");
+			//$('#'+field+'Available').html("Not Available!");
 			$('#'+field+'Available').css('color', '#ff0000');		//green
 
 		}

@@ -46,9 +46,9 @@ function resolve(request, response) {
 	else
 	{
 		var split = pathname.split("/"),
-			route = split[1],
-			params = split.slice(2);
-			scriptName = dynamicRoot + route + ".js";
+			route = split[1];
+		var params = url.parse(request.url, true).query;
+		var scriptName = dynamicRoot + route + ".js";
 		
 		sendDynamicObj(request, response, scriptName, params);
 	}
