@@ -86,6 +86,11 @@ function postHandler(request, callback) {
 			
 			//experimental code
 			util.log("Trailers: "+request.trailers);	//does this contain the post data?
+			
+			for(key in request.trailers) {
+				util.log(key+" "+request.trailers[key]);
+			}
+			
 			//experimental code
 			
 			callback(_REQUEST);
