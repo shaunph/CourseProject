@@ -42,8 +42,12 @@ db.open(dbLocation, function (error) {
 
 	db.execute("CREATE TABLE task (" +
 		"taskid INTEGER PRIMARY KEY AUTOINCREMENT," +
-		"taskname TEXT," +
-		"creator TEXT)", // "FOREIGN KEY (creator) REFERENCES user (email))"
+		"taskName TEXT," +
+		"description TEXT," +
+		"priority TEXT," +
+		"status TEXT," +
+		"user TEXT," +
+		"date TEXT)",
 		function (error) {
 			if(error) {
 				console.log("Error creating task table.");

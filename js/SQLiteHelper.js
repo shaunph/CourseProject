@@ -14,6 +14,7 @@
 
 
 sqlite = require('./../lib/node-sqlite/sqlite');
+task = require('./../static/js/task');
 fs = require('fs');
 path = require('path');
 
@@ -21,6 +22,11 @@ var dbLocation = "../db/main.db"; // database location in file system
 var dbLogLocation = "../db/log.txt"; // database log
 var db;
 
+/**
+	Parameter1: an error object describing an error. (error)
+
+	This function logs this error in a txt file.
+*/
 function writeLog(logLine) {
 
 	console.log(logLine);
@@ -37,6 +43,14 @@ function writeLog(logLine) {
 	});
 }
 
+/**
+	Parameter1: a sql query. (String)
+	Parameter2: the arguments to bind to the query. (String)
+	Parameter3: a function with 2 args, error and rows, which
+		performs operations on the query results. (function)
+
+	This is only a helper function for this js file.
+*/
 function accessDB(sql, executionArgs, inputFunction) {
 
 	path.exists(dbLocation, function(exists) {
@@ -68,7 +82,7 @@ function accessDB(sql, executionArgs, inputFunction) {
 	});
 }
 
-//TODO: add error checking (email invalid)
+/*
 exports.addTask = function(taskName, creatorEmail) {
 
 	var sql = "SELECT * FROM task";
@@ -102,7 +116,61 @@ exports.addTask = function(taskName, creatorEmail) {
 		);
 	});
 }
+*/
 
+/**
+	Parameter1: an object of type Task from task.js. (Task)
+
+	This function stores the task object in the database.
+*/
+//TODO: add error checking
+exports.addTask = function(taskObj) {
+
+	var sql = "SELECT * FROM task";
+
+	accessDB(sql, null, function(error, rows) {
+		if(error) {
+			writeLog(error);
+			return -2;
+		}
+
+		for(i = 0; i < rows.length; i++) {
+			if(rows[i].taskName.toLowerCase() ==
+						taskObj.getTaskName().toLowerCase()) {
+				writeLog("func: addTask, task " + taskObj.getTaskName() +
+						" already exists.");
+				return -1; // error code for caller
+			}
+		}
+		
+		sql = "INSERT INTO task " +
+			"(taskName, description, priority, status, user, date) " +
+			"VALUES (?,?,?,?,?,?)";
+
+		db.execute(sql, [taskObj.getTaskName(), taskObj.getDescription(),
+				taskObj.getPriority(), taskObj.getStatus(), taskObj.getUser(),
+				taskObj.getDate()],
+			function(error, rows) {
+				if(error) {
+					writeLog(error);
+					return -2; // error code for caller
+				}
+
+				writeLog("task " + taskObj.getTaskName() + " by " +
+					taskObj.getUser() + " added.");
+			}
+		);
+	});
+}
+
+/**
+	Parameter1: an email. (String)
+	Parameter2: a nickname. (String)
+	Parameter3: a password. (String)
+
+	This function takes the input and stores it in the user table
+	of the database.
+*/
 //TODO: add error checking (email invalid, nickname taken)
 exports.addUser = function(userEmail, userNickname, userPassword) {
 	
@@ -137,6 +205,13 @@ exports.addUser = function(userEmail, userNickname, userPassword) {
 	});
 }
 
+/**
+	Parameter1: a comment. (String)
+	Parameter2: the taskid that the comment refers to. (String)
+	Parameter3: the email of the commenter. (String)
+
+	This function adds a comment to the comment table in the database.
+*/
 exports.addComment = function(commentText, commentTaskid, commenterEmail) {
 
 	var sql = "SELECT * FROM user WHERE email = ?";
