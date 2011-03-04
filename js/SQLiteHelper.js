@@ -72,7 +72,6 @@ exports.addTask = function (taskName, creatorEmail,callback) {
 				writeLog("func: addTask, task " + taskName +
 						" already exists.");
 				if (callback != null) { callback({status:-1, detail:{message:"task already exists."}}); }
-				return -1; // error code for caller
 			}
 		}
 		
@@ -83,7 +82,6 @@ exports.addTask = function (taskName, creatorEmail,callback) {
 				if(error) {
 					writeLog(error);
 					if (callback != null) { callback({status:-2, detail:error}); }
-					return -2; // error code for caller
 				}
 
 				writeLog("task " + taskName + " by " +
@@ -121,7 +119,6 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 			if(error) {
 				writeLog(error);
 				if (callback != null) { callback({status:-2, detail:error}); }
-				return -2; // error code for caller
 			}
 
 			if(rows.length != 0) {
@@ -137,7 +134,6 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 							if(error) {
 								writeLog(error);
 								if (callback != null) { callback({status:-2, detail:error}); }
-								return -2; // error code for caller
 							}
 
 							writeLog("user " + userEmail + ", " +
