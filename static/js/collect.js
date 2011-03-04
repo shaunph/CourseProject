@@ -33,4 +33,5 @@ function clicked() {
 	}
 	//t = new Task(tnom, desc, pri, "open", nom, date);
 	window.alert("<<success>> " + date);
+	document.location="index.html"
 }
