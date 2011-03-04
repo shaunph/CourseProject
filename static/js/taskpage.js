@@ -6,7 +6,7 @@
     (width) - An optional argument. Specifies the maximum width of the displayed text.
 */
 function display(type, width) {
-	var ouput, containerList;
+	var output, containerList;
 	
 	// If optional argument 'width' is not provided, use a default width of 30em.
 	if (width === undefined)
@@ -59,6 +59,6 @@ function display(type, width) {
 
     For now, these are test parameters. 
 */
-var taskObj = new Task("TaskNameHere", 123, "This is a test description. ", "priority", "status", "user", "date");
+var taskObj = new Task("TaskNameHere", "This is a test description. ", "priority", "status", "user", "date");
 
 document.title = taskObj.getTaskName() + " Details";	// Just display the title on the html page
