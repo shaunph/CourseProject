@@ -1,5 +1,5 @@
 task = require('./../static/js/task');
-SQLiteHelper = require('./SQLiteHelper.js');
+SQLiteHelper = require('./../js/SQLiteHelper.js');
 
 
 var task1 = new task.Task(

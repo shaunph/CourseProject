@@ -18,8 +18,8 @@ task = require('./../static/js/task');
 fs = require('fs');
 path = require('path');
 
-var dbLocation = "../db/main.db"; // database location in file system
-var dbLogLocation = "../db/log.txt"; // database log
+var dbLocation = "./db/main.db"; // database location in file system
+var dbLogLocation = "./db/log.txt"; // database log
 var db;
 
 /**

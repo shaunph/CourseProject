@@ -22,7 +22,7 @@
 	user		- The creator of the task (String)
 	date		- Date when task was created (Date)
 */
-function Task(taskName, description, priority, status, user, date) {
+exports.Task = function(taskName, description, priority, status, user, date) {
 
 	this.taskName = taskName;
 	this.id = undefined;
