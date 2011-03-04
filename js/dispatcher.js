@@ -27,8 +27,8 @@ extTypes["jpg"]="image/jpg";
 extTypes["jpeg"]="image/jpg";
    
 var docRoot = "static",
-	dynamicRoot = "dynamic/",
-    errorRoot = "static/error_pages/";
+	dynamicRoot = "dynamic",
+    errorRoot = "static/error_pages";
 
 /*
 error sends an error page in response to a bad request
@@ -36,7 +36,7 @@ error sends an error page in response to a bad request
 function error(request, response, code, file) {
     log(request, code, file);
     response.writeHead(code, {"Content-Type": "text/html"});
-    util.pump(fs.createReadStream(errorRoot + code + ".html"), response, function(){});
+    util.pump(fs.createReadStream(errorRoot + "/" + code + ".html"), response, function(){});
 }
 
 /*
@@ -68,8 +68,8 @@ function resolveGet(request, response) {
     if (pathname.charAt(pathname.length-1) == "/") { 
         pathname += "index.html"; 
     }
-	// if the path does not contain ".js", we assume it is static content.
-	if (pathname.indexOf(".js") == -1)
+	// if the url does not contain "?", we assume it is static content.
+	if (request.url.indexOf("?") == -1)
 	{
 		sendStaticObj(request, response, pathname);
     } else {
@@ -91,15 +91,15 @@ Author: Mitchell Ludwig
 */
 function resolvePost(request, response) {
     var pathname = process.cwd() + "/" + dynamicRoot + url.parse(request.url).pathname;
-    path.exists(file, function(exists) {
-        if(exists){
-            console.log("File posted with: " + process.cwd() + "/" + dynamicRoot + "js" + url.parse(request.url).pathname);
-            var handler = require(process.cwd() + "/" + dynamicRoot + url.parse(request.url).pathname);
-            handler.postReq(request,response);
-        } else {
-			error(request, response, 404, scriptName);
-        }
-    });
+    //NOTE: No time to do a path.exists, it will take too long to execute and data will begin to arrive before it is processed.
+    try {
+        console.log("File POST with: " + pathname);
+        var handler = require(pathname);
+        handler.postReq(request,response);
+    } catch (error) {
+        console.log("Error: " + error);
+		error(request, response, 404, pathname);
+    }
 }
 
 /*
@@ -128,15 +128,14 @@ function called getReq (exports.getReq=function(request,response){...};
 */
 function sendDynamicObj(request, response) {
     var pathname = process.cwd() + "/" + dynamicRoot + url.parse(request.url).pathname;
-    path.exists(file, function(exists) {
-        if(exists){
-            console.log("File posted with: " + process.cwd() + "/" + dynamicRoot + "js" + url.parse(request.url).pathname);
-            var handler = require(process.cwd() + "/" + dynamicRoot + url.parse(request.url).pathname);
-            handler.getReq(request,response);
-        } else {
-			error(request, response, 404, scriptName);
-        }
-    });
+    //NOTE: No time to do a path.exists, it will take too long to execute and data will begin to arrive before it is processed.
+    try {
+        console.log("File GET with: " + pathname);
+        var handler = require(pathname);
+        handler.getReq(request,response);
+    } catch (error) {
+        error(request, response, 404, pathname);
+    }
 }
 
 function init(args) {
