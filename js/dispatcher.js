@@ -6,25 +6,12 @@ var exec = require('child_process').exec,
     path = require('path'),
     url = require('url'),
     util = require('util');
-
-var docRoot = "static/",
+	
+var docRoot = "static",
+	dynamicRoot = "dynamic/",
     errorRoot = "static/error_pages/";
 
-/* register your new pages here, until the database is working */
-var pages = [
-			 ["/main.html", "text/html"],
-             ["/jquery-1.5.min.js", "text/javascript"],
-             ["/server_error.html", "text/html"],
-             ["/signup.html", "text/html"],
-             ["/signup.js", "text/javascript"],
-             ["/style.css", "text/css"],
-			 ["/test.jpg", "image/jpg"],
-			 ["/task.js", "text/javascript"],
-			 ["/taskpage.html", "text/html"],
-			 ["/taskpage.js", "text/javascript"]
-			];
 
-   
 function error(request, response, code, file) {
     log(request, code, file);
     response.writeHead(code, {"Content-Type": "text/html"});
@@ -36,73 +23,93 @@ function log(request, statusCode, fileMatch) {
     util.log(strings.join("\t"));
 }
 
-/* Upon receiving a request, try to match it with a response object. If
-   no corresponding object is found, respond with a 404 error page. In case
+/* Upon receiving a request, try to match it with a file. If
+   no corresponding file is found, respond with a 404 error page. In case
    an unresolvable exception is encountered, repond with a 500 error page. */
 function resolve(request, response) {
     var pathname = url.parse(request.url).pathname;
-    var fileMatch;
 
-    /* some miscellaneous work: redirect / to /main.html, look for images
-       right place */
-    if (pathname == "/") { pathname = "/main.html"; }
-    var extension = pathname.split(".").pop();
-    if (extension == "jpg" || extension == "png" || extension == "gif") {
-        extension = "img";
-    }
+    /* some miscellaneous work: redirect / to /index.html */
+    if (pathname == "/") { pathname = "/index.html"; }
 
-    match = 0;
-    for (p in pages) {
-        if (pages[p][0] == pathname) {
-            match++;
-            fileMatch = docRoot + extension + pathname;
-			
-            sendObj(request, response, fileMatch, pages[p][1]);
-            break;
-        }
-    } 
-    if (!match) {
-        error(request, response, 404, fileMatch);
-    }
+	// if the path splits at a ".", we assume it has a file extension
+	// and in turn assume it is static content.
+	if (pathname.split(".").length != 1)
+	{
+		var type = getMIMEType(pathname);
+		
+		pathname = docRoot + pathname;
+		sendStaticObj(request, response, pathname, type);
+	}
+	else
+	{
+		var split = pathname.split("/"),
+			route = split[1],
+			params = split.slice(2);
+			scriptName = dynamicRoot + route + ".js";
+		
+		sendDynamicObj(request, response, scriptName, params);
+	}
 }
 
-function sendObj(request, response, file, type) {
-    var statusCode = 200;
+function sendStaticObj(request, response, file, type) {
     path.exists(file, function(exists) {
         if (exists) {
             log(request, 200, file);
+			
             response.writeHead(200, {'Content-Type': type});
-
-            /* TODO: use page generation for pages
-
-            var page = new StandardPage();
-            //need a way to get the title from the page
-            page.setTitle("Testing");
-
-            //need a way to remove the <head> from the page
-            //and instead put it into: 
-            //page.addHead(data);
-
-            //create header
-
-            //create file input stream
-            var istream = fs.createReadStream(fullpath);
-            istream.on('data', function(data) {
-                page.addContent(data);
-            });
-            istream.on('end', function() {
-                response.end(page.toHTML());
-            });
-            //if there was an error handle it.
-            istream.on('error', function(error) {});
-            */
-
             util.pump(fs.createReadStream(file), response, function() {});
         } else {
-            error(request, response, 500, file);
-            console.log("ERROR: file reported to exist, but can't be found: " + file);
+			error(request, response, 404, file);
         }
     });
+}
+
+function sendDynamicObj(request, response, scriptName, parameters) {
+    path.exists(scriptName, function(exists) {
+        if (exists) {
+            log(request, 200, scriptName);
+			
+            var script = require("../" + scriptName);	//Path must relative to dispatcher.js
+			script.send(response, parameters);
+        } else {
+			error(request, response, 404, scriptName);
+        }
+    });
+}
+
+/* A simple function to try to map a file extension to a MIME type */
+function getMIMEType(pathname) {
+	var extension = pathname.split(".").pop();
+	var type;
+
+	switch(extension)
+	{
+		case 'html':
+			type = 'text/html';
+			break;
+		case 'css':
+			type = 'text/css';
+			break;
+		case 'js':
+			type = 'application/javascript';
+			break;
+		case 'jpg':
+		case 'jpeg':
+			type = 'image/jpeg';
+			break;
+		case 'gif':
+			type = 'image/gif';
+			break;
+		case 'png':
+			type = 'image/png';
+			break;
+		default:	//if no MIME type is found, just send the data as text
+			type = 'text/plain';
+			break;
+	}
+	
+	return type;
 }
 
 function init(args) {
