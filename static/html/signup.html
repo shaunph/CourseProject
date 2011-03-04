@@ -3,33 +3,33 @@
 	<head>
 		<title>Sign Up</title>
 		<script type="text/javascript" src="/jquery-1.5.min.js"></script>
-		<script type="text/javascript" src="/signup.js"></script>
+		<script type="text/javascript" src="/signup.js"> </script>
 		
 	</head>
 	<body>
 		<form action="signupRequest" id="signupForm" method="post">
 		
-			<label>Email: <br /><input type=email id=Email onchange="checkAvailability('Email');" required>
+			<label>Email: </label> <br /> <input type=email id=Email name=Email onchange="checkAvailability('Email');" required>
 				<div id="EmailAvailable" style="display:inline;"></div>
-			</label> <br />
+			<br />
 			
-			<label>Confirm Email: <br /><input type=email id=EmailConf onkeyup="verify('Email');" required>
+			<label>Confirm Email: </label> <br /><input type=email id=EmailConf onkeyup="verify('Email');" required>
 				<div id="EmailValid" style="display:inline;"></div>
-			</label><br />
+			<br />
 			
-			<label>Username (optional): <br /><input id=Username onchange="checkAvailability('Username');" >
+			<label>Username (optional): </label> <br /><input id=Username name=Username onchange="checkAvailability('Username');" >
 				<div id="UsernameAvailable" style="display:inline;"></div>
-			</label><br />
+			><br />
 			
-			<label>Password: <br /><input type=password id=Password onkeyup="verify('Password');" required >
+			<label>Password: </label> <br /><input type=password id=Password name=Password onkeyup="verify('Password');" required >
 				<div id=PasswordStrength style="display:inline;"></div>
-			</label><br />
+			<br />
 			
-			<label>Confirm Password: <br /><input type=Password id=PasswordConf onkeyup="verify('Password');" required>
+			<label>Confirm Password: </label> <br /><input type=Password id=PasswordConf onkeyup="verify('Password');" required>
 				<div id="PasswordValid" style="display:inline;"></div>
-			</label><br />
+			<br />
 			
-			<br /><input id="submitButton" type=submit value="Sign up" disabled=disabled><br />
+			<br /><input id="submitButton" type=submit value="Sign up" disabled=disabled ><br />
 		</form>
 	</body>
 </html>

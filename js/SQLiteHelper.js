@@ -89,18 +89,23 @@ exports.addTask = function(taskName, creatorEmail) {
 }
 
 //TODO: add error checking (email invalid, nickname taken)
-exports.addUser = function(userEmail, userNickname, userPassword) {
+
+//the callback is so that the user can get the return value from the nested functions
+//simply return #; doesnt work.
+exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 	
 	var sql = "SELECT * FROM user WHERE email = ? OR nickname = ?";
 
 	accessDB(sql, [userEmail, userNickname], function(error, rows) {
 			if(error) {
 				writeLog(error);
+				callback(-2);
 				return -2; // error code for caller
 			}
 
 			if(rows.length != 0) {
 				writeLog("func: addUser, email " + userEmail + " already exists.");
+				callback(-1);
 				return -1; // error code for caller
 			} else {
 				sql = "INSERT INTO user (email,nickname,password) " +
@@ -110,6 +115,7 @@ exports.addUser = function(userEmail, userNickname, userPassword) {
 						function(error, rows) {
 							if(error) {
 								writeLog(error);
+								callback(-2)
 								return -2; // error code for caller
 							}
 
@@ -120,6 +126,7 @@ exports.addUser = function(userEmail, userNickname, userPassword) {
 				);
 			}
 	});
+	callback(1);
 }
 
 exports.checkAvailable = function(field, entry, callback) {
