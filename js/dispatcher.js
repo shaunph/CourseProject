@@ -11,6 +11,7 @@ var docRoot = "static",
 	dynamicRoot = "dynamic/",
     errorRoot = "static/error_pages/";
 
+
 function error(request, response, code, file) {
     log(request, code, file);
     response.writeHead(code, {"Content-Type": "text/html"});
@@ -94,6 +95,7 @@ function getMIMEType(pathname) {
 			type = 'application/javascript';
 			break;
 		case 'jpg':
+		case 'jpeg':
 			type = 'image/jpeg';
 			break;
 		case 'gif':
