@@ -89,19 +89,22 @@ exports.addTask = function(taskName, creatorEmail) {
 }
 
 //TODO: add error checking (email invalid, nickname taken)
-exports.addUser = function(userEmail, userNickname, userPassword) {
+
+//the callback is so that the user can get the return value from the nested functions
+//simply return #; doesnt work.
+exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 	
 	var sql = "SELECT * FROM user WHERE email = ? OR nickname = ?";
 
 	accessDB(sql, [userEmail, userNickname], function(error, rows) {
 			if(error) {
 				writeLog(error);
-				return -2; // error code for caller
+				callback(-2);
 			}
 
 			if(rows.length != 0) {
 				writeLog("func: addUser, email " + userEmail + " already exists.");
-				return -1; // error code for caller
+				callback(-1);
 			} else {
 				sql = "INSERT INTO user (email,nickname,password) " +
 						"VALUES (?,?,?)";
@@ -110,6 +113,7 @@ exports.addUser = function(userEmail, userNickname, userPassword) {
 						function(error, rows) {
 							if(error) {
 								writeLog(error);
+								callback(-2)
 								return -2; // error code for caller
 							}
 
@@ -118,14 +122,22 @@ exports.addUser = function(userEmail, userNickname, userPassword) {
 								userPassword + " added.");
 						}
 				);
+				callback(1);
 			}
 	});
 }
 
 exports.checkAvailable = function(field, entry, callback) {
-	var sql = "SELECT * FROM user WHERE ? = ?";	//TODO: This may be optimised or formatted better?
+	var sql;	
+	if(field == "Email") 
+		sql = "SELECT * FROM user WHERE email = ?";
+	if(field == "Username")
+		sql = "SELECT * FROM user WHERE nickname = ?";
+
+	writeLog("Checking for: "+field+" : "+entry);
+
 	var avail=0;
-	accessDB(sql, [field, entry], function(error, rows) {
+	accessDB(sql, [entry], function(error, rows) {
 		if(error) {
 			writeLog(error);
 			callback(-3);

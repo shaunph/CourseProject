@@ -67,23 +67,16 @@ function postHandler(request, callback) {
 
     var _REQUEST = { };
     var _CONTENT = '';
-
-	/*
+	request.setEncoding('utf8');
 	
-		For some reason the below segment of code doesnt work... It just doesnt do anything.
+	if (request.method == 'POST') {		
 	
-	*/
-	if (request.method == 'POST') {		//this conditional works fine, and detects that its a POST.
-	
-		request.on('data', function(chunk) {	//but here it doesn't receive any data.
-			util.log("next chunk: "+chunk);
+		request.on('data', function(chunk) {	
 			_CONTENT+= chunk;
 		});
 
 		request.on('end', function() {
-			util.log("end of post request found.");
 			_REQUEST = qs.parse(_CONTENT);
-			
 			callback(_REQUEST);
 		});
     }
@@ -93,10 +86,21 @@ function postHandler(request, callback) {
 function signupRequest(request, callback) {
 
 	postHandler(request, function(data) {
-		for(key in data) {
-			util.log(key+" "+data[key]);
-		}
-		callback("Success");	//this is the screen that the user will see upon success full signup
+		
+		db.addUser(data.Email, data.Username, data.Password, function(ret) {
+			if(ret == 1) {
+				callback("Signup Successfull<br /><a href=\"/login.html\">Click here to login</a>");
+			}
+			else if(ret == -1) {
+				callback("That user already exists <br />"+
+					 "<a href=\"signup.html\">Click here to try again<\a>");
+			}
+			else {
+				callback("There was an error with the signup process <br />"+
+					 "<a href=\"signup.html\">Click here to try again<\a>");
+			}
+		
+		});
 	});
 }
 
