@@ -2,8 +2,10 @@ sqlite = require('./../lib/node-sqlite/sqlite');
 fs = require('fs');
 path = require('path');
 
-var dbLocation = "./db/main.db"; // database location in file system
-var dbLogLocation = "./db/log.txt"; // database log
+// directories changed, assuming the node process will be
+// started with CourseProject/ as the working directory
+var dbLocation = "db/main.db"; // database location in file system
+var dbLogLocation = "db/log.txt"; // database log
 var db;
 
 function writeLog(logLine) {
@@ -54,13 +56,14 @@ function accessDB(sql, executionArgs, inputFunction) {
 }
 
 //TODO: add error checking (email invalid)
-exports.addTask = function(taskName, creatorEmail) {
+exports.addTask = function (taskName, creatorEmail,callback) {
 
 	var sql = "SELECT * FROM task";
 
 	accessDB(sql, null, function(error, rows) {
 		if(error) {
 			writeLog(error);
+			if (callback != null) { callback({status:-2, detail:error}); }
 			return -2;
 		}
 
@@ -68,7 +71,7 @@ exports.addTask = function(taskName, creatorEmail) {
 			if(rows[i].taskname.toLowerCase == taskName.toLowerCase) {
 				writeLog("func: addTask, task " + taskName +
 						" already exists.");
-				return -1; // error code for caller
+				if (callback != null) { callback({status:-1, detail:{message:"task already exists."}}); }
 			}
 		}
 		
@@ -78,20 +81,36 @@ exports.addTask = function(taskName, creatorEmail) {
 			function(error, rows) {
 				if(error) {
 					writeLog(error);
-					return -2; // error code for caller
+					if (callback != null) { callback({status:-2, detail:error}); }
 				}
 
 				writeLog("task " + taskName + " by " +
 					creatorEmail + " added.");
+				if (callback != null) { callback({status:0, detail:error}); }
 			}
 		);
 	});
 }
 
-//TODO: add error checking (email invalid, nickname taken)
+//TODO: add error checking (email invalid)
+exports.removeTask = function (taskName, callback) {
 
-//the callback is so that the user can get the return value from the nested functions
-//simply return #; doesnt work.
+	var sql = "DELETE FROM task WHERE taskname = ?";
+
+	accessDB(sql, [taskName], function(error) {
+		if(error) {
+			writeLog(error);
+			if (callback != null) { callback({status:-2, detail:error}); }
+			return -2;
+		}
+		else{
+			writeLog("Task: " + taskName + "successfully removed.");
+			if (callback != null) { callback({status:0, detail:error}); }
+		}
+
+	});
+}
+//TODO: add error checking (email invalid, nickname taken)
 exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 	
 	var sql = "SELECT * FROM user WHERE email = ? OR nickname = ?";
@@ -99,12 +118,13 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 	accessDB(sql, [userEmail, userNickname], function(error, rows) {
 			if(error) {
 				writeLog(error);
-				callback(-2);
+				if (callback != null) { callback({status:-2, detail:error}); }
 			}
 
 			if(rows.length != 0) {
 				writeLog("func: addUser, email " + userEmail + " already exists.");
-				callback(-1);
+				if (callback != null) { callback({status:-2, detail:{message:"user exists"}}); }
+				return -1; // error code for caller
 			} else {
 				sql = "INSERT INTO user (email,nickname,password) " +
 						"VALUES (?,?,?)";
@@ -113,13 +133,13 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 						function(error, rows) {
 							if(error) {
 								writeLog(error);
-								callback(-2)
-								return -2; // error code for caller
+								if (callback != null) { callback({status:-2, detail:error}); }
 							}
 
 							writeLog("user " + userEmail + ", " +
 								userNickname +", with password " +
 								userPassword + " added.");
+								if (callback != null) { callback({status:0, detail:error}); }
 						}
 				);
 				callback(1);
@@ -127,33 +147,42 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 	});
 }
 
-exports.checkAvailable = function(field, entry, callback) {
-	var sql;	
-	if(field == "Email") 
-		sql = "SELECT * FROM user WHERE email = ?";
-	if(field == "Username")
-		sql = "SELECT * FROM user WHERE nickname = ?";
 
-	writeLog("Checking for: "+field+" : "+entry);
+exports.userExists = function (userEmail, callback) {
+	var sql = "SELECT * FROM user WHERE email = ?";
 
-	var avail=0;
-	accessDB(sql, [entry], function(error, rows) {
-		if(error) {
-			writeLog(error);
-			callback(-3);
-		}
-		
-		if(rows.length != 0) {
-			writeLog("func: checkEmailAvail, "+field+": "+entry+ "already exists.\n");
-			callback(-1);
-		}
-		else {
-			callback(1);
-		}
+	accessDB(sql, [userEmail], function(error, rows) {
+			if(error) {
+				writeLog(error);
+				if (callback != null) { callback({status:-2, detail:error}); }
+			}
+			else if(rows.length != 0) {
+				writeLog("user: " + userEmail + " exists.");
+				if (callback != null) { callback({status:0, exists:true, detail:error}); }
+			}
+			else {
+				writeLog("user: " + userEmail + " does not exist.");
+				if (callback != null) { callback({status:0, exists:false, detail:error}); }
+			}
 	});
 }
 
-exports.addComment = function(commentText, commentTaskid, commenterEmail) {
+exports.removeUser = function (userEmail, callback) {
+	var sql = "DELETE FROM user WHERE email = ?";
+
+	accessDB(sql, [userEmail], function(error, rows) {
+			if(error) {
+				writeLog(error);
+				if (callback != null) { callback({status:-2, detail:error}); }
+			}
+			else {
+				writeLog("user: " + userEmail + " removed.");
+				if (callback != null) { callback({status:0, detail:error}); }
+			}
+	});
+}
+
+exports.addComment = function (commentText, commentTaskid, commenterEmail) {
 
 	var sql = "SELECT * FROM user WHERE email = ?";
 

@@ -8,32 +8,12 @@ var exec = require('child_process').exec,
     util = require('util'),
 	db = require('./SQLiteHelper'),
 	qs = require('querystring');
-
-var docRoot = "static/",
+	
+var docRoot = "static",
+	dynamicRoot = "dynamic/",
     errorRoot = "static/error_pages/";
 
-/* register your new pages here, until the database is working */
-var pages = [["/main.html", "text/html"],
-             ["/jquery-1.5.min.js", "text/javascript"],
-             ["/server_error.html", "text/html"],
-             ["/signup.html", "text/html"],
-             ["/Available", checkAvailable],	
-             ["/signupRequest", signupRequest],	
-			 /*
-				So this is what i was thinking.  You put the function you want/need to call as the second parameter
-				then in the resolve function it checks to see if the second element is a string or a function
-				if its a string it calls sendObj if its a function it calls the function.  If the function needs parameters
-				whether passed in the url or in the document, the function must take the request as the parameter 
-				then manipulate the request to get the requested data... doing this will minimize the amount of if then else
-				or switch statements in the resolve method.  Also your function needs a call back function due to asynchonisity.
-				and to tell the resolver what to send to the users.
-			 */
-             ["/signup-request.html", "text/javascript"],
-             ["/signup.js", "text/javascript"],
-             ["/style.css", "text/css"],
-             ["/test.jpg", "image/jpg"]];
 
-   
 function error(request, response, code, file) {
     log(request, code, file);
     response.writeHead(code, {"Content-Type": "text/html"});
@@ -45,142 +25,93 @@ function log(request, statusCode, fileMatch) {
     util.log(strings.join("\t"));
 }
 
-function checkAvailable(request, callback) {
-
-	var params = url.parse(request.url,true).query;		
-	
-	for(key in params){
-		var res = db.checkAvailable(key, params[key], function (res) {
-			if(res == 1) {
-				callback("Available!!");
-			}
-			else {
-				callback("Unavailable");
-			}
-		});
-	}	
-}
-
-
-//copied from http://www.toxiccoma.com/random/nodejs-0195-http-post-handling-of-form-data
-function postHandler(request, callback) {
-
-    var _REQUEST = { };
-    var _CONTENT = '';
-	request.setEncoding('utf8');
-	
-	if (request.method == 'POST') {		
-	
-		request.on('data', function(chunk) {	
-			_CONTENT+= chunk;
-		});
-
-		request.on('end', function() {
-			_REQUEST = qs.parse(_CONTENT);
-			callback(_REQUEST);
-		});
-    }
-};
-
-
-function signupRequest(request, callback) {
-
-	postHandler(request, function(data) {
-		
-		db.addUser(data.Email, data.Username, data.Password, function(ret) {
-			if(ret == 1) {
-				callback("Signup Successfull<br /><a href=\"/login.html\">Click here to login</a>");
-			}
-			else if(ret == -1) {
-				callback("That user already exists <br />"+
-					 "<a href=\"signup.html\">Click here to try again<\a>");
-			}
-			else {
-				callback("There was an error with the signup process <br />"+
-					 "<a href=\"signup.html\">Click here to try again<\a>");
-			}
-		
-		});
-	});
-}
-
-/* Upon receiving a request, try to match it with a response object. If
-   no corresponding object is found, respond with a 404 error page. In case
+/* Upon receiving a request, try to match it with a file. If
+   no corresponding file is found, respond with a 404 error page. In case
    an unresolvable exception is encountered, repond with a 500 error page. */
 function resolve(request, response) {
     var pathname = url.parse(request.url).pathname;
-    var fileMatch;
 
-    /* some miscellaneous work: redirect / to /main.html, look for images
-       right place */
-    if (pathname == "/") { pathname = "/main.html"; }
-    var extension = pathname.split(".").pop();
-    if (extension == "jpg" || extension == "png" || extension == "gif") {
-        extension = "img";
-    }
+    /* some miscellaneous work: redirect / to /index.html */
+    if (pathname == "/") { pathname = "/index.html"; }
 
-    match = 0;
-    for (p in pages) {
-        if (pages[p][0] == pathname) {
-            match++;
-            fileMatch = docRoot + extension + pathname;
-			
-			if(typeof pages[p][1] == "string") {
-				sendObj(request, response, fileMatch, pages[p][1]);
-				break;
-			}
-			else if(typeof pages[p][1] == "function") {
-				pages[p][1](request, function(res) {//here is where we call the function with the request and callback as the parameters.
-					response.writeHead(200, {'Content-Type': "text/html"});
-					response.write(res);	
-					response.end();
-				});
-				log(request, 200, pages[p][1].toString().split("{")[0]);	//log the function that was called				
-			}
-        }
-    } 
-    if (!match) {
-        error(request, response, 404, fileMatch);
-    }
+	// if the path splits at a ".", we assume it has a file extension
+	// and in turn assume it is static content.
+	if (pathname.split(".").length != 1)
+	{
+		var type = getMIMEType(pathname);
+		
+		pathname = docRoot + pathname;
+		sendStaticObj(request, response, pathname, type);
+	}
+	else
+	{
+		var split = pathname.split("/"),
+			route = split[1],
+			params = split.slice(2);
+			scriptName = dynamicRoot + route + ".js";
+		
+		sendDynamicObj(request, response, scriptName, params);
+	}
 }
 
-function sendObj(request, response, file, type) {
-    var statusCode = 200;
+function sendStaticObj(request, response, file, type) {
     path.exists(file, function(exists) {
         if (exists) {
             log(request, 200, file);
+			
             response.writeHead(200, {'Content-Type': type});
-
-            /* TODO: use page generation for pages
-
-            var page = new StandardPage();
-            //need a way to get the title from the page
-            page.setTitle("Testing");
-
-            //need a way to remove the <head> from the page
-            //and instead put it into: 
-            //page.addHead(data);
-
-            //create header
-
-            //create file input stream
-            var istream = fs.createReadStream(fullpath);
-            istream.on('data', function(data) {
-                page.addContent(data);
-            });
-            istream.on('end', function() {
-                response.end(page.toHTML());
-            });
-            //if there was an error handle it.
-            istream.on('error', function(error) {});
-            */
-
             util.pump(fs.createReadStream(file), response, function() {});
         } else {
-            error(request, response, 500, file);
-            console.log("ERROR: file reported to exist, but can't be found: " + file);
+			error(request, response, 404, file);
         }
     });
+}
+
+function sendDynamicObj(request, response, scriptName, parameters) {
+    path.exists(scriptName, function(exists) {
+        if (exists) {
+            log(request, 200, scriptName);
+			
+            var script = require("../" + scriptName);	//Path must relative to dispatcher.js
+			script.send(response, parameters);
+        } else {
+			error(request, response, 404, scriptName);
+        }
+    });
+}
+
+/* A simple function to try to map a file extension to a MIME type */
+function getMIMEType(pathname) {
+	var extension = pathname.split(".").pop();
+	var type;
+
+	switch(extension)
+	{
+		case 'html':
+			type = 'text/html';
+			break;
+		case 'css':
+			type = 'text/css';
+			break;
+		case 'js':
+			type = 'application/javascript';
+			break;
+		case 'jpg':
+		case 'jpeg':
+			type = 'image/jpeg';
+			break;
+		case 'gif':
+			type = 'image/gif';
+			break;
+		case 'png':
+			type = 'image/png';
+			break;
+		default:	//if no MIME type is found, just send the data as text
+			type = 'text/plain';
+			break;
+	}
+	
+	return type;
 }
 
 function init(args) {
