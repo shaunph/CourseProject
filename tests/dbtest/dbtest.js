@@ -8,7 +8,8 @@ var dbLocation = "db/main.db"; // database location in file system
 
 
 /*The dbtest object
- *	usage: dbtest.run()
+ *	usage(assuming the user is in the CourseProject/ directory): 
+ *		node tests/dbtest/dbtest.js
  *
  * output currently directed to the console.
  *
