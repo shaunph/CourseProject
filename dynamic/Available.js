@@ -1,14 +1,15 @@
 var db = require('../js/SQLiteHelper'),
-	qs = require('querystring');
+	qs = require('querystring'),
+	url = require('url');
 
 
-exports.send = function (res, params) {
+exports.getReq = function (req, res ) {
 	
 	res.writeHead(200, {'content-type':'text/html'});	
-	console.log(params);
+	
+	var params = url.parse(req.url, true).query;
 
-	if(typeof params.Email != undefined) {
-		console.log("In email check");
+	if(params.Email != undefined) {
 		db.nickExists(params.Email, function(codes) {
 			if(codes.status == 0) {
 				if(codes.exists == false) {
@@ -26,7 +27,7 @@ exports.send = function (res, params) {
 			}
 		});
 	}	
-	else if(typeof params.Username != undefined) {
+	else if(params.Username != undefined) {
 		db.userExists(params.Username, function(codes) {
 			if(codes.status == 0) {
 				if(codes.exists == false) {
