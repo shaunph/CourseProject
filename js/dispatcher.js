@@ -1,23 +1,47 @@
 var exec = require('child_process').exec,
     fs = require('fs'),
     http = require('http'),
-    os = require('os');
+    os = require('os'),
     pagemaker = require('./pagemaker'),
     path = require('path'),
     url = require('url'),
     util = require('util');
-	
+
+/* register your new pages here, until the database is working 
+var pages = [["/main.html", "text/html"],
+             ["/jquery-1.5.min.js", "text/javascript"],
+             ["/server_error.html", "text/html"],
+             ["/signup.html", "text/html"],
+             ["/signup.js", "text/javascript"],
+             ["/style.css", "text/css"],
+             ["/test.jpg", "image/jpg"],
+             ["/profile/imgup.js", "text/javascript"],
+             ["/profile/imguptest.html", "text/html"]];
+*/
+var extTypes = [];
+extTypes["html"]="text/html";
+extTypes["htm"]="text/html";
+extTypes["js"]="text/javascript";
+extTypes["css"]="text/css";
+extTypes["jpg"]="image/jpg";
+extTypes["jpeg"]="image/jpg";
+   
 var docRoot = "static",
-	dynamicRoot = "dynamic/",
-    errorRoot = "static/error_pages/";
+	dynamicRoot = "dynamic",
+    errorRoot = "static/error_pages";
 
-
+/*
+error sends an error page in response to a bad request
+*/
 function error(request, response, code, file) {
     log(request, code, file);
     response.writeHead(code, {"Content-Type": "text/html"});
-    util.pump(fs.createReadStream(errorRoot + code + ".html"), response, function(){});
+    util.pump(fs.createReadStream(errorRoot + "/" + code + ".html"), response, function(){});
 }
 
+/*
+log logs a response sent by the server
+*/
 function log(request, statusCode, fileMatch) {
     strings = new Array(request.socket.remoteAddress, statusCode, request.url + "  ->  " + fileMatch);
     util.log(strings.join("\t"));
@@ -27,89 +51,91 @@ function log(request, statusCode, fileMatch) {
    no corresponding file is found, respond with a 404 error page. In case
    an unresolvable exception is encountered, repond with a 500 error page. */
 function resolve(request, response) {
-    var pathname = url.parse(request.url).pathname;
-
-    /* some miscellaneous work: redirect / to /index.html */
-    if (pathname == "/") { pathname = "/index.html"; }
-
-	// if the path splits at a ".", we assume it has a file extension
-	// and in turn assume it is static content.
-	if (pathname.split(".").length != 1)
-	{
-		var type = getMIMEType(pathname);
-		
-		pathname = docRoot + pathname;
-		sendStaticObj(request, response, pathname, type);
-	}
-	else
-	{
-		var split = pathname.split("/"),
-			route = split[1],
-			params = split.slice(2);
-			scriptName = dynamicRoot + route + ".js";
-		
-		sendDynamicObj(request, response, scriptName, params);
-	}
+    //If the user is posting data, call the POST resolver
+    if(request.method=='POST') {
+        resolvePost(request, response);
+    //If the user is retreiving data, call the GET resolver
+    } else if (request.method=='GET') {
+        resolveGet(request,response);
+    }
 }
 
-function sendStaticObj(request, response, file, type) {
+function resolveGet(request, response) {
+
+    var pathname = url.parse(request.url).pathname;
+
+    //redirect */ to */index.html
+    if (pathname.charAt(pathname.length-1) == "/") { 
+        pathname += "index.html"; 
+    }
+	// if the url does not contain "?", we assume it is static content.
+	if (request.url.indexOf("?") == -1)
+	{
+		sendStaticObj(request, response, pathname);
+    } else {
+		sendDynamicObj(request, response);
+	}
+}
+/* 
+resolvePost is used to resolve a post request. All file uploads will be handled as follows:
+
+In the HTML:
+<form method=post name=upform action="/dir1/dir2/script.js">
+
+will result in a form post calling postReq in the file: ./static/js/dir1/dir2/script.js
+
+the code in the postReq function in script.js will handle the upload from there.
+No posted data is even glanced at by the dispatcher.
+
+Author: Mitchell Ludwig
+*/
+function resolvePost(request, response) {
+    var pathname = process.cwd() + "/" + dynamicRoot + url.parse(request.url).pathname;
+    //NOTE: No time to do a path.exists, it will take too long to execute and data will begin to arrive before it is processed.
+    try {
+        console.log("File POST with: " + pathname);
+        var handler = require(pathname);
+        handler.postReq(request,response);
+    } catch (error) {
+        console.log("Error: " + error);
+		error(request, response, 404, pathname);
+    }
+}
+
+/*
+sendStaticObj is used to simply send a static file in response to a
+GET request for a static object
+*/
+function sendStaticObj(request, response, file) {
+    var extension = file.split(".").pop();
+    file = "./" + docRoot + file;
     path.exists(file, function(exists) {
         if (exists) {
             log(request, 200, file);
-			
-            response.writeHead(200, {'Content-Type': type});
+            response.writeHead(200, {'Content-Type': extTypes[extension]});
             util.pump(fs.createReadStream(file), response, function() {});
         } else {
-			error(request, response, 404, file);
+            error(request, response, 404, file);
+            console.log("ERROR: file requested does not exist: " + file);
         }
     });
 }
 
-function sendDynamicObj(request, response, scriptName, parameters) {
-    path.exists(scriptName, function(exists) {
-        if (exists) {
-            log(request, 200, scriptName);
-			
-            var script = require("../" + scriptName);	//Path must relative to dispatcher.js
-			script.send(response, parameters);
-        } else {
-			error(request, response, 404, scriptName);
-        }
-    });
-}
-
-/* A simple function to try to map a file extension to a MIME type */
-function getMIMEType(pathname) {
-	var extension = pathname.split(".").pop();
-	var type;
-
-	switch(extension)
-	{
-		case 'html':
-			type = 'text/html';
-			break;
-		case 'css':
-			type = 'text/css';
-			break;
-		case 'js':
-			type = 'application/javascript';
-			break;
-		case 'jpg':
-		case 'jpeg':
-			type = 'image/jpeg';
-			break;
-		case 'gif':
-			type = 'image/gif';
-			break;
-		case 'png':
-			type = 'image/png';
-			break;
-		default:	//if no MIME type is found, just send the data as text
-			type = 'text/plain';
-			break;
-	}
-	
-	return type;
+/*
+sendDynamicObj runs getReq(request,response) in the js file found at url.pathname
+To make a dynamic page, the js file serving the dynamic page must have a exported
+function called getReq (exports.getReq=function(request,response){...};
+*/
+function sendDynamicObj(request, response) {
+    var pathname = process.cwd() + "/" + dynamicRoot + url.parse(request.url).pathname;
+    //NOTE: No time to do a path.exists, it will take too long to execute and data will begin to arrive before it is processed.
+    try {
+        console.log("File GET with: " + pathname);
+        var handler = require(pathname);
+        handler.getReq(request,response);
+    } catch (error) {
+        error(request, response, 404, pathname);
+    }
 }
 
 function init(args) {
@@ -130,5 +156,6 @@ function init(args) {
         console.log("date/time\t  remote ip\tstatus\trequest  ->  resolution");
     }
 }
+
 
 init(process.argv);
