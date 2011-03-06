@@ -8,18 +8,21 @@
 		addUser(String userEmail, String userNickname, String userPassword)
 	To add a comment, use the function
 		addComment(String commentText, int taskid, Strnig commenterEmail)
+
+	Error codes:
+		0: everythings OK
+		-1: error from above (opening db, closing db, ....)
+		-2: insertion or deletion object already exists or doesn't exist, etc...)
 */
-
-//TODO: figure out why "out of memory" error occurs sometimes, but not always
-
-
-sqlite = require('./../lib/node-sqlite/sqlite');
-task = require('./../static/js/task');
+var basepath = "../";
+sqlite = require(basepath + 'lib/node-sqlite/sqlite');
 fs = require('fs');
 path = require('path');
 
-var dbLocation = "./db/main.db"; // database location in file system
-var dbLogLocation = "./db/log.txt"; // database log
+// directories changed, assuming the node process will be
+// started with CourseProject/ as the working directory
+var dbLocation = "db/main.db"; // database location in file system
+var dbLogLocation = "db/log.txt"; // database log
 var db;
 
 /**
@@ -82,55 +85,20 @@ function accessDB(sql, executionArgs, inputFunction) {
 	});
 }
 
-/*
-exports.addTask = function(taskName, creatorEmail) {
-
-	var sql = "SELECT * FROM task";
-
-	accessDB(sql, null, function(error, rows) {
-		if(error) {
-			writeLog(error);
-			return -2;
-		}
-
-		for(i = 0; i < rows.length; i++) {
-			if(rows[i].taskname.toLowerCase == taskName.toLowerCase) {
-				writeLog("func: addTask, task " + taskName +
-						" already exists.");
-				return -1; // error code for caller
-			}
-		}
-		
-		sql = "INSERT INTO task (taskname,creator) VALUES (?,?)";
-
-		db.execute(sql, [taskName, creatorEmail],
-			function(error, rows) {
-				if(error) {
-					writeLog(error);
-					return -2; // error code for caller
-				}
-
-				writeLog("task " + taskName + " by " +
-					creatorEmail + " added.");
-			}
-		);
-	});
-}
-*/
-
 /**
 	Parameter1: an object of type Task from task.js. (Task)
+	Parameter2: callback. (function)
 
 	This function stores the task object in the database.
 */
-//TODO: add error checking
-exports.addTask = function(taskObj) {
+exports.addTask = function(taskObj, callback) {
 
 	var sql = "SELECT * FROM task";
 
 	accessDB(sql, null, function(error, rows) {
 		if(error) {
 			writeLog(error);
+			if (callback != null) { callback({status:-2, detail:error}); }
 			return -2;
 		}
 
@@ -139,7 +107,8 @@ exports.addTask = function(taskObj) {
 						taskObj.getTaskName().toLowerCase()) {
 				writeLog("func: addTask, task " + taskObj.getTaskName() +
 						" already exists.");
-				return -1; // error code for caller
+				if (callback != null) { callback({status:-1, detail:error}); }
+				return -1;
 			}
 		}
 		
@@ -148,18 +117,43 @@ exports.addTask = function(taskObj) {
 			"VALUES (?,?,?,?,?,?)";
 
 		db.execute(sql, [taskObj.getTaskName(), taskObj.getDescription(),
-				taskObj.getPriority(), taskObj.getStatus(), taskObj.getUser(),
-				taskObj.getDate()],
+			taskObj.getPriority(), taskObj.getStatus(), taskObj.getUser(),
+			taskObj.getDate()],
 			function(error, rows) {
 				if(error) {
 					writeLog(error);
-					return -2; // error code for caller
+					if (callback != null) { callback({status:-2, detail:error}); }
+					return -2;
 				}
-
 				writeLog("task " + taskObj.getTaskName() + " by " +
 					taskObj.getUser() + " added.");
+				if (callback != null) { callback({status:0, detail:error}); }
 			}
 		);
+	});
+}
+
+/**
+	Parameter1: name of task to delete. (String)
+	Parameter2: callback. (function)
+
+	removes task with given taskName if it exists.
+*/
+exports.removeTask = function (taskName, callback) {
+
+	var sql = "DELETE FROM task WHERE taskname = ?";
+
+	accessDB(sql, [taskName], function(error) {
+		if(error) {
+			writeLog(error);
+			if (callback != null) { callback({status:-2, detail:error}); }
+			return -2;
+		}
+		else{
+			writeLog("Task: " + taskName + "successfully removed.");
+			if (callback != null) { callback({status:0, detail:error}); }
+		}
+
 	});
 }
 
@@ -167,23 +161,25 @@ exports.addTask = function(taskObj) {
 	Parameter1: an email. (String)
 	Parameter2: a nickname. (String)
 	Parameter3: a password. (String)
+	Parameter4: callback (function)
 
 	This function takes the input and stores it in the user table
 	of the database.
 */
 //TODO: add error checking (email invalid, nickname taken)
-exports.addUser = function(userEmail, userNickname, userPassword) {
+exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 	
 	var sql = "SELECT * FROM user WHERE email = ? OR nickname = ?";
 
 	accessDB(sql, [userEmail, userNickname], function(error, rows) {
 			if(error) {
 				writeLog(error);
-				return -2; // error code for caller
+				if (callback != null) { callback({status:-2, detail:error}); }
 			}
 
 			if(rows.length != 0) {
 				writeLog("func: addUser, email " + userEmail + " already exists.");
+				if (callback != null) { callback({status:-2, detail:{message:"user exists"}}); }
 				return -1; // error code for caller
 			} else {
 				sql = "INSERT INTO user (email,nickname,password) " +
@@ -193,14 +189,61 @@ exports.addUser = function(userEmail, userNickname, userPassword) {
 						function(error, rows) {
 							if(error) {
 								writeLog(error);
-								return -2; // error code for caller
+								if (callback != null) { callback({status:-2, detail:error}); }
 							}
 
 							writeLog("user " + userEmail + ", " +
 								userNickname +", with password " +
 								userPassword + " added.");
+								if (callback != null) { callback({status:0, detail:error}); }
 						}
 				);
+			}
+	});
+}
+
+/**
+	Parameter1: email to check. (String)
+	Parameter2: callback. (function)
+
+	Checks if a user email exists in the db.
+*/
+exports.userExists = function (userEmail, callback) {
+	var sql = "SELECT * FROM user WHERE email = ?";
+
+	accessDB(sql, [userEmail], function(error, rows) {
+			if(error) {
+				writeLog(error);
+				if (callback != null) { callback({status:-2, detail:error}); }
+			}
+			else if(rows.length != 0) {
+				writeLog("user: " + userEmail + " exists.");
+				if (callback != null) { callback({status:0, exists:true, detail:error}); }
+			}
+			else {
+				writeLog("user: " + userEmail + " does not exist.");
+				if (callback != null) { callback({status:0, exists:false, detail:error}); }
+			}
+	});
+}
+
+/**
+	Parameter1: email of user to remove. (String)
+	Parameter2: callback. (function)
+
+	removes the user corresponding to the given email if it exists.
+*/
+exports.removeUser = function (userEmail, callback) {
+	var sql = "DELETE FROM user WHERE email = ?";
+
+	accessDB(sql, [userEmail], function(error, rows) {
+			if(error) {
+				writeLog(error);
+				if (callback != null) { callback({status:-2, detail:error}); }
+			}
+			else {
+				writeLog("user: " + userEmail + " removed.");
+				if (callback != null) { callback({status:0, detail:error}); }
 			}
 	});
 }
@@ -212,7 +255,7 @@ exports.addUser = function(userEmail, userNickname, userPassword) {
 
 	This function adds a comment to the comment table in the database.
 */
-exports.addComment = function(commentText, commentTaskid, commenterEmail) {
+exports.addComment = function (commentText, commentTaskid, commenterEmail) {
 
 	var sql = "SELECT * FROM user WHERE email = ?";
 
@@ -282,7 +325,7 @@ exports.addComment = function(commentText, commentTaskid, commenterEmail) {
 		}
 	});
 */
-exports.getTable = function(tableName, inputFunction) {
+exports.getTable = function(tableName, callback) {
 	var sql = "SELECT * FROM " + tableName;
 
 	db = new sqlite.Database();
@@ -291,7 +334,7 @@ exports.getTable = function(tableName, inputFunction) {
 		if(error)
 			throw error;
 
-		db.execute(sql, inputFunction);
+		db.execute(sql, callback);
 	});
 
 	db.close(function(error) {
@@ -319,7 +362,7 @@ exports.getTable = function(tableName, inputFunction) {
 		}
 	});
 */
-exports.getCommentsForTask = function(taskid, inputFunction) {
+exports.getCommentsForTask = function(taskid, callback) {
 	var sql = "SELECT * FROM comment WHERE taskid = " + taskid;
 
 	db = new sqlite.Database();
@@ -328,7 +371,7 @@ exports.getCommentsForTask = function(taskid, inputFunction) {
 		if(error)
 			throw error;
 
-		db.execute(sql, inputFunction);
+		db.execute(sql, callback);
 	});
 
 	db.close(function(error) {
