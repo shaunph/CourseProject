@@ -35,14 +35,14 @@ function checkPriority() {
 		case "high":
 			document.getElementsByName('level')[2].checked = true;
 			break;
-		/*Remove // on alert() after test object is not relied upon*/
 		default:
-			//alert("Invalid Priority Level");
+			alert("Invalid Priority Level");
 			return;
 	}
 }
 
-/* Sets the appropriate input to each of the update fields */
+/* Sets the appropriate input to each of the update fields both initially and when resetting the fields.
+ */
 function setInput() {
 	inputDisplay("inputTaskName", "taskName");
 	inputDisplay("inputStatus", "status");
@@ -52,19 +52,42 @@ function setInput() {
 }
 
 /*
- * Since page needs to be re-loaded to check for new values, taskObj in the function below is always "re-set".
- * To be modified in the future with save()
+ * Checks if all fields are filled; returns true or false
+ */
+function inputFilled(field1, field2, field3, field4) {
+	if (field1 != "" && field2 != "" && field3 != "" && field4 != "") {
+		return true;
+	}
+	return false;
+}
+
+/*
+ * Takes the new values inputted into the fields
+ * Calls modifyTask() and save() to store modified values in the DB
+ * modifyTask() and save() are both from task.js
  */
 function update() {
-	var priorityLevel;
-	if (document.getElementsByName('level')[0].checked == true) {
-		priorityLevel = "low";
+	var field1 = document.getElementById('inputTaskName').value;
+	var field2 = document.getElementById('inputDescription').value;
+	var field3;
+	var field4 = document.getElementById('inputStatus').value;
+	
+	if (document.getElementsByName('level')[0].checked) {
+		field3 = "low";
 	}
-	else if (document.getElementsByName('level')[1].checked == true) {
-		priorityLevel = "medium";
+	else if (document.getElementsByName('level')[1].checked) {
+		field3 = "medium";
 	}
-	else {
-		priorityLevel = "high";
+	else if (document.getElementsByName('level')[2].checked){
+		field3 = "high";
 	}
-	modifyTask(document.getElementById('inputTaskName').value, document.getElementById('inputDescription').value, priorityLevel, document.getElementById('inputStatus').value);
+	
+	taskObj.modifyTask(field1, field2, field3, field4);
+	taskObj.save();
 }
+
+/* TODO: Take in an id from the task list page and call loadTask() from task.js */
+//var taskObj = loadTask(id);
+
+var taskObj = new Task("TaskName", "desc", "low", "status", "user", "date");
+document.title = "Update " + taskObj.getTaskName();
