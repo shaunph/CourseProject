@@ -2,7 +2,7 @@ var exec = require('child_process').exec,
     fs = require('fs'),
     http = require('http'),
     os = require('os'),
-    pagemaker = require('./pagemaker'),
+    pagemaker = require('pagemaker'),
     path = require('path'),
     url = require('url'),
     util = require('util');
@@ -133,7 +133,8 @@ function sendDynamicObj(request, response) {
         console.log("File GET with: " + pathname);
         var handler = require(pathname);
         handler.getReq(request,response);
-    } catch (error) {
+    } catch (e) {
+        console.log(e);
         error(request, response, 404, pathname);
     }
 }
