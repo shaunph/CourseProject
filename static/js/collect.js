@@ -1,4 +1,8 @@
-var serv = require("CourseProject/js/dispatcher");
+//TODO: Determine username once username system is operational
+//TODO: Task name check into DB to check for like named tasks
+//TODO: Use form submission to submit data to the server.
+
+//var serv = require("CourseProject/js/dispatcher");
 /* initialize sets up certain set features of the addtask page such as page 
    title and the default state of the radio button.
 */
@@ -9,7 +13,7 @@ function initialize() {
 
 /* clicked is called by addtask.html when the user attempts to submit their fields.
    It scans the required fields (all but comments) and terminates process if the fields
-   are incomplete. If complete, it currently displays a success box and links to the main
+   are incomplete. If complete, it currently links to the main
    page and creates a task object using Chris's task.js file.
    TODO: use server and link to database 
 */
@@ -22,7 +26,7 @@ function clicked() {
 		}
 	}
 
-	var nom = "J Doe"; //temporary filler until user system is up
+	var nom = "J Doe"; //TODO: Determine username once username system is operational
 	var tnom = document.getElementById("phrase2");
 	var desc = document.getElementById("phrase3");
 	var ETR = document.getElementById("phrase4");
@@ -43,6 +47,6 @@ function clicked() {
 	t = new Task(tnom, desc, pri, "open", nom, date);
 	//TODO: Task name check into DB to check for like named tasks
 	t.save();
-	window.alert("<<success>> " + date);
+	//window.alert("<<success>> " + date);
 	document.location="index.html";
 }
