@@ -133,7 +133,7 @@ function sendDynamicObj(request, response) {
         console.log("File GET with: " + pathname);
         var handler = require(pathname);
         handler.getReq(request,response);
-    } catch (error) {
+    } catch (errora) {
         error(request, response, 404, pathname);
     }
 }
