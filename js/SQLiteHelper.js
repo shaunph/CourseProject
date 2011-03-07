@@ -107,8 +107,7 @@ exports.addTask = function(taskObj, callback) {
 						taskObj.getTaskName().toLowerCase()) {
 				writeLog("func: addTask, task " + taskObj.getTaskName() +
 						" already exists.");
-				if (callback != null) { callback({status:-1, detail:error}); }
-				return -1;
+				if (callback != null) { callback({status:-1, detail:{message:"task already exists."}}); }
 			}
 		}
 		
@@ -123,10 +122,10 @@ exports.addTask = function(taskObj, callback) {
 				if(error) {
 					writeLog(error);
 					if (callback != null) { callback({status:-2, detail:error}); }
-					return -2;
 				}
-				writeLog("task " + taskObj.getTaskName() + " by " +
-					taskObj.getUser() + " added.");
+
+				writeLog("task " + taskName + " by " +
+					creatorEmail + " added.");
 				if (callback != null) { callback({status:0, detail:error}); }
 			}
 		);

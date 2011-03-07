@@ -153,6 +153,7 @@ function userExistsTest(){
  */
 function addTaskTest(){
 	dbtest.addToLog("attempting to add a task...");
+
 	var taskObj = new task.Task("noise task",
 		"Find out where that noise is coming from",
 		"High",
