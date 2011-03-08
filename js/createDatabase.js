@@ -1,4 +1,6 @@
 /**
+	To create the database, run from command line: node createDatabase.js
+
 	This code will create the database tables used on the website.
 	Should only be run when changes are made, and after the old
 	database has been deleted.
@@ -7,7 +9,7 @@
 
 	The tables created are:
 		user(email, nickname, password)
-		task(taskid, taskname, email)
+		task(taskid, taskname, description, priority, status, user, date)
 		comment(thecomment, taskid, creator)
 */
 
@@ -15,9 +17,9 @@ sqlite = require('./../lib/node-sqlite/sqlite');
 fs = require('fs');
 
 var db = sqlite.Database();
-var dbLocation = "../db/main.db"; // location of database
+var dbLocation = "./db/main.db"; // location of database
 
-fs.mkdir('../db', 0777);
+fs.mkdir('./db', 0777);
 
 db.open(dbLocation, function (error) {
 	if(error) {
@@ -39,9 +41,13 @@ db.open(dbLocation, function (error) {
 	});
 
 	db.execute("CREATE TABLE task (" +
-		"taskid NUMBER," +
+		"taskid INTEGER PRIMARY KEY AUTOINCREMENT," +
 		"taskname TEXT," +
-		"creator TEXT)", // "FOREIGN KEY (creator) REFERENCES user (email))"
+		"description TEXT," +
+		"priority TEXT," +
+		"status TEXT," +
+		"user TEXT," +
+		"date TEXT)",
 		function (error) {
 			if(error) {
 				console.log("Error creating task table.");
