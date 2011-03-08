@@ -132,7 +132,7 @@ To make a dynamic page, the js file serving the dynamic page must have a exporte
 function called getReq (exports.getReq=function(request,response){...};
 */
 function sendDynamicObj(request, response) {
-    var pathname = process.cwd() + "/" + dynamicRoot + url.parse(request.url).pathname+'.js';
+    var pathname = process.cwd() + "/" + dynamicRoot + url.parse(request.url).pathname;
     //NOTE: No time to do a path.exists, it will take too long to execute and data will begin to arrive before it is processed.
     try {
         console.log("File GET with: " + pathname);
