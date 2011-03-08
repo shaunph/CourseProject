@@ -3,6 +3,7 @@ var sqlite = require(basepath + 'lib/node-sqlite/sqlite');
 var slh = require(basepath + "js/SQLiteHelper");
 var fs = require('fs');
 var path = require('path');
+var task = require(basepath + 'static/js/task');
 
 var dbLocation = "db/main.db"; // database location in file system
 
@@ -152,8 +153,15 @@ function userExistsTest(){
  */
 function addTaskTest(){
 	dbtest.addToLog("attempting to add a task...");
-	slh.addTask("Find out where that noise is coming from",
-		"test@thisdomainshouldnotexist.com", 
+
+	var taskObj = new task.Task("noise task",
+		"Find out where that noise is coming from",
+		"High",
+		"Work in progress",
+		"test@thisdomainshouldnotexist.com",
+		"03062011");
+
+	slh.addTask(taskObj,
 		function(error){
 			if (error.status == 0){
 				dbtest.addToLog("user task added successfully\n");
@@ -175,7 +183,7 @@ function addTaskTest(){
  */
 function removeTaskTest(){
 	dbtest.addToLog("attempting to remove task...");
-	slh.removeTask("Find out where that noise is coming from", 
+	slh.removeTask("noise task", 
 		function(error){
 			if (error.status == 0){
 				dbtest.addToLog("task removed successfully\n");

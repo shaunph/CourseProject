@@ -5,7 +5,9 @@ var exec = require('child_process').exec,
     pagemaker = require('./pagemaker'),
     path = require('path'),
     url = require('url'),
-    util = require('util');
+    util = require('util'),
+    db = require('./SQLiteHelper'),
+    qs = require('querystring');
 
 /* register your new pages here, until the database is working 
 var pages = [["/main.html", "text/html"],
@@ -69,6 +71,7 @@ function resolveGet(request, response) {
         pathname += "index.html"; 
     }
 	// if the url does not contain "?", we assume it is static content.
+	//THIS MAY NOT BE A SAFE ASSUMPTION
 	if (request.url.indexOf("?") == -1)
 	{
 		sendStaticObj(request, response, pathname);
@@ -96,7 +99,7 @@ function resolvePost(request, response) {
         console.log("File POST with: " + pathname);
         var handler = require(pathname);
         handler.postReq(request,response);
-    } catch (error) {
+    } catch (err) {
         console.log("Error: " + error);
 		error(request, response, 404, pathname);
     }
@@ -113,6 +116,8 @@ function sendStaticObj(request, response, file) {
         if (exists) {
             log(request, 200, file);
             response.writeHead(200, {'Content-Type': extTypes[extension]});
+			//TODO: Add code here so that the static content utilizes
+			//the page maker code.
             util.pump(fs.createReadStream(file), response, function() {});
         } else {
             error(request, response, 404, file);
@@ -127,13 +132,13 @@ To make a dynamic page, the js file serving the dynamic page must have a exporte
 function called getReq (exports.getReq=function(request,response){...};
 */
 function sendDynamicObj(request, response) {
-    var pathname = process.cwd() + "/" + dynamicRoot + url.parse(request.url).pathname;
+    var pathname = process.cwd() + "/" + dynamicRoot + url.parse(request.url).pathname+'.js';
     //NOTE: No time to do a path.exists, it will take too long to execute and data will begin to arrive before it is processed.
     try {
         console.log("File GET with: " + pathname);
         var handler = require(pathname);
         handler.getReq(request,response);
-    } catch (errora) {
+    } catch (err) {
         error(request, response, 404, pathname);
     }
 }
