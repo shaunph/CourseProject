@@ -1,15 +1,13 @@
 /*
-	Intended Usage:
-	
-	To retrieve a Task from the database, use:
-		var myTask = loadTask(id);	// where id is the id of the Task you want
-
-	If you manipulate the task and wish to save it back to the database, use:
-		myTask.save();
+	Usage:
 
 	To create a new Task, use:
 		var myNewTask = new Task(taskName, description, priority, status, user, date);
 	Note that this task is not in the database yet, call myNewTask.save() to do so.
+
+	If you manipulate the task and wish to save it back to the database, use:
+		myTask.save();	
+	again.
 */
 
 
@@ -22,7 +20,7 @@
 	user		- The creator of the task (String)
 	date		- Date when task was created (Date)
 */
-function Task(taskName, description, priority, status, user, date) {
+exports.Task = function(taskName, description, priority, status, user, date) {
 
 	this.taskName = taskName;
 	this.id = undefined;
@@ -47,15 +45,6 @@ function Task(taskName, description, priority, status, user, date) {
 
 	this.modifyTask = modifyTask;
 	this.save = save;
-}
-
-function loadTask(id) {
-	/* 
-		TODO: Reference the database with id to see if the task already exists.
-		If it does, load the values from the database, create a Task object using 
-			the constructor, and return a reference to this object.
-		Else, return an error/exception of some sort.
-	*/
 }
 
 function setTaskName(newTaskName) {
