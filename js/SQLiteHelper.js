@@ -197,6 +197,27 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 								if (callback != null) { callback({status:0, detail:error}); }
 						}
 				);
+				callback(1);
+			}
+	});
+}
+
+
+exports.nickExists = function (nickName, callback) {
+	var sql = "SELECT * FROM user WHERE nickname = ?";
+
+	accessDB(sql, [nickName], function(error, rows) {
+			if(error) {
+				writeLog(error);
+				if (callback != null) { callback({status:-2, detail:error}); }
+			}
+			else if(rows.length != 0) {
+				writeLog("user: " + nickName + " exists.");
+				if (callback != null) { callback({status:0, exists:true, detail:error}); }
+			}
+			else {
+				writeLog("user: " + nickName + " does not exist.");
+				if (callback != null) { callback({status:0, exists:false, detail:error}); }
 			}
 	});
 }
