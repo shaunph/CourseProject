@@ -27,6 +27,8 @@ extTypes["js"]="text/javascript";
 extTypes["css"]="text/css";
 extTypes["jpg"]="image/jpg";
 extTypes["jpeg"]="image/jpg";
+extTypes["png"]="image/png";
+extTypes["gif"]="image/gif";
    
 var docRoot = "static",
 	dynamicRoot = "dynamic",
@@ -132,7 +134,11 @@ To make a dynamic page, the js file serving the dynamic page must have a exporte
 function called getReq (exports.getReq=function(request,response){...};
 */
 function sendDynamicObj(request, response) {
-    var pathname = process.cwd() + "/" + dynamicRoot + url.parse(request.url).pathname+'.js';
+    var pathname = process.cwd() + "/" + dynamicRoot + url.parse(request.url).pathname;
+    var extension = pathname.split(".").pop();
+    if(extension!='js') {
+        pathname = pathname + ".js";
+    }
     //NOTE: No time to do a path.exists, it will take too long to execute and data will begin to arrive before it is processed.
     try {
         console.log("File GET with: " + pathname);

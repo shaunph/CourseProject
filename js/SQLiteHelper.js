@@ -59,7 +59,7 @@ function accessDB(sql, executionArgs, inputFunction) {
 	path.exists(dbLocation, function(exists) {
 		if(!exists) {
 			console.log("Database doesn't exist. First run createDatabase.js");
-			throw error;
+			throw new Error('');
 		}
 	});
 
