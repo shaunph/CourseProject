@@ -86,7 +86,7 @@ function checkAvailability(field, entry) {
 
 
 	var entry = $('input[id="'+field+'"]').val();
-	$.get('Available?'+field+'='+entry, function(data) {
+	$.get('Available.js?'+field+'='+entry, function(data) {
 	
 		$('#'+field+'Available').html(data);
 		if(data.search("Available") >= 0) {
