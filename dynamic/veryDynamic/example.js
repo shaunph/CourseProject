@@ -3,7 +3,7 @@ var url = require('url');
 var upops = require('uploadOps');
 
 exports.getReq = function (request,response) {
-    send(response,upops.parseURLEncoded(request.url));
+    send(response,url.parse(request.url,true).query);
 }
 
 send = function (response, parameters) {
