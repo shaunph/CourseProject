@@ -159,7 +159,7 @@ function addTaskTest(){
 		"High",
 		"Work in progress",
 		"test@thisdomainshouldnotexist.com",
-		"03062011");
+		new Date());
 
 	slh.addTask(taskObj,
 		function(error){

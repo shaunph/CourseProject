@@ -3,11 +3,11 @@
 	running from command line: node createDatabase.js
 
 	To add a task, use the function
-		addTask(String taskName, String creatorEmail)
+		addTask(Task taskObj, function callback)
 	To add a user, use the function
-		addUser(String userEmail, String userNickname, String userPassword)
+		addUser(String userEmail, String userNickname, String userPassword, function callback)
 	To add a comment, use the function
-		addComment(String commentText, int taskid, Strnig commenterEmail)
+		addComment(String commentText, int taskid, String commenterEmail)
 
 	Error codes:
 		0: everythings OK
@@ -98,7 +98,7 @@ exports.addTask = function(taskObj, callback) {
 	accessDB(sql, null, function(error, rows) {
 		if(error) {
 			writeLog(error);
-			if (callback != null) { callback({status:-2, detail:error}); }
+			if (callback != undefined) { callback({status:-2, detail:error}); }
 			return -2;
 		}
 
@@ -107,7 +107,10 @@ exports.addTask = function(taskObj, callback) {
 						taskObj.getTaskName().toLowerCase()) {
 				writeLog("func: addTask, task " + taskObj.getTaskName() +
 						" already exists.");
-				if (callback != null) { callback({status:-1, detail:{message:"task already exists."}}); }
+				if (callback != undefined) {
+					callback({status:-1, detail:{message:"task already exists."}});
+				}
+				return -2;
 			}
 		}
 		
@@ -117,16 +120,16 @@ exports.addTask = function(taskObj, callback) {
 
 		db.execute(sql, [taskObj.getTaskName(), taskObj.getDescription(),
 			taskObj.getPriority(), taskObj.getStatus(), taskObj.getUser(),
-			taskObj.getDate()],
+			taskObj.getDate().toString()],
 			function(error, rows) {
 				if(error) {
 					writeLog(error);
-					if (callback != null) { callback({status:-2, detail:error}); }
+					if (callback != undefined) { callback({status:-2, detail:error}); }
 				}
 
-				writeLog("task " + taskName + " by " +
-					creatorEmail + " added.");
-				if (callback != null) { callback({status:0, detail:error}); }
+				writeLog("task " + taskObj.getTaskName() + " by " +
+					taskObj.getUser() + " added.");
+				if (callback != undefined) { callback({status:0, detail:error}); }
 			}
 		);
 	});
@@ -140,17 +143,17 @@ exports.addTask = function(taskObj, callback) {
 */
 exports.removeTask = function (taskName, callback) {
 
-	var sql = "DELETE FROM task WHERE taskname = ?";
+	var sql = "DELETE FROM task WHERE taskName = ?";
 
 	accessDB(sql, [taskName], function(error) {
 		if(error) {
 			writeLog(error);
-			if (callback != null) { callback({status:-2, detail:error}); }
+			if (callback != undefined) { callback({status:-2, detail:error}); }
 			return -2;
 		}
 		else{
 			writeLog("Task: " + taskName + "successfully removed.");
-			if (callback != null) { callback({status:0, detail:error}); }
+			if (callback != undefined) { callback({status:0, detail:error}); }
 		}
 
 	});
@@ -173,12 +176,12 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 	accessDB(sql, [userEmail, userNickname], function(error, rows) {
 			if(error) {
 				writeLog(error);
-				if (callback != null) { callback({status:-2, detail:error}); }
+				if (callback != undefined) { callback({status:-2, detail:error}); }
 			}
 
 			if(rows.length != 0) {
 				writeLog("func: addUser, email " + userEmail + " already exists.");
-				if (callback != null) { callback({status:-2, detail:{message:"user exists"}}); }
+				if (callback != undefined) { callback({status:-2, detail:{message:"user exists"}}); }
 				return -1; // error code for caller
 			} else {
 				sql = "INSERT INTO user (email,nickname,password) " +
@@ -188,16 +191,15 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 						function(error, rows) {
 							if(error) {
 								writeLog(error);
-								if (callback != null) { callback({status:-2, detail:error}); }
+								if (callback != undefined) { callback({status:-2, detail:error}); }
 							}
 
 							writeLog("user " + userEmail + ", " +
 								userNickname +", with password " +
 								userPassword + " added.");
-								if (callback != null) { callback({status:0, detail:error}); }
+								if (callback != undefined) { callback({status:0, detail:error}); }
 						}
 				);
-				callback(1);
 			}
 	});
 }
@@ -209,15 +211,15 @@ exports.nickExists = function (nickName, callback) {
 	accessDB(sql, [nickName], function(error, rows) {
 			if(error) {
 				writeLog(error);
-				if (callback != null) { callback({status:-2, detail:error}); }
+				if (callback != undefined) { callback({status:-2, detail:error}); }
 			}
 			else if(rows.length != 0) {
 				writeLog("user: " + nickName + " exists.");
-				if (callback != null) { callback({status:0, exists:true, detail:error}); }
+				if (callback != undefined) { callback({status:0, exists:true, detail:error}); }
 			}
 			else {
 				writeLog("user: " + nickName + " does not exist.");
-				if (callback != null) { callback({status:0, exists:false, detail:error}); }
+				if (callback != undefined) { callback({status:0, exists:false, detail:error}); }
 			}
 	});
 }
@@ -234,15 +236,15 @@ exports.userExists = function (userEmail, callback) {
 	accessDB(sql, [userEmail], function(error, rows) {
 			if(error) {
 				writeLog(error);
-				if (callback != null) { callback({status:-2, detail:error}); }
+				if (callback != undefined) { callback({status:-2, detail:error}); }
 			}
 			else if(rows.length != 0) {
 				writeLog("user: " + userEmail + " exists.");
-				if (callback != null) { callback({status:0, exists:true, detail:error}); }
+				if (callback != undefined) { callback({status:0, exists:true, detail:error}); }
 			}
 			else {
 				writeLog("user: " + userEmail + " does not exist.");
-				if (callback != null) { callback({status:0, exists:false, detail:error}); }
+				if (callback != undefined) { callback({status:0, exists:false, detail:error}); }
 			}
 	});
 }
@@ -259,11 +261,11 @@ exports.removeUser = function (userEmail, callback) {
 	accessDB(sql, [userEmail], function(error, rows) {
 			if(error) {
 				writeLog(error);
-				if (callback != null) { callback({status:-2, detail:error}); }
+				if (callback != undefined) { callback({status:-2, detail:error}); }
 			}
 			else {
 				writeLog("user: " + userEmail + " removed.");
-				if (callback != null) { callback({status:0, detail:error}); }
+				if (callback != undefined) { callback({status:0, detail:error}); }
 			}
 	});
 }
