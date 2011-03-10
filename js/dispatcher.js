@@ -72,6 +72,8 @@ function resolveGet(request, response) {
     }
 	// if the url does not contain "?", we assume it is static content.
 	//THIS MAY NOT BE A SAFE ASSUMPTION
+	//This is not a safe assumption as some javascript files wont require a
+	//? or any parameters to be passed to it eg. user profile page.
 	if (request.url.indexOf("?") == -1)
 	{
 		sendStaticObj(request, response, pathname);
