@@ -3,7 +3,7 @@
 	running from command line: node createDatabase.js
 
 	To add a task, use the function
-		addTask(String taskName, String creatorEmail)
+		addTask(String taskName, function callback)
 	To add a user, use the function
 		addUser(String userEmail, String userNickname, String userPassword)
 	To add a comment, use the function
@@ -103,7 +103,7 @@ exports.addTask = function(taskObj, callback) {
 		}
 
 		for(i = 0; i < rows.length; i++) {
-			if(rows[i].taskName.toLowerCase() ==
+			if(rows[i].taskname.toLowerCase() ==
 						taskObj.getTaskName().toLowerCase()) {
 				writeLog("func: addTask, task " + taskObj.getTaskName() +
 						" already exists.");
@@ -124,8 +124,8 @@ exports.addTask = function(taskObj, callback) {
 					if (callback != null) { callback({status:-2, detail:error}); }
 				}
 
-				writeLog("task " + taskName + " by " +
-					creatorEmail + " added.");
+				writeLog("task " + taskObj.getTaskName() + " by " +
+					taskObj.getUser() + " added.");
 				if (callback != null) { callback({status:0, detail:error}); }
 			}
 		);
@@ -197,7 +197,6 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 								if (callback != null) { callback({status:0, detail:error}); }
 						}
 				);
-				callback(1);
 			}
 	});
 }
