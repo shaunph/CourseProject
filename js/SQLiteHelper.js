@@ -168,7 +168,6 @@ exports.removeTask = function (taskName, callback) {
 	This function takes the input and stores it in the user table
 	of the database.
 */
-//TODO: add error checking (email invalid, nickname taken)
 exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 	
 	var sql = "SELECT * FROM user WHERE email = ? OR nickname = ?";
@@ -204,7 +203,13 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 	});
 }
 
+/**
+	Parameter1: nickName to check for. (String)
+	Parameter2: callback (function)
 
+	this function is used to check if a user with the given nickName exists
+	in the database.
+*/
 exports.nickExists = function (nickName, callback) {
 	var sql = "SELECT * FROM user WHERE nickname = ?";
 
@@ -277,19 +282,21 @@ exports.removeUser = function (userEmail, callback) {
 
 	This function adds a comment to the comment table in the database.
 */
-exports.addComment = function (commentText, commentTaskid, commenterEmail) {
+exports.addComment = function (commentText, commentTaskid, commenterEmail, callback) {
 
 	var sql = "SELECT * FROM user WHERE email = ?";
 
 	accessDB(sql, [commenterEmail], function(error, rows) {
 			if(error) {
 				writeLog(error);
+				if (callback != undefined) { callback({status:-2, detail:error}); }
 				return -2; // error code for caller
 			}
 
-			if(rows.length != 1) {
+			if(rows.length == 0) {
 				writeLog("func: addComment, user email " +
 					commenterEmail + " not found.");
+				if (callback != undefined) { callback({status:-1, detail:error}); }
 				return -1; // error code for caller
 			}
 
@@ -298,12 +305,14 @@ exports.addComment = function (commentText, commentTaskid, commenterEmail) {
 			db.execute(sql, [commentTaskid], function(error, rows) {
 				if(error) {
 					writeLog(error);
+					if (callback != undefined) { callback({status:-2, detail:error}); }
 					return -2; // error code for caller
 				}
 
-				if(rows.length != 1) {
+				if(rows.length == 0) {
 					writeLog("func: addComment, taskid " +
 						commentTaskid + " not found.");
+					if (callback != undefined) { callback({status:-1, detail:error}); }
 					return -1; // error code for caller
 				}
 
@@ -315,11 +324,13 @@ exports.addComment = function (commentText, commentTaskid, commenterEmail) {
 						function(error, rows) {
 							if(error) {
 								writeLog(error);
+								if (callback != undefined) { callback({status:-2, detail:error}); }
 								return -2; // error code for caller
 							}
 
 							writeLog("comment for taskid " + commentTaskid +
 								" by " + commenterEmail + " added.");
+							if (callback != undefined) { callback({status:0, detail:error}); }
 						}
 				);
 			});
@@ -336,14 +347,16 @@ exports.addComment = function (commentText, commentTaskid, commenterEmail) {
 
 	Usage example:
 		
-	getTable("user", function (error, rows) {
-		if(error)
-			throw error;
+	getTable("user", function(obj) {
+		if(obj.status != 0) {
+			console.log(obj.detail);
+			return;
+		}
 
-		for(i = 0; i < rows.length; i++) {
-			console.log(rows[i].email + " " +
-				rows[i].nickname + " " +
-				rows[i].password);
+		for(i = 0; i < obj.rows.length; i++) {
+			console.log(obj.rows[i].email);
+			console.log(obj.rows[i].nickname);
+			console.log(obj.rows[i].password);
 		}
 	});
 */
@@ -353,10 +366,21 @@ exports.getTable = function(tableName, callback) {
 	db = new sqlite.Database();
 
 	db.open(dbLocation, function(error) {
-		if(error)
-			throw error;
+		if(error) {
+			writeLog(error);
+			if (callback != undefined) { callback({status:-2, detail:error}); }
+			return -2;
+		}
 
-		db.execute(sql, callback);
+		db.execute(sql, function(error, rows) {
+			if(error) {
+				writeLog(error);
+				if (callback != undefined) { callback({status:-2, detail:error}); }
+				return -2;
+			}
+
+			if (callback != undefined) { callback({status:0, rows:rows, detail:error}); }
+		});
 	});
 
 	db.close(function(error) {
@@ -374,13 +398,17 @@ exports.getTable = function(tableName, callback) {
 		database.
 
 	Usage example:
-		
 	
-	getCommentsForTask(1, function(error, rows) {
-		for(i = 0; i < rows.length; i++) {
-			console.log(rows[i].thecomment);
-			console.log(rows[i].taskid);
-			console.log(rows[i].email);
+	getCommentsForTask(1, function(obj) {
+		if(obj.status != 0) {
+			console.log(obj.detail);
+			return;
+		}
+
+		for(i = 0; i < obj.rows.length; i++) {
+			console.log(obj.rows[i].thecomment);
+			console.log(obj.rows[i].taskid);
+			console.log(obj.rows[i].email);
 		}
 	});
 */
@@ -390,14 +418,28 @@ exports.getCommentsForTask = function(taskid, callback) {
 	db = new sqlite.Database();
 
 	db.open(dbLocation, function(error) {
-		if(error)
-			throw error;
+		if(error) {
+			writeLog(error);
+			if (callback != undefined) { callback({status:-2, detail:error}); }
+			return -2;
+		}
 
-		db.execute(sql, callback);
+		db.execute(sql, function(error, rows) {
+			if(error) {
+				writeLog(error);
+				if (callback != undefined) { callback({status:-2, detail:error}); }
+				return -2;
+			}
+
+			if (callback != undefined) { callback({status:0, rows:rows, detail:error}); }
+		});
 	});
 
 	db.close(function(error) {
-		if(error)
-			throw error;
+		if(error) {
+			writeLog(error);
+			if (callback != undefined) { callback({status:-2, detail:error}); }
+			return -2;
+		}
 	});
 }
