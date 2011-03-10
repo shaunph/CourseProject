@@ -52,16 +52,6 @@ function setInput() {
 }
 
 /*
- * Checks if all fields are filled; returns true or false
- */
-function inputFilled(field1, field2, field3, field4) {
-	if (field1 != "" && field2 != "" && field3 != "" && field4 != "") {
-		return true;
-	}
-	return false;
-}
-
-/*
  * Takes the new values inputted into the fields
  * Calls modifyTask() and save() to store modified values in the DB
  * modifyTask() and save() are both from task.js
