@@ -18,7 +18,7 @@
 	priority	- Priority in relation to other tasks (["Low", "Medium", "High"])
 	status		- Current completion status (["Not started", "Work in progress", "Completed"])
 	user		- The creator of the task (String)
-	date		- Date when task was created (Date)
+	date		- Date when task was created ( Date(year, month, day, hours, minutes, seconds) )
 */
 exports.Task = function(taskName, description, priority, status, user, date) {
 
@@ -28,7 +28,7 @@ exports.Task = function(taskName, description, priority, status, user, date) {
 	this.priority = priority;
 	this.status = status;
 	this.user = user;
-	this.date = date;
+	this.date = date.toLocaleDateString();
 
 	this.getTaskName = function() { return this.taskName; }
 	this.getId = function() { return this.id; }
