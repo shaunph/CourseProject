@@ -120,7 +120,7 @@ exports.addTask = function(taskObj, callback) {
 
 		db.execute(sql, [taskObj.getTaskName(), taskObj.getDescription(),
 			taskObj.getPriority(), taskObj.getStatus(), taskObj.getUser(),
-			taskObj.getDate().toString()],
+			taskObj.getDate()],
 			function(error, rows) {
 				if(error) {
 					writeLog(error);
