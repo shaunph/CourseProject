@@ -28,7 +28,7 @@ exports.Task = function(taskName, description, priority, status, user, date) {
 	this.priority = priority;
 	this.status = status;
 	this.user = user;
-	this.date = date.toLocaleDateString();
+	this.date = date.getTime();
 
 	this.getTaskName = function() { return this.taskName; }
 	this.getId = function() { return this.id; }
@@ -36,7 +36,7 @@ exports.Task = function(taskName, description, priority, status, user, date) {
 	this.getPriority = function() { return this.priority; }
 	this.getStatus = function() { return this.status; }
 	this.getUser = function() { return this.user; }
-	this.getDate = function() { return this.date; }	
+	this.getDate = function() { return this.date.toLocaleDateString; }	
 
 	this.setTaskName = setTaskName;
 	this.setDescription = setDescription;
