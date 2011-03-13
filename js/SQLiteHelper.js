@@ -65,6 +65,17 @@ function accessDB(sql, executionArgs, inputFunction) {
 
 	db = new sqlite.Database();
 
+	inputFunctionWithClose = function(err,row){
+		db.close(function(error) {
+			if(error) {
+				writeLog(error);
+				return -2; // error code for caller
+			} else {
+				inputFunction(err,row);
+			}
+		});
+	}
+
 	db.open(dbLocation, function(error) {
 			if(error) {
 				writeLog(new Date() + "\n\tfunc: accessDB" + error + "\n");
@@ -72,16 +83,9 @@ function accessDB(sql, executionArgs, inputFunction) {
 			}
 
 			if(executionArgs == null)
-				db.execute(sql, inputFunction);
+				db.execute(sql, inputFunctionWithClose);
 			else
-				db.execute(sql, executionArgs, inputFunction);
-	});
-
-	db.close(function(error) {
-		if(error) {
-			writeLog(error);
-			return -2; // error code for caller
-		}
+				db.execute(sql, executionArgs, inputFunctionWithClose);
 	});
 }
 
@@ -100,14 +104,16 @@ exports.addTask = function(taskObj, callback) {
 			writeLog(error);
 			if (callback != null) { callback({status:-2, detail:error}); }
 			return -2;
-		}
+		} 
 
 		for(i = 0; i < rows.length; i++) {
-			if(rows[i].taskName.toLowerCase() ==
-						taskObj.getTaskName().toLowerCase()) {
+			if ((rows[i].taskName != undefined)
+				&& (rows[i].taskName.toLowerCase() ==
+						taskObj.getTaskName().toLowerCase())) {
 				writeLog("func: addTask, task " + taskObj.getTaskName() +
 						" already exists.");
 				if (callback != null) { callback({status:-1, detail:{message:"task already exists."}}); }
+				return -1;
 			}
 		}
 		
@@ -115,7 +121,7 @@ exports.addTask = function(taskObj, callback) {
 			"(taskName, description, priority, status, user, date) " +
 			"VALUES (?,?,?,?,?,?)";
 
-		db.execute(sql, [taskObj.getTaskName(), taskObj.getDescription(),
+		accessDB(sql, [taskObj.getTaskName(), taskObj.getDescription(),
 			taskObj.getPriority(), taskObj.getStatus(), taskObj.getUser(),
 			taskObj.getDate()],
 			function(error, rows) {
@@ -123,10 +129,11 @@ exports.addTask = function(taskObj, callback) {
 					writeLog(error);
 					if (callback != null) { callback({status:-2, detail:error}); }
 				}
-
-				writeLog("task " + taskName + " by " +
-					creatorEmail + " added.");
-				if (callback != null) { callback({status:0, detail:error}); }
+				else{
+					writeLog("task " + taskObj.getTaskName() + " by " +
+						taskObj.getUser() + " added.");
+					if (callback != null) { callback({status:0, detail:error}); }
+				}
 			}
 		);
 	});
@@ -174,8 +181,7 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 			if(error) {
 				writeLog(error);
 				if (callback != null) { callback({status:-2, detail:error}); }
-			}
-
+			} else { 
 			if(rows.length != 0) {
 				writeLog("func: addUser, email " + userEmail + " already exists.");
 				if (callback != null) { callback({status:-2, detail:{message:"user exists"}}); }
@@ -184,7 +190,7 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 				sql = "INSERT INTO user (email,nickname,password) " +
 						"VALUES (?,?,?)";
 
-				db.execute(sql, [userEmail, userNickname, userPassword],
+				accessDB(sql, [userEmail, userNickname, userPassword],
 						function(error, rows) {
 							if(error) {
 								writeLog(error);
@@ -197,7 +203,7 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 								if (callback != null) { callback({status:0, detail:error}); }
 						}
 				);
-				callback(1);
+				}
 			}
 	});
 }
@@ -354,13 +360,44 @@ exports.getTable = function(tableName, callback) {
 		if(error)
 			throw error;
 
-		db.execute(sql, callback);
+		db.execute(sql, function(err,rows){
+			callback(err,rows);
+
+			db.close(function(error) {
+				if(error)
+					throw error;
+			});
+
+		});
 	});
 
-	db.close(function(error) {
+}
+
+
+/**
+	Like getTable, except returns the list of all tables
+*/
+
+exports.getTables = function(callback) {
+	var sql = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"
+
+	db = new sqlite.Database();
+
+	db.open(dbLocation, function(error) {
 		if(error)
 			throw error;
+
+		db.execute(sql, function(err,rows){
+			callback(err,rows);
+
+			db.close(function(error) {
+				if(error)
+					throw error;
+			});
+
+		});
 	});
+
 }
 
 /**
@@ -391,11 +428,14 @@ exports.getCommentsForTask = function(taskid, callback) {
 		if(error)
 			throw error;
 
-		db.execute(sql, callback);
-	});
+		db.execute(sql, function(err,rows){
+			callback(err,rows);
 
-	db.close(function(error) {
-		if(error)
-			throw error;
+			db.close(function(error) {
+				if(error)
+					throw error;
+			});
+
+		});
 	});
 }
