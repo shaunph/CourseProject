@@ -159,7 +159,7 @@ function addTaskTest(){
 		"High",
 		"Work in progress",
 		"test@thisdomainshouldnotexist.com",
-		"03062011");
+		new Date());
 
 	slh.addTask(taskObj,
 		function(error){
@@ -220,6 +220,48 @@ function removeUserTest(){
 }
 
 /*
+ * getTableTest()
+ *
+ * tests whether or not a table can be retrieved.
+ *
+ */
+function getTableTest() {
+	dbtest.addToLog("attempting to retrieve user table...");
+	slh.getTable("user", function(obj) {
+		if(obj.status == 0) {
+			dbtest.addToLog("user table retrieved successfully\n");
+			dbtest.callNext();
+		}
+		else {
+			dbtest.addToLog("failed to retrieve user table (" +
+				obj.detail.message + ")\n");
+			dbtest.callNext();
+		}
+	});
+}
+
+/*
+ * getCommentsForTaskTest()
+ *
+ * tests whether or not comments on a task can be retrieved.
+ *
+ */
+function getCommentsForTaskTest() {
+	dbtest.addToLog("attempting to retrieve comments for task 1...");
+	slh.getCommentsForTask(1, function(obj) {
+		if(obj.status == 0) {
+			dbtest.addToLog("comments for task 1 retrieved successfully\n");
+			dbtest.callNext();
+		}
+		else {
+			dbtest.addToLog("failed to retrieve comments for task 1 (" +
+				obj.detail.message + ")\n");
+			dbtest.callNext();
+		}
+	});
+}
+
+/*
  * printLog() 
  *
  * simplest output function, directly to console.
@@ -233,6 +275,8 @@ dbtest.addTest(dbExists);
 dbtest.addTest(addUserTest);
 dbtest.addTest(userExistsTest);
 dbtest.addTest(addTaskTest);
+dbtest.addTest(getTableTest);
+dbtest.addTest(getCommentsForTaskTest);
 dbtest.addTest(removeTaskTest);
 dbtest.addTest(removeUserTest);
 dbtest.addTest(printLog);
