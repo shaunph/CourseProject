@@ -28,7 +28,7 @@ exports.Task = function(taskName, description, priority, status, user, date) {
 	this.priority = priority;
 	this.status = status;
 	this.user = user;
-	this.date = date.getTime();
+	this.date = date;
 
 	this.getTaskName = function() { return this.taskName; }
 	this.getId = function() { return this.id; }
