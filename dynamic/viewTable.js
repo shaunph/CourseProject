@@ -34,17 +34,17 @@ exports.getReq = function (req, res) {
 	var lookup = url.parse(req.url , parseQueryString=true).query.table;
 	res.writeHead(200, {'content-type':'text/html'});
 	db.getTables(function (err,row){
-		if (err){
-			res.end(err.toString());
+		if (err.status != 0){
+			res.end(err);
 		} else {
 			res.write(headstring);
-			res.write(tables.tableToHTML(row));
-			res.write(tableToSelectForm(row));
+			res.write(tables.tableToHTML(err.rows));
+			res.write(tableToSelectForm(err.rows));
 			db.getTable(lookup ,function (err2,row2){
-				if (err) {
-					console.log(err);
+				if (err2.status != 0) {
+					console.log(err2);
 				}else{
-					res.write(tables.tableToHTML(row2));
+					res.write(tables.tableToHTML(err2.rows));
 				}
 				res.end(tailstring);
 			});

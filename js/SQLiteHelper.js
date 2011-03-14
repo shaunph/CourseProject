@@ -394,6 +394,37 @@ exports.getTable = function(tableName, callback) {
 }
 
 /**
+	Like getTable, except returns the list of all tables
+*/
+
+exports.getTables = function(callback) {
+	var sql = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"
+
+	db = new sqlite.Database();
+
+	db.open(dbLocation, function(error) {
+		if(error) {
+			writeLog(error);
+			if (callback != undefined) { callback({status:-2, detail:error}); }
+			return -2;
+		}
+		db.execute(sql, function(err,rows){
+
+			db.close(function(error) {
+				if(error){
+					throw error;
+				} else {
+					if (callback != undefined) { callback({status:0, rows:rows, detail:error}); }
+				}
+			});
+
+		});
+	});
+
+}
+
+
+/**
 	Parameter1: taskid for the task whose comments the caller wants.
 
 	Parameter2: a function that takes in 2 arguments, the first
