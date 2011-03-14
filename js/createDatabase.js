@@ -9,7 +9,7 @@
 
 	The tables created are:
 		user(email, nickname, password)
-		task(taskid, taskname, description, priority, status, user, date)
+		task(taskid, taskName, description, priority, status, user, date)
 		comment(thecomment, taskid, creator)
 */
 
@@ -42,7 +42,7 @@ db.open(dbLocation, function (error) {
 
 	db.execute("CREATE TABLE task (" +
 		"taskid INTEGER PRIMARY KEY AUTOINCREMENT," +
-		"taskname TEXT," +
+		"taskName TEXT," +
 		"description TEXT," +
 		"priority TEXT," +
 		"status TEXT," +
