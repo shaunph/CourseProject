@@ -36,7 +36,7 @@ exports.Task = function(taskName, description, priority, status, user, date) {
 	this.getPriority = function() { return this.priority; }
 	this.getStatus = function() { return this.status; }
 	this.getUser = function() { return this.user; }
-	this.getDate = function() { return this.date.toLocaleDateString; }	
+	this.getDate = function() { return this.date.toLocaleDateString(); }
 
 	this.setTaskName = setTaskName;
 	this.setDescription = setDescription;
