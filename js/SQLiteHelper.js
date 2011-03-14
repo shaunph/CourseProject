@@ -3,11 +3,7 @@
 	running from command line: node createDatabase.js
 
 	To add a task, use the function
-<<<<<<< HEAD
-		addTask(String taskName, function callback)
-=======
 		addTask(Task taskObj, function callback)
->>>>>>> d8c2e3f985a8d02e8a095ab473f09a7336329b84
 	To add a user, use the function
 		addUser(String userEmail, String userNickname, String userPassword, function callback)
 	To add a comment, use the function
