@@ -3,11 +3,11 @@
 	running from command line: node createDatabase.js
 
 	To add a task, use the function
-		addTask(String taskName, String creatorEmail)
+		addTask(Task taskObj, function callback)
 	To add a user, use the function
-		addUser(String userEmail, String userNickname, String userPassword)
+		addUser(String userEmail, String userNickname, String userPassword, function callback)
 	To add a comment, use the function
-		addComment(String commentText, int taskid, Strnig commenterEmail)
+		addComment(String commentText, int taskid, String commenterEmail)
 
 	Error codes:
 		0: everythings OK
@@ -59,7 +59,7 @@ function accessDB(sql, executionArgs, inputFunction) {
 	path.exists(dbLocation, function(exists) {
 		if(!exists) {
 			console.log("Database doesn't exist. First run createDatabase.js");
-			throw error;
+			throw new Error('');
 		}
 	});
 
@@ -104,16 +104,17 @@ exports.addTask = function(taskObj, callback) {
 			writeLog(error);
 			if (callback != undefined) { callback({status:-2, detail:error}); }
 			return -2;
-		} 
+		}
 
 		for(i = 0; i < rows.length; i++) {
-			if ((rows[i].taskName != undefined)
-				&& (rows[i].taskName.toLowerCase() ==
+			if ((rows != undefined) || (rows[i].taskName.toLowerCase() ==
 						taskObj.getTaskName().toLowerCase())) {
 				writeLog("func: addTask, task " + taskObj.getTaskName() +
 						" already exists.");
-				if (callback != undefined) { callback({status:-1, detail:{message:"task already exists."}}); }
-				return -1;
+				if (callback != undefined) {
+					callback({status:-1, detail:{message:"task already exists."}});
+				}
+				return -2;
 			}
 		}
 		
@@ -129,11 +130,10 @@ exports.addTask = function(taskObj, callback) {
 					writeLog(error);
 					if (callback != undefined) { callback({status:-2, detail:error}); }
 				}
-				else{
-					writeLog("task " + taskObj.getTaskName() + " by " +
-						taskObj.getUser() + " added.");
-					if (callback != undefined) { callback({status:0, detail:error}); }
-				}
+
+				writeLog("task " + taskObj.getTaskName() + " by " +
+					taskObj.getUser() + " added.");
+				if (callback != undefined) { callback({status:0, detail:error}); }
 			}
 		);
 	});
@@ -147,7 +147,7 @@ exports.addTask = function(taskObj, callback) {
 */
 exports.removeTask = function (taskName, callback) {
 
-	var sql = "DELETE FROM task WHERE taskname = ?";
+	var sql = "DELETE FROM task WHERE taskName = ?";
 
 	accessDB(sql, [taskName], function(error) {
 		if(error) {
@@ -172,7 +172,6 @@ exports.removeTask = function (taskName, callback) {
 	This function takes the input and stores it in the user table
 	of the database.
 */
-//TODO: add error checking (email invalid, nickname taken)
 exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 	
 	var sql = "SELECT * FROM user WHERE email = ? OR nickname = ?";
@@ -181,7 +180,8 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 			if(error) {
 				writeLog(error);
 				if (callback != undefined) { callback({status:-2, detail:error}); }
-			} else { 
+			}
+
 			if(rows.length != 0) {
 				writeLog("func: addUser, email " + userEmail + " already exists.");
 				if (callback != undefined) { callback({status:-2, detail:{message:"user exists"}}); }
@@ -203,12 +203,17 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 								if (callback != undefined) { callback({status:0, detail:error}); }
 						}
 				);
-				}
 			}
 	});
 }
 
+/**
+	Parameter1: nickName to check for. (String)
+	Parameter2: callback (function)
 
+	this function is used to check if a user with the given nickName exists
+	in the database.
+*/
 exports.nickExists = function (nickName, callback) {
 	var sql = "SELECT * FROM user WHERE nickname = ?";
 
@@ -281,49 +286,55 @@ exports.removeUser = function (userEmail, callback) {
 
 	This function adds a comment to the comment table in the database.
 */
-exports.addComment = function (commentText, commentTaskid, commenterEmail) {
+exports.addComment = function (commentText, commentTaskid, commenterEmail, callback) {
 
 	var sql = "SELECT * FROM user WHERE email = ?";
 
 	accessDB(sql, [commenterEmail], function(error, rows) {
 			if(error) {
 				writeLog(error);
+				if (callback != undefined) { callback({status:-2, detail:error}); }
 				return -2; // error code for caller
 			}
 
-			if(rows.length != 1) {
+			if(rows.length == 0) {
 				writeLog("func: addComment, user email " +
 					commenterEmail + " not found.");
+				if (callback != undefined) { callback({status:-1, detail:error}); }
 				return -1; // error code for caller
 			}
 
 			sql = "SELECT * FROM task WHERE taskid = ?";
 
-			db.execute(sql, [commentTaskid], function(error, rows) {
+			accessDB(sql, [commentTaskid], function(error, rows) {
 				if(error) {
 					writeLog(error);
+					if (callback != undefined) { callback({status:-2, detail:error}); }
 					return -2; // error code for caller
 				}
 
-				if(rows.length != 1) {
+				if(rows.length == 0) {
 					writeLog("func: addComment, taskid " +
 						commentTaskid + " not found.");
+					if (callback != undefined) { callback({status:-1, detail:error}); }
 					return -1; // error code for caller
 				}
 
 				sql = "INSERT INTO comment (thecomment,taskid,email) " +
 						"VALUES (?,?,?)";
 
-				db.execute(sql,
+				accessDB(sql,
 						[commentText, commentTaskid, commenterEmail],
 						function(error, rows) {
 							if(error) {
 								writeLog(error);
+								if (callback != undefined) { callback({status:-2, detail:error}); }
 								return -2; // error code for caller
 							}
 
 							writeLog("comment for taskid " + commentTaskid +
 								" by " + commenterEmail + " added.");
+							if (callback != undefined) { callback({status:0, detail:error}); }
 						}
 				);
 			});
@@ -340,66 +351,46 @@ exports.addComment = function (commentText, commentTaskid, commenterEmail) {
 
 	Usage example:
 		
-	getTable("user", function (error, rows) {
-		if(error)
-			throw error;
+	getTable("user", function(obj) {
+		if(obj.status != 0) {
+			console.log(obj.detail);
+			return;
+		}
 
-		for(i = 0; i < rows.length; i++) {
-			console.log(rows[i].email + " " +
-				rows[i].nickname + " " +
-				rows[i].password);
+		for(i = 0; i < obj.rows.length; i++) {
+			console.log(obj.rows[i].email);
+			console.log(obj.rows[i].nickname);
+			console.log(obj.rows[i].password);
 		}
 	});
 */
 exports.getTable = function(tableName, callback) {
 	var sql = "SELECT * FROM " + tableName;
-	db = new sqlite.Database();
-
-	db.open(dbLocation, function(error) {
-		if(error)
-			throw error;
-
-		db.execute(sql, function(err,rows){
-			db.close(function(error) {
-				if(error){
-					throw error;
-				}else{
-					callback(err,rows);
-				}
-			});
-
-		});
-	});
-
-}
-
-
-/**
-	Like getTable, except returns the list of all tables
-*/
-
-exports.getTables = function(callback) {
-	var sql = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"
 
 	db = new sqlite.Database();
 
 	db.open(dbLocation, function(error) {
-		if(error)
-			throw error;
+		if(error) {
+			writeLog(error);
+			if (callback != undefined) { callback({status:-2, detail:error}); }
+			return -2;
+		}
 
-		db.execute(sql, function(err,rows){
-
+		db.execute(sql, function(error, rows) {
+			if(error) {
+				writeLog(error);
+				if (callback != undefined) { callback({status:-2, detail:error}); }
+				return -2;
+			} 
 			db.close(function(error) {
 				if(error){
 					throw error;
 				} else {
-					callback(err,rows);
+					if (callback != undefined) { callback({status:0, rows:rows, detail:error}); }
 				}
 			});
-
 		});
 	});
-
 }
 
 /**
@@ -411,13 +402,17 @@ exports.getTables = function(callback) {
 		database.
 
 	Usage example:
-		
 	
-	getCommentsForTask(1, function(error, rows) {
-		for(i = 0; i < rows.length; i++) {
-			console.log(rows[i].thecomment);
-			console.log(rows[i].taskid);
-			console.log(rows[i].email);
+	getCommentsForTask(1, function(obj) {
+		if(obj.status != 0) {
+			console.log(obj.detail);
+			return;
+		}
+
+		for(i = 0; i < obj.rows.length; i++) {
+			console.log(obj.rows[i].thecomment);
+			console.log(obj.rows[i].taskid);
+			console.log(obj.rows[i].email);
 		}
 	});
 */
@@ -427,20 +422,29 @@ exports.getCommentsForTask = function(taskid, callback) {
 	db = new sqlite.Database();
 
 	db.open(dbLocation, function(error) {
-		if(error)
-			throw error;
+		if(error) {
+			writeLog(error);
+			if (callback != undefined) { callback({status:-2, detail:error}); }
+			return -2;
+		}
 
-		db.execute(sql, function(err,rows){
-			callback(err,rows);
-
+		db.execute(sql, function(error, rows) {
+			if(error) {
+				writeLog(error);
+				if (callback != undefined) { callback({status:-2, detail:error}); }
+				return -2;
+			}
 			db.close(function(error) {
-				if(error){
-					throw error;
+				if(error) {
+					writeLog(error);
+					if (callback != undefined) { callback({status:-2, detail:error}); }
+					return -2;
 				} else {
-					callback(err,rows);
+					if (callback != undefined) { callback({status:0, rows:rows, detail:error}); }
 				}
 			});
-
 		});
 	});
+
+
 }
