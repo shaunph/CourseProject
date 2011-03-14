@@ -103,7 +103,7 @@ exports.addTask = function(taskObj, callback) {
 		}
 
 		for(i = 0; i < rows.length; i++) {
-			if(rows[i].taskname.toLowerCase() ==
+			if(rows[i].taskName.toLowerCase() ==
 						taskObj.getTaskName().toLowerCase()) {
 				writeLog("func: addTask, task " + taskObj.getTaskName() +
 						" already exists.");
