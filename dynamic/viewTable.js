@@ -1,6 +1,7 @@
 var db = require('../js/SQLiteHelper'),
 	jaml = require('../js/jaml'),
 	tables = require('renderTable'),
+	pagemaker = require('../js/pagemaker'),
 	url = require('url');
 
 
@@ -28,25 +29,25 @@ var tableToSelectForm = function(row){
 }
 
 exports.getReq = function (req, res) {
-	var headstring = "<!doctype html>\n<html>\n<head><title>ViewTables</title></head>\n<body>\n";
-	var tableform = "<form id=form1> <input type=select>"
-	var tailstring = "\n</body></html>"; 
 	var lookup = url.parse(req.url , parseQueryString=true).query.table;
+	var page = new StandardPage();
+	page.standardMenus();
+	page.setTitle("View Tables");
 	res.writeHead(200, {'content-type':'text/html'});
 	db.getTables(function (err,row){
 		if (err.status != 0){
 			res.end(err);
 		} else {
-			res.write(headstring);
-			res.write(tables.tableToHTML(err.rows));
-			res.write(tableToSelectForm(err.rows));
+			page.addContent(tables.tableToHTML(err.rows));
+			page.addContent(tableToSelectForm(err.rows));
 			db.getTable(lookup ,function (err2,row2){
 				if (err2.status != 0) {
 					console.log(err2);
 				}else{
-					res.write(tables.tableToHTML(err2.rows));
+					page.addContent( tables.tableToHTML(err2.rows));
 				}
-				res.end(tailstring);
+				res.write(page.toHTML());
+				res.end();
 			});
 		}
 	});

@@ -161,9 +161,9 @@ StandardPage = function()
 	 */
 	this.standardMenus = function()
 	{
-		this.addMenuItem("To Page 1", "page1.htm");
-		this.addMenuItem("To Page 2", "page2.htm");
-		this.addMenuItem("To Page 3", "page3.htm");
+		this.addMenuItem("Home", "/");
+		this.addMenuItem("View Tables", "viewTable?");
+		this.addMenuItem("Sign Up", "signup?");
 	}
 }
 
