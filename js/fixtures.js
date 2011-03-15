@@ -57,9 +57,44 @@ var tasks =	[["Begin the morning","Begin the morning by saying to thyself, I sha
 		["He who has a vehement desire","He who has a vehement desire for posthumous fame does not consider that every one of those who remember him will himself also die very soon."],
 		["Everything","Everything which is in any way beautiful is beautiful in itself, and terminates in itself, not having praise as part of itself. Neither worse then nor better is a thing made by being praised."]];
 
-var users = ['Russell', 'Hilbert', 'Zermelo', 'Tarski', 
-		'Zorn', 'Kripke', 'Quine'];
+var users = ['russell@domain.com', 'hilbert@domain.com', 'zermelo@domain.com', 
+		'tarski@domain.com', 'zorn@domain.com', 
+		'kripke@domain.com', 'quine@domain.com'];
 
+var comments = 	["Think continually how many physicians are dead after often contracting their eyebrows over the sick",
+		"Add to the reckoning all whom thou hast known, one after another.",
+		"Be like the promontory against which the waves continually break, but it stands firm and tames the fury of the water around it. ",
+		"For such a thing as this might have happened to every man; but every man would not have continued free from pain on such an occasion.",
+		"It is a vulgar, but still a useful help towards contempt of death, to pass in review those who have tenaciously stuck to life.",
+		"In he morning when thou risest unwillingly, let this thought be present- I am rising to the work of a human being.",
+		"How easy it is to repel and to wipe away every impression which is troublesome or unsuitable, and immediately to be in all tranquility.",
+		"Judge every word and deed which are according to nature to be fit for thee",
+		"One man, when he has done a service to another, is ready to set it down to his account as a favour conferred. Another is not ready to do this, but still in his own mind he thinks of the man as his debtor, and he knows what he has done.",
+		"A prayer of the Athenians: Rain, rain, O dear Zeus, down on the ploughed fields of the Athenians and on the plains.",
+		"Be not disgusted, nor discouraged, nor dissatisfied, if thou dost not succeed in doing everything according to right principles.",
+		"Remember that philosophy requires only the things which thy nature requires; but thou wouldst have something else which is not according to nature.",
+		"Things are in such a kind of envelopment that they have seemed to philosophers, not a few nor those common philosophers, altogether unintelligible; nay even to the Stoics themselves they seem difficult to understand.",
+		"The one, that nothing will happen to me which is not conformable to the nature of the universe; and the other, that it is in my power never to act contrary to my god and daemon: for there is no man who will compel me to this. ",
+		"On every occasion I must ask myself this question, and inquire, what have I now in this part of me which they call the ruling principle?",
+		"None of these things ought to be called a man's, which do not belong to a man, as man.",
+		"Besides, if any of these things did belong to man, it would not be right for a man to despise them and to set himself against them; nor would a man be worthy of praise who showed that he did not want these things.",
+		"To seek what is impossible is madness: and it is impossible that the bad should not do something of this kind.",
+		"Nothing happens to any man which he is not formed by nature to bear.",
+		"Things themselves touch not the soul, not in the least degree; nor have they admission to the soul, nor can they turn or move the soul.",
+		"Reverence that which is best in the universe; and this is that which makes use of all things and directs all things.",
+		"That which does no harm to the state, does no harm to the citizen.",
+		"Often think of the rapidity with which things pass by and disappear, both the things which are and the things which are produced.",
+		"Does another do me wrong? Let him look to it. He has his own disposition, his own activity.",
+		"Let the part of thy soul which leads and governs be undisturbed by the movements in the flesh, whether of pleasure or of pain; and let it not unite with them, but let it circumscribe itself and limit those affects to their parts.",
+		"Live with the gods. And he does live with the gods who constantly shows to them, his own soul is satisfied with that which is assigned to him.",
+		"The house is smoky, and I quit it.",
+		"As thou intendest to live when thou art gone out,...so it is in thy power to live here.",
+		"Why do unskilled and ignorant souls disturb him who has skill and knowledge?",
+		"Soon, very soon, thou wilt be ashes, or a skeleton, and either a name or not even a name; but name is sound and echo.",
+		"Thou canst pass thy life in an equable flow of happiness, if thou canst go by the right way, and think and act in the right way.",
+		"Do not be carried along inconsiderately by the appearance of things.",
+		"They are objects of great concern to these people- wilt thou too then be made a fool for these things?",
+		"Fortunate means that a man has assigned to himself a good fortune: and a good fortune is good disposition of the soul, good emotions, good actions."];
 
 db.open(dbLocation, function (error) {
 	if(error) {
@@ -96,6 +131,17 @@ db.open(dbLocation, function (error) {
 			db.execute("INSERT INTO task (taskName,"
 				+"description,priority,status," 
 				+"user,date) VALUES (?,?,?,?,?,?)", tasks[i],
+				function(error){ if (error) console.log(error);}
+			);
+		}
+
+		for (i = 0; i < comments.length; i++) {
+			comment = [];
+			comment[0] = comments[i];
+			comment[1] = Math.floor(Math.random()*tasks.length);
+			comment[2] = users[Math.floor(Math.random()*users.length)];
+			db.execute("INSERT INTO comment (thecomment,"
+				+"taskid,email) VALUES (?,?,?)", comment,
 				function(error){ if (error) console.log(error);}
 			);
 		}

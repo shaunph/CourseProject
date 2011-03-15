@@ -60,7 +60,7 @@ db.open(dbLocation, function (error) {
 
 	db.execute("CREATE TABLE comment (" +
 		"thecomment TEXT," + // do i need a primary key?
-		"taskid NUMBER UNIQUE," + // FOREIGN KEY(taskid) REFERENCES task(taskid)
+		"taskid NUMBER," + // FOREIGN KEY(taskid) REFERENCES task(taskid)
 		"email TEXT)", // FOREIGN KEY(creator) REFERENCES user(email)
 		function (error) {
 			if(error) {
