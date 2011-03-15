@@ -1,8 +1,23 @@
 var sqlite = require('./../lib/node-sqlite/sqlite');
 var db = sqlite.Database();
 var dbLocation = "./db/main.db";
-var password = "thereismorethanoneofeverything";
 
+/*
+ * DB fixtures
+ *	populates the database tables user, tasks and comment.
+ *	table data will be somewhat consistent incase references are 
+ *	setup, they will at least be satified by the content.
+ *
+ *	Intended to be run after createDatabase.js, on development systems.
+ */
+
+
+
+//this is not a real password, 
+//it is the password of the fake users
+var password = "thereismorethanoneofeverything"; 
+
+// quotes from Meditations to be used as tasks
 var tasks =	[["Begin the morning","Begin the morning by saying to thyself, I shall meet with the busy-body, the ungrateful, arrogant, deceitful, envious, unsocial."],
 		["Whatever this is that I am","Whatever this is that I am, it is a little flesh and breath, and the ruling part. Throw away thy books; no longer distract thyself: it is not allowed; but as if thou wast now dying, despise the flesh; it is blood and bones and a network, a contexture of nerves, veins, and arteries."],
 		["All that is from the gods","All that is from the gods is full of Providence. That which is from fortune is not separated from nature or without an interweaving and involution with the things which are ordered by Providence."],
@@ -57,10 +72,12 @@ var tasks =	[["Begin the morning","Begin the morning by saying to thyself, I sha
 		["He who has a vehement desire","He who has a vehement desire for posthumous fame does not consider that every one of those who remember him will himself also die very soon."],
 		["Everything","Everything which is in any way beautiful is beautiful in itself, and terminates in itself, not having praise as part of itself. Neither worse then nor better is a thing made by being praised."]];
 
+// list of user emails to be used with adding tasks and comments
 var users = ['russell@domain.com', 'hilbert@domain.com', 'zermelo@domain.com', 
 		'tarski@domain.com', 'zorn@domain.com', 
 		'kripke@domain.com', 'quine@domain.com'];
 
+// more quotes from Meditations, to be used as comments
 var comments = 	["Think continually how many physicians are dead after often contracting their eyebrows over the sick",
 		"Add to the reckoning all whom thou hast known, one after another.",
 		"Be like the promontory against which the waves continually break, but it stands firm and tames the fury of the water around it. ",
@@ -96,11 +113,13 @@ var comments = 	["Think continually how many physicians are dead after often con
 		"They are objects of great concern to these people- wilt thou too then be made a fool for these things?",
 		"Fortunate means that a man has assigned to himself a good fortune: and a good fortune is good disposition of the soul, good emotions, good actions."];
 
+
 db.open(dbLocation, function (error) {
 	if(error) {
 		console.log(error);
 		throw error;
 	} else {
+		// inserts all users
 		db.execute("INSERT INTO user (email, nickname,password) "
 				+"VALUES ('russell@domain.com','Russell',?)",
 			[password],function (error) { console.log(error); });
@@ -123,9 +142,12 @@ db.open(dbLocation, function (error) {
 				+"VALUES ('quine@domain.com','Quine',?)",
 			[password],function (error) { console.log(error); });
 
+		//inserts tasks
 		for (i = 0; i < tasks.length; i++) {
+			// sets priority, status, and date
 			tasks[i][2] = "Low";
 			tasks[i][3] = "Closed";
+			// assigned user is chosen randomly
 			tasks[i][4] = users[Math.floor(Math.random()*users.length)];
 			tasks[i][5] = new Date().toString();
 			db.execute("INSERT INTO task (taskName,"
@@ -135,10 +157,13 @@ db.open(dbLocation, function (error) {
 			);
 		}
 
+		//inserts functions
 		for (i = 0; i < comments.length; i++) {
 			comment = [];
 			comment[0] = comments[i];
-			comment[1] = Math.floor(Math.random()*tasks.length);
+			// randomly chooses a task to comment on
+			comment[1] = Math.floor(Math.random()*tasks.length) + 1;
+			// randomly chooses a user to make the comment
 			comment[2] = users[Math.floor(Math.random()*users.length)];
 			db.execute("INSERT INTO comment (thecomment,"
 				+"taskid,email) VALUES (?,?,?)", comment,

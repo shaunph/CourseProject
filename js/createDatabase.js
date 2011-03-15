@@ -30,7 +30,8 @@ db.open(dbLocation, function (error) {
 	db.execute("CREATE TABLE user (" +
 		"email TEXT PRIMARY KEY," +
 		"nickname TEXT UNIQUE," +
-		"password TEXT)",
+		"password TEXT," +
+		"created TIMESTAMP DEFAULT CURRENT_TIMESTAMP)",
 		function (error) {
 			if(error) {
 				console.log("Error creating user table.");
@@ -47,7 +48,8 @@ db.open(dbLocation, function (error) {
 		"priority TEXT," +
 		"status TEXT," +
 		"user TEXT," +
-		"date TEXT)",
+		"date TEXT," +
+		"created TIMESTAMP DEFAULT CURRENT_TIMESTAMP)",
 		function (error) {
 			if(error) {
 				console.log("Error creating task table.");
@@ -59,9 +61,11 @@ db.open(dbLocation, function (error) {
 	);
 
 	db.execute("CREATE TABLE comment (" +
-		"thecomment TEXT," + // do i need a primary key?
+		"id INTEGER PRIMARY KEY AUTOINCREMENT," +
+		"thecomment TEXT," + 
 		"taskid NUMBER," + // FOREIGN KEY(taskid) REFERENCES task(taskid)
-		"email TEXT)", // FOREIGN KEY(creator) REFERENCES user(email)
+		"email TEXT," + // FOREIGN KEY(creator) REFERENCES user(email)
+		"created TIMESTAMP DEFAULT CURRENT_TIMESTAMP)",
 		function (error) {
 			if(error) {
 				console.log("Error creating task table.");
