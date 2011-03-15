@@ -22,7 +22,7 @@
 	user		- The creator of the task (String)
 	date		- Date when task was created (Date)
 */
-function Task(taskName, description, priority, status, user, date) {
+exports.Task = function(taskName, description, priority, status, user, date) {
 
 	this.taskName = taskName;
 	this.id = undefined;
@@ -38,7 +38,7 @@ function Task(taskName, description, priority, status, user, date) {
 	this.getPriority = function() { return this.priority; }
 	this.getStatus = function() { return this.status; }
 	this.getUser = function() { return this.user; }
-	this.getDate = function() { return this.date; }	
+	this.getDate = function() { return this.date.toString(); }
 
 	this.setTaskName = setTaskName;
 	this.setDescription = setDescription;

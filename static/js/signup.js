@@ -1,6 +1,7 @@
 var signUpPass = false;
 var signUpEmail = false;
-var signUpValid = false
+var signUpEmailAvail = false;
+var signUpUserAvail = true;
 /*
  * This function is used to verify if the text in two different fields match.
  * field is the name of the field to validate.  The field to be validated with
@@ -42,13 +43,14 @@ function verify(field) {
 		
 		//since something in the field isnt right we need to disable the submit 
 		//button.
-		$('#submitButton').attr("disabled","disabled");
 		//set the variable associated with the 'field' to false since they dont match
 		if(field == "Email")
 			signUpEmail = false;
 		else if (field == "Password")
 			signUpPass = false;
-		//exit the function.
+			
+		setSubmitButton();
+			
 		return false;
 	}
 	else {
@@ -64,12 +66,52 @@ function verify(field) {
 			$('#'+field+'Valid').css('color', '#00ff00');		//green
 			
 			//check to see if all the fields are present and set.
-			if(signUpEmail == true && signUpPass == true) {
-				//if everything is good then activate the submit button.
-				$('#submitButton').removeAttr("disabled")
-			}
+			setSubmitButton();
 			return true;		
 		}
 	}		
 	return false;
+}
+
+function setSubmitButton() {
+	if(signUpEmail == true && signUpPass == true && signUpEmailAvail == true && signUpUserAvail == true) {
+		//if everything is good then activate the submit button.
+		$('#submitButton').removeAttr("disabled")
+	}
+	else 
+		$('#submitButton').attr("disabled", "disabled")
+}
+
+function checkAvailability(field, entry) {
+
+
+	var entry = $('input[id="'+field+'"]').val();
+	$.get('Available?'+field+'='+entry, function(data) {
+	
+		$('#'+field+'Available').html(data);
+		if(data.search("Available") >= 0) {
+			if(field == 'Email')
+				signUpEmailAvail = true;
+			else if (field == 'Username')
+				signUpUserAvail = true;
+				
+			//$('#'+field+'Available').html("Available!");
+			$('#'+field+'Available').css('color', '#00ff00');		//green
+
+		}
+		else {
+			if(field == 'Email')
+				signUpEmailAvail = false;
+			else if (field == 'Username')
+				signUpUserAvail = false;
+			
+			//$('#'+field+'Available').html("Not Available!");
+			$('#'+field+'Available').css('color', '#ff0000');		//green
+
+		}
+			
+	});
+
+	setSubmitButton();
+
 }
