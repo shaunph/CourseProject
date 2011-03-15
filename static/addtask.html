@@ -2,12 +2,10 @@
 <html>
 <head>
 
-<script type="text/javascript"
-    src="js/collect.js">
-</script>
+<link rel="stylesheet" type="text/css" href="style.css" />
 
 <script type="text/javascript"
-    src="js/task.js">
+    src="js/collect.js">
 </script>
 
 </head>
@@ -24,7 +22,9 @@
 <input type="radio", name="priority", value="low" id="low"> low 
 <input type="radio", name="priority", value="medium" id="medium"> medium 
 <input type="radio", name="priority", value="high" id="high"> high <br />
-<br /><b>Additional Comments: <br /></b><textarea id="phrase6" rows="10" cols="85"/></textarea><br />
+<br /> <b> Status:
+<input type="radio", name="status", value="Not Started" id="NS"> Not Started 
+<input type="radio", name="status", value="Work in Progress" id="WiP"> Work in Progress <br />
 <br /><button type="button" id="enter" onclick="clicked()">Add Entry</button><br />
 </form>
 </body>

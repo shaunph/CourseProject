@@ -1,10 +1,10 @@
-var serv = require("CourseProject/js/dispatcher");
 /* initialize sets up certain set features of the addtask page such as page 
    title and the default state of the radio button.
 */
 function initialize() {
 	document.title = "Add A Task";
 	document.getElementById("low").checked=true;
+    document.getElementById("NS").checked=true;
 }
 
 /* clicked is called by addtask.html when the user attempts to submit their fields.
@@ -22,13 +22,20 @@ function clicked() {
 		}
 	}
 
+    var ETR = document.getElementById("phrase4").value;
+	var ETL = document.getElementById("phrase5").value;
+
+    if(isNaN(parseFloat(ETR)) || isNaN(parseFloat(ETL))){
+        window.alert("Time entries must be a number");
+		return;
+    }
 	var nom = "J Doe"; //temporary filler until user system is up
-	var tnom = document.getElementById("phrase2");
-	var desc = document.getElementById("phrase3");
-	var ETR = document.getElementById("phrase4");
-	var ETL = document.getElementById("phrase5");
-	var com = document.getElementById("phrase6");
+	var tnom = document.getElementById("phrase2").value;
+	var desc = document.getElementById("phrase3").value;
+	var com = document.getElementById("phrase6").value;
 	var date = new Date();
+    var pri;
+    var stat;
 	
 	//NOTE: .checked is a boolean value that indicates if a button is checked (true = checked, false = unchecked)
 	if(document.getElementById("low").checked){
@@ -40,9 +47,15 @@ function clicked() {
 	else if(document.getElementById("high").checked){
 		pri = document.getElementById("high").value;
 	}
-	t = new Task(tnom, desc, pri, "open", nom, date);
-	//TODO: Task name check into DB to check for like named tasks
-	t.save();
+
+    if(document.getElementById("NS").checked){
+		stat = document.getElementById("NS").value;
+	}
+	else if(document.getElementById("WiP").checked){
+		stat = document.getElementById("Wip").value;
+	}
+	t = new Task(tnom, desc, pri, stat, nom, date);
+	t.tSave();
 	window.alert("<<success>> " + date);
 	document.location="index.html";
 }
