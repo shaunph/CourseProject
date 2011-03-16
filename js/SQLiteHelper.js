@@ -390,6 +390,56 @@ exports.getTable = function(tableName, callback) {
 }
 
 /**
+	Parameter1: taskid for the task that the caller wants.
+
+	Parameter2: a callback function that takes in a callback object
+	as its only arugment.
+
+	Usage example:
+	
+	getTask(1, function(obj) {
+		if(obj.status != 0) {
+			console.log(obj.detail);
+			return;
+		}
+
+		for(i = 0; i < obj.rows.length; i++) {
+			console.log(obj.rows[i].taskName);
+			console.log(obj.rows[i].description);
+			console.log(obj.rows[i].priority);
+		}
+	});
+*/
+exports.getTask = function(taskid, callback) {
+	var sql = "SELECT * FROM task WHERE taskid = " + taskid;
+
+	db = new sqlite.Database();
+
+	db.open(dbLocation, function(error) {
+		if(error) {
+			writeLog(error);
+			if (callback != undefined) { callback({status:-2, detail:error}); }
+			return -2;
+		}
+
+		db.execute(sql, function(error, rows) {
+			if(error) {
+				writeLog(error);
+				if (callback != undefined) { callback({status:-2, detail:error}); }
+				return -2;
+			}
+
+			if (callback != undefined) { callback({status:0, rows:rows, detail:error}); }
+		});
+	});
+
+	db.close(function(error) {
+		if(error)
+			throw error;
+	});
+}
+
+/**
 	Parameter1: taskid for the task whose comments the caller wants.
 
 	Parameter2: a function that takes in 2 arguments, the first
