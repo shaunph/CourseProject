@@ -10,14 +10,12 @@ var slh = require(basepath + "js/SQLiteHelper.js");
 var pagemaker = require(basepath + "js/pagemaker.js");
 
 exports.getReq = function(request, response) {
-    console.log("IN HEREEEEEEEwherwhe;alhtEEEE");
     slh.getTable("user", function(obj) {
         if(obj.status != 0) {
             console.log("error getting user table: " + obj.detail);
             return;
         }
 
-    console.log("IN HEREEEEEEEEEEE");
         var membersPage = new pagemaker.StandardPage();
         membersPage.setTitle("Members");
 
