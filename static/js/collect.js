@@ -26,13 +26,12 @@ function clicked() {
 	var ETL = document.getElementById("phrase5").value;
 
     if(isNaN(parseFloat(ETR)) || isNaN(parseFloat(ETL))){
-        window.alert("Time entries must be a number");
+        window.alert("Time field entries must be a number");
 		return;
     }
 	var nom = "J Doe"; //temporary filler until user system is up
 	var tnom = document.getElementById("phrase2").value;
 	var desc = document.getElementById("phrase3").value;
-	var com = document.getElementById("phrase6").value;
 	var date = new Date();
     var pri;
     var stat;
@@ -52,10 +51,11 @@ function clicked() {
 		stat = document.getElementById("NS").value;
 	}
 	else if(document.getElementById("WiP").checked){
-		stat = document.getElementById("Wip").value;
+		stat = document.getElementById("WiP").value;
 	}
-	t = new Task(tnom, desc, pri, stat, nom, date);
-	t.tSave();
-	window.alert("<<success>> " + date);
+	var atask = new Task(tnom, desc, pri, stat, nom, date);
+	atask.save();
+	window.alert("<<success>> " + atask.taskName);
 	document.location="index.html";
+    //TODO: send to view this task page
 }
