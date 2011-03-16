@@ -1,12 +1,13 @@
+var basepath = '../';
 var exec = require('child_process').exec,
     fs = require('fs'),
     http = require('http'),
     os = require('os'),
-    pagemaker = require('./pagemaker'),
+    pagemaker = require('./' + basepath + 'node_modules/pagemaker'),
     path = require('path'),
     url = require('url'),
     util = require('util'),
-    db = require('./SQLiteHelper'),
+    db = require('./' + basepath +'node_modules/SQLiteHelper'),
     qs = require('querystring');
 
 /* register your new pages here, until the database is working 

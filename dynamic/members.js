@@ -6,16 +6,21 @@
  */
 
 var basepath = "../";
-var slh = require(basepath + "js/SQLiteHelper.js");
-var pagemaker = require(basepath + "js/pagemaker.js");
+var slh = require(basepath + "node_modules/SQLiteHelper.js");
+var pagemaker = require(basepath + "node_modules/pagemaker.js");
 
 exports.getReq = function(request, response) {
+    
+    console.log("Getting table...");
+
     slh.getTable("user", function(obj) {
         if(obj.status != 0) {
             console.log("error getting user table: " + obj.detail);
             return;
         }
 
+        console.log("Table retrieved.");
+        
         var membersPage = new pagemaker.StandardPage();
         membersPage.setTitle("Members");
 
@@ -31,7 +36,7 @@ exports.getReq = function(request, response) {
                     "<td><span style=\"color: #000000; \">" + obj.rows[i].password + "</td>" +
                     "</tr>");
 
-            if(i ==obj.rows.length - 1) {
+            if(i == obj.rows.length - 1) {
                 membersPage.addContent("</table");
             }
         }
