@@ -89,7 +89,7 @@ Jaml.register('stdpage', function(page)
  * which may be modified to change the content and add title etc.
  */
 
-StandardPage = function()
+exports.StandardPage = function()
 {
 	this.title = "<!-- needs a title -->";
 	this.menu = new Array();
