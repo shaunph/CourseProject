@@ -1,12 +1,12 @@
 /*
 	Usage:
-	
+
 	To create a new Task, use:
 		var myNewTask = new Task(taskName, description, priority, status, user, date);
 	Note that this task is not in the database yet, call myNewTask.save() to do so.
 
 	If you manipulate the task and wish to save it back to the database, use:
-		myTask.save();
+		myTask.save();	
 	again.
 */
 
@@ -46,7 +46,6 @@ exports.Task = function(taskName, description, priority, status, user, date) {
 	this.modifyTask = modifyTask;
 	this.save = save;
 }
-
 
 function setTaskName(newTaskName) {
 	if( newTaskName == null || newTaskName.trim().length == 0 ) {
