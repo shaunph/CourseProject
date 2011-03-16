@@ -161,14 +161,17 @@ exports.StandardPage = function()
 	 */
 	this.standardMenus = function()
 	{
-		this.addMenuItem("To Page 1", "page1.htm");
-		this.addMenuItem("To Page 2", "page2.htm");
-		this.addMenuItem("To Page 3", "page3.htm");
+		this.addMenuItem("Main", "index.html");
+		this.addMenuItem("Signup", "signup.html");
+		this.addMenuItem("Task Page", "taskpage.html");
+		this.addMenuItem("Update Task", "updatetask.html");
+		this.addMenuItem("Add Task", "addtask.html");
+		this.addMenuItem("User Profile", "UserProfile");
 	}
 }
 
-exports.ParsePage = function(file) {
-	var page1 = new StandardPage();
+exports.ParsePage = function(file, callback) {
+	var page1 = new exports.StandardPage();
 	var content;
 	var istream = fs.createReadStream(file);
 	istream.setEncoding('utf8');
@@ -180,31 +183,34 @@ exports.ParsePage = function(file) {
 		
 	istream.on('end', function() {
 
+	page1.setTitle(file);
+	page1.standardMenus();
+
 	//Start looking for <script></script> tags to put into the page.
 		var scripts = content.split("<script");
 		var scr = [];
 		var scr1 = []
 		var scr2 = [];
 	//find the src of the script
-		for(var i=1; i < scripts.length; i++) {
+		for(var i = 1; i < scripts.length; i++) {
 			scr1.push(scripts[i].split(" src="));
 		}
 	//remove unneeded characters.
 		for(var i = 0; i < scr1.length; i++) {
-			scr2.push(scr1[i][1].substr(1).split(">")[0].split(" ")[0]);
+			scr2.push(scr1[i][1].substr(1).split(".js")[0]);
 		}
 	//add script to the page.
-		for(var i =0; i <= scr2.length; i++) {
+		for(var i = 0; i <= scr2.length; i++) {
 			var s = scr2.pop();
-			page1.addScript(s.substr(0, s.length-1));
+			page1.addScript(s+".js");
 		}
 
 	//find the body of the page
-		var body = content.split("<body");
-		page1.setContent("<body "+body.split("</body>")[0]);
+		var body = content.split("<body>");
+		page1.setContent(body[1].split("</body>")[0]);
 
-
+		
+		callback(page1.toHTML());
 	});
 
-	return page1.toHTML();
 }

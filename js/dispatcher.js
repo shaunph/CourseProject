@@ -121,22 +121,12 @@ function sendStaticObj(request, response, file) {
 			//TODO: Add code here so that the static content utilizes
 			//the page maker code.
 
-/*TODO: make page generation work properly */
-/*image is being sent as a page*/
-			console.log("extension: "+extension);
 			if(extension == "html" || extension == "htm") {
 
-				var page1 = new pagemaker.StandardPage();
-				page1.setTitle(file);
-				
-				var istream = fs.createReadStream(file);
-				istream.on('data', function(data) {
-					page1.addContent(data);
+				pagemaker.ParsePage(file, function (html) {
+					response.end(html);
 				});
-	
-				istream.on('end', function(data) {
-					response.end(page1.toHTML());
-				});
+
 			} else {
 				util.pump(fs.createReadStream(file), response, function () {});
 			}
