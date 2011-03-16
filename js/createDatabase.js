@@ -47,7 +47,7 @@ db.open(dbLocation, function (error) {
 		"priority TEXT," +
 		"status TEXT," +
 		"user TEXT," +
-		"date NUMBER)",
+		"date TEXT)",
 		function (error) {
 			if(error) {
 				console.log("Error creating task table.");
