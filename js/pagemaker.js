@@ -183,7 +183,6 @@ exports.ParsePage = function(file, callback) {
 		
 	istream.on('end', function() {
 
-	page1.setTitle(file);
 	page1.standardMenus();
 
 	//Start looking for <script></script> tags to put into the page.
@@ -207,8 +206,13 @@ exports.ParsePage = function(file, callback) {
 
 	//find the body of the page
 		var body = content.split("<body>");
-		page1.setContent(body[1].split("</body>")[0]);
+		if(body.length > 0)
+			page1.setContent(body[1].split("</body>")[0]);
 
+		var title = content.split("<title>");
+		if(title[1] !== undefined)
+			page1.setTitle(title[1].split("</title>")[0]);
+		
 		
 		callback(page1.toHTML());
 	});
