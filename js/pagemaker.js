@@ -89,7 +89,7 @@ Jaml.register('stdpage', function(page)
  * which may be modified to change the content and add title etc.
  */
 
-StandardPage = function()
+exports.StandardPage = function()
 {
 	this.title = "<!-- needs a title -->";
 	this.menu = new Array();
@@ -167,4 +167,44 @@ StandardPage = function()
 	}
 }
 
+exports.ParsePage = function(file) {
+	var page1 = new StandardPage();
+	var content;
+	var istream = fs.createReadStream(file);
+	istream.setEncoding('utf8');
+	
+	istream.on('data', function(data) {
+		content += data;
+	});
 
+		
+	istream.on('end', function() {
+
+	//Start looking for <script></script> tags to put into the page.
+		var scripts = content.split("<script");
+		var scr = [];
+		var scr1 = []
+		var scr2 = [];
+	//find the src of the script
+		for(var i=1; i < scripts.length; i++) {
+			scr1.push(scripts[i].split(" src="));
+		}
+	//remove unneeded characters.
+		for(var i = 0; i < scr1.length; i++) {
+			scr2.push(scr1[i][1].substr(1).split(">")[0].split(" ")[0]);
+		}
+	//add script to the page.
+		for(var i =0; i <= scr2.length; i++) {
+			var s = scr2.pop();
+			page1.addScript(s.substr(0, s.length-1));
+		}
+
+	//find the body of the page
+		var body = content.split("<body");
+		page1.setContent("<body "+body.split("</body>")[0]);
+
+
+	});
+
+	return page1.toHTML();
+}
