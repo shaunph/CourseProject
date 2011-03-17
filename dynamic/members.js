@@ -41,7 +41,7 @@ exports.getReq = function(request, response) {
             }
         }
         membersPage.addContent("</h3>");
-console.log(membersPage.toHTML());
+
         response.write(membersPage.toHTML());
         response.end();
     });
