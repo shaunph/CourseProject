@@ -42,7 +42,7 @@ db.open(dbLocation, function (error) {
 
 	db.execute("CREATE TABLE task (" +
 		"taskid INTEGER PRIMARY KEY AUTOINCREMENT," +
-		"taskname TEXT," +
+		"taskname TEXT UNIQUE," + //taskname is now unique
 		"description TEXT," +
 		"priority TEXT," +
 		"status TEXT," +
@@ -72,6 +72,8 @@ db.open(dbLocation, function (error) {
 	});
 
 });
+
+
 
 db.close(function(error) {
 	if(error)

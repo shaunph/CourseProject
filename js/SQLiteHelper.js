@@ -93,7 +93,8 @@ function accessDB(sql, executionArgs, inputFunction) {
 */
 exports.addTask = function(taskObj, callback) {
 
-	var sql = "SELECT * FROM task";
+	//This call will pull any tasks in the DB with the same name as the new task
+	var sql = "SELECT * FROM task WHERE taskname = taskObj.getTaskName() COLLATE NOCASE";
 
 	accessDB(sql, null, function(error, rows) {
 		if(error) {
@@ -101,15 +102,13 @@ exports.addTask = function(taskObj, callback) {
 			if (callback != null) { callback({status:-2, detail:error}); }
 			return -2;
 		}
-
-		for(i = 0; i < rows.length; i++) {
-			if(rows[i].taskName.toLowerCase() ==
-						taskObj.getTaskName().toLowerCase()) {
-				writeLog("func: addTask, task " + taskObj.getTaskName() +
-						" already exists.");
-				if (callback != null) { callback({status:-1, detail:{message:"task already exists."}}); }
-			}
+		
+		if(rows.length > 0) { //if there are any results, a task with that name exists already
+			writeLog("func: addTask, task " + taskObj.getTaskName() +
+					" already exists.");
+			if (callback != null) { callback({status:-1, detail:{message:"task already exists."}}); }
 		}
+		
 		
 		sql = "INSERT INTO task " +
 			"(taskName, description, priority, status, user, date) " +
