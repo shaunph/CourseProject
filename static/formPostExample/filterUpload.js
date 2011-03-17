@@ -1,7 +1,7 @@
 /*
 Author: Mitchell Ludwig
 */
-//Filters file uploads to accept only gif, jpg and png images.
+//Filters file uploads to accept only certain file extensions.
 var extArray = new Array("zip", "rar", "js", "html", "htm", "jpg", "jpeg", "png", "gif", "bmp", "txt", "css");
 function LimitAttach(form, file) {
 	if (!file) {
