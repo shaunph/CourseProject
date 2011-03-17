@@ -12,23 +12,21 @@
 
 </head>
 
-<body onload="initialize()">
+<body>
 <h1><u> Add a Task</u></h1>
 
-<form>
-    <br/>
-    <br/><b>Task Name: </b><input type="text" id="phrase2"/><br/>
-    <br/><b>Description: </b><br/><textarea id="phrase3" rows="10" cols="85"/></textarea><br/>
-    <br/><b>Estimated Time Remaining: </b><input type="text" id="phrase4"/>hrs<br/>
-    <br/><b>Time Spent: </b><input type="text" id="phrase5"/>hrs<br/>
-    <br/> <b> Priority:</b>
-        <input type="radio", name="priority", value="low" id="low"> low
-        <input type="radio", name="priority", value="medium" id="medium"> medium
-        <input type="radio", name="priority", value="high" id="high"> high <br/>
-        <br/><b>Additional Comments: </b><br/><textarea id="phrase6" rows="10" cols="85"></textarea><br/>
-        <br/>
-        <button type="button" id="enter" onclick="clicked()">Add Entry</button>
-        <br/>
+<form onload="javasctipt:initialize();">
+<br />
+<br /><b>Task Name: </b><input type="text" id="phrase2" /><br />
+<br /><b>Description: <br /></b><textarea id="phrase3" rows="10" cols="85"/></textarea><br />
+<br /><b>Estimated Time Remaining: </b><input type="text" id="phrase4" />hrs<br />
+<br />Time Spent: <input type="text" id="phrase5" />hrs<br />
+<br /> <b> Priority: </b>
+<input type="radio", name="priority", value="low" id="low"> low 
+<input type="radio", name="priority", value="medium" id="medium"> medium 
+<input type="radio", name="priority", value="high" id="high"> high <br />
+<br /><b>Additional Comments: <br /></b><textarea id="phrase6" rows="10" cols="85"/></textarea><br />
+<br /><button type="button" id="enter" onclick="javascript:clicked();">Add Entry</button><br />
 </form>
 </body>
 </html>
