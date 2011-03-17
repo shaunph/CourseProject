@@ -94,9 +94,9 @@ function accessDB(sql, executionArgs, inputFunction) {
 exports.addTask = function(taskObj, callback) {
 
 	//This call will pull any tasks in the DB with the same name as the new task
-	var sql = "SELECT * FROM task WHERE taskname = taskObj.getTaskName() COLLATE NOCASE";
+	var sql =  "SELECT * FROM task WHERE taskname = ? COLLATE NOCASE";
 
-	accessDB(sql, null, function(error, rows) {
+	accessDB(sql, [taskObj.getTaskName()], function(error, rows) {
 		if(error) {
 			writeLog(error);
 			if (callback != null) { callback({status:-2, detail:error}); }
