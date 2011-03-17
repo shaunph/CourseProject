@@ -1,3 +1,4 @@
+var task = require('task.js');
 /* initialize sets up certain set features of the addtask page such as page 
    title and the default state of the radio button.
 */
@@ -53,7 +54,7 @@ function clicked() {
 	else if(document.getElementById("WiP").checked){
 		stat = document.getElementById("WiP").value;
 	}
-	var atask = new Task(tnom, desc, pri, stat, nom, date);
+	var atask = new task.Task(tnom, desc, pri, stat, nom, date);
 	atask.save();
 	window.alert("<<success>> " + atask.taskName);
 	document.location="index.html";
