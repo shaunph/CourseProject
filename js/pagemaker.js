@@ -183,7 +183,7 @@ exports.ParsePage = function(file, callback) {
 		
 	istream.on('end', function() {
 
-	page1.standardMenus();
+		page1.standardMenus();
 
 	//Start looking for <script></script> tags to put into the page.
 		var scripts = content.split("<script");
@@ -201,7 +201,7 @@ exports.ParsePage = function(file, callback) {
 	//add script to the page.
 		for(var i = 0; i <= scr2.length; i++) {
 			var s = scr2.pop();
-			page1.addScript(s+".js");
+			page1.addScript(s + ".js");
 		}
 
 	//find the body of the page

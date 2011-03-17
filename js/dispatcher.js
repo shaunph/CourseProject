@@ -118,8 +118,6 @@ function sendStaticObj(request, response, file) {
         if (exists) {
             log(request, 200, file);
             response.writeHead(200, {'Content-Type': extTypes[extension]});
-			//TODO: Add code here so that the static content utilizes
-			//the page maker code.
 
 			if(extension == "html" || extension == "htm") {
 
