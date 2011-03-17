@@ -37,7 +37,7 @@ exports.getReq = function(request, response) {
                     "</tr>");
 
             if(i == obj.rows.length - 1) {
-                membersPage.addContent("</table");
+                membersPage.addContent("</table>");
             }
         }
         membersPage.addContent("</h3>");
