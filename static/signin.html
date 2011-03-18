@@ -22,23 +22,26 @@ often seen on most websites in the top right hand corner of every page.
 	</head>
 
 	<body>
-		<p>Sign-in</p>
 		<!--Form for sign-in input -->
-		<form action="signin-request.html" id="signInData" method="post">
+		<form action="signin-request.html" id="signInData" name="signInData" method="post">
+			<p>Sign-in</p>
 			<!--Email/Nickname label assigned to a text field-->
-			<label for="identity">Email/Nickname:</label>
+			<label for="identityIn">Email/Nickname:</label>
+			<br />
 			<!--When dealing with the post data, find out if id and name are
 			both needed -->
-			<input type="text" id="identity" name="identity" />
+			<input type="text" id="identityIn" name="identityIn" />
 			<br />
 			<!--Password label assigned to a password text field-->
 			<label for="passwordIn">Password:</label>
+			<br />
 			<input type="password" id="passwordIn" name="passwordIn" />			
 			<br />
 			<!--Once signin.js is implemented with the database this
 			input will need to be enabled -->
-			<input type="submit" id="loginButton" value="Login"
-				disabled=disabled /><br />
+			<input type="submit" id="loginButton" name="loginButton" value="Login"
+				onkeyup="hitLogin();" disabled=disabled /><br />
+			<p id=loginStatus ></p>
 		</form>
 	</body>
 </html>
