@@ -44,18 +44,9 @@ function error(request, response, code, file) {
 /*
 log logs a response sent by the server
 */
-function log(request, statusCode) {
-    /* get the current date/time, format is YYYY-MM-DD-HH:MM:SS */
-    date = exec('date +"%F-%T"', function(error, stdout, stderr) {
-        if (error == null) {
-	    /* chop the \n off the end of stdout and print all of the log data */
-            console.log(stdout.substring(0, stdout.length-1) + "\t" + request.socket.remoteAddress + "\t" + statusCode + "\t" + request.url);
-	} else {
-	    /* problem running 'date' */
-            console.log("SYSTEM ERROR: could not generate date");
-	    return "";
-	}
-    });
+function log(request, statusCode, fileMatch) {
+    strings = new Array(request.socket.remoteAddress, statusCode, request.url + "  ->  " + fileMatch);
+    util.log(strings.join("\t"));
 }
 
 /* Upon receiving a request, try to match it with a file. If
@@ -125,7 +116,7 @@ function sendStaticObj(request, response, file) {
     file = "./" + docRoot + file;
     path.exists(file, function(exists) {
         if (exists) {
-            log(request, 200);
+            log(request, 200, file);
             response.writeHead(200, {'Content-Type': extTypes[extension]});
 
 			if(extension == "html" || extension == "htm") {
@@ -176,7 +167,7 @@ function init(args) {
         http.createServer(resolve).listen(port);
 
         console.log("server listening on " + os.hostname() + ":" + port);
-        console.log("date/time\t\tremote ip\tstatus\trequest");
+        console.log("date/time\t  remote ip\tstatus\trequest  ->  resolution");
     }
 }
 
