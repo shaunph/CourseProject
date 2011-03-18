@@ -87,9 +87,12 @@ Jaml.register('stdpage', function(page)
 /*
  * The standard page constructor, takes no arguments returns a page object 
  * which may be modified to change the content and add title etc.
+ *
+ * Note: We dont need exports for StandardPage as it is a class, and we
+ *      create instances of it with 'new', which doesnt require the exports. -CM
  */
 
-exports.StandardPage = function()
+StandardPage = function()
 {
 	this.title = "<!-- needs a title -->";
 	this.menu = new Array();
@@ -171,7 +174,7 @@ exports.StandardPage = function()
 }
 
 exports.ParsePage = function(file, callback) {
-	var page1 = new exports.StandardPage();
+	var page1 = new StandardPage();
 	var content;
 	var istream = fs.createReadStream(file);
 	istream.setEncoding('utf8');
