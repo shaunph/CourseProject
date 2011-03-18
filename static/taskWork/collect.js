@@ -1,6 +1,5 @@
 /* initialize sets up certain set features of the addtask page such as page 
-   title and the default state of the radio button. currently does not work with pagemaker
-TODO: integrate with structure
+   title and the default state of the radio button.
 */
 function initialize() {
     document.title = "Add A Task";
@@ -22,22 +21,6 @@ function clicked(form) {
         }
     }
 
-    if(!document.getElementById("low").checked){
-	if(!document.getElementById("medium").checked){
-            if(!document.getElementById("high").checked){
-		window.alert("Not all required fields are properly filled");
-                return;	
-            }
-	}
-    }
-
-    if(!document.getElementById("NS").checked){
-	if(!document.getElementById("WiP").checked){
-	    window.alert("Not all required fields are properly filled");
-            return;	
-	}
-    }	
-
     var ETR = document.getElementById("phrase4").value;
     var ETL = document.getElementById("phrase5").value;
 
@@ -46,4 +29,5 @@ function clicked(form) {
         return;
     }
     form.submit();
+    //TODO: send to view this task page
 }
