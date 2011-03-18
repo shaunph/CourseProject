@@ -8,11 +8,12 @@ node ./nodeunit/bin/nodeunit dbtest/dbtest_nodeunit.js
 node ./nodeunit/bin/nodeunit dispatcher/dispatcher_nodeunit.js
 node ./nodeunit/bin/nodeunit signup/signup_nodeunit.js
 
+echo "Remove database?"
 CONFIRM="Yes No"
     select resp in $CONFIRM; do
         if [ "$resp" = "Yes" ]; then
+            echo "Removing database..."
             rm -r ./db
-            echo "Database removed."
             exit
         else
             exit
