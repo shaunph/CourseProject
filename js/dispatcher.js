@@ -122,9 +122,16 @@ function sendStaticObj(request, response, file) {
         if (exists) {
             log(request, 200, file);
             response.writeHead(200, {'Content-Type': extTypes[extension]});
-			//TODO: Add code here so that the static content utilizes
-			//the page maker code.
-            util.pump(fs.createReadStream(file), response, function() {});
+
+			if(extension == "html" || extension == "htm") {
+
+				pagemaker.ParsePage(file, function (html) {
+					response.end(html);
+				});
+
+			} else {
+				util.pump(fs.createReadStream(file), response, function () {});
+			}
         } else {
             error(request, response, 404, file);
         }
