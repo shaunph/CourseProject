@@ -388,7 +388,7 @@ exports.addEstimate = function (estTaskid, estTimeSpent, estTimeRemaining, callb
 					}
 
 					writeLog("estimate of task " + estTaskid + " added.");
-					if (callback != undefined) { callback({status:0, detail:error});
+					if (callback != undefined) { callback({status:0, detail:error})};
 			});
 		} else {
 			sql = "UPDATE estimate (timeSpent,timeRemaining) VALUES(?,?) WHERE taskid="+estTaskid;
@@ -401,7 +401,7 @@ exports.addEstimate = function (estTaskid, estTimeSpent, estTimeRemaining, callb
 					}
 					
 					writeLog("estimate of task " + estTaskid " updated");
-					if (callback != undefined) { callback({status:0, detail:error});
+					if (callback != undefined) { callback({status:0, detail:error})};
 				});		
 		}		
 	});
