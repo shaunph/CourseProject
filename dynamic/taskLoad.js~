@@ -1,14 +1,16 @@
 /* 
 Author of original code: Mitchell Ludwig
 
-This is a modified version of the file upload code by Mitchell used to store tasks in the database (changed by Justin Kelly)
+This is a modified version of the file upload code by Mitchell used to store tasks in the database
 */
 
 var upops = require('uploadOps');
     
 /*
-Tries to store task in the database. After, redirect to main page
-TODO: redirect to dynamic task display page
+postReq will process the HTTP POST request, and extract the profile picture and save it as <username>.<ext> somewhere.
+TODO: 
+Decide where to store profile pics
+write the actual file, once one can determine the current user
 */
 exports.postReq = function (request, response) {
     var allChunks = [];
@@ -37,5 +39,7 @@ exports.postReq = function (request, response) {
             console.log("Error in taskLoad.js->postReq: " + error);
         }
     });
+    //response.write();
     response.end('<meta http-equiv="refresh" content="0; URL=index.html">');
+    //response.end("<html> <body> Task Processed <br /> <br /> </body> </html>");
 };
