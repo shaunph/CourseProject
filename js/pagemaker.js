@@ -166,7 +166,6 @@ StandardPage = function()
 	{
 		this.addMenuItem("Main", "index.html");
 		this.addMenuItem("Signup", "signup.html");
-		this.addMenuItem("Task Page", "taskpage.html");
 		this.addMenuItem("Update Task", "updatetask.html");
 		this.addMenuItem("Add Task", "addtask.html");
 		this.addMenuItem("User Profile", "UserProfile");
