@@ -74,6 +74,8 @@ function resolveGet(request, response) {
     }
 	// if the url does not contain "?", we assume it is static content.
 	//THIS MAY NOT BE A SAFE ASSUMPTION
+	//This is not a safe assumption as some javascript files wont require a
+	//? or any parameters to be passed to it eg. user profile page.
 	if (request.url.indexOf("?") == -1)
 	{
 		sendStaticObj(request, response, pathname);
@@ -118,9 +120,16 @@ function sendStaticObj(request, response, file) {
         if (exists) {
             log(request, 200, file);
             response.writeHead(200, {'Content-Type': extTypes[extension]});
-			//TODO: Add code here so that the static content utilizes
-			//the page maker code.
-            util.pump(fs.createReadStream(file), response, function() {});
+
+			if(extension == "html" || extension == "htm") {
+
+				pagemaker.ParsePage(file, function (html) {
+					response.end(html);
+				});
+
+			} else {
+				util.pump(fs.createReadStream(file), response, function () {});
+			}
         } else {
             error(request, response, 404, file);
             console.log("ERROR: file requested does not exist: " + file);

@@ -17,14 +17,21 @@
 		</p>
 
 		<p>
-			<a href="taskWork/addtask.html">Add Task page</a>
+			<a href="addtask.html">Add Task page</a>
 		</p>
+<<<<<<< HEAD
 
 		<p>
 			<a href="/formPostExample/index.html">HOW TO TRANSFER DATA FROM THE CLIENT TO THE SERVER 101</a>
 		</p>
 
 		<img src="img/test.jpg" />
+=======
+		<p>
+			<a href="UserProfile">View User Profile</a>
+		</p>
+		<img src="/img/test.jpg" />
+>>>>>>> 52117e781d52f9835e1e427269cb60c77749a69a
 
 
 	</body>

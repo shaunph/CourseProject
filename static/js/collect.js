@@ -29,5 +29,4 @@ function clicked(form) {
         return;
     }
     form.submit();
-    //TODO: send to view this task page
 }
