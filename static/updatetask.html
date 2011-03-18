@@ -12,12 +12,12 @@
 		</form>
 		
 		User: 
-		<div name="user"></div><br />
+		<div name="user" onload="javascript:display('user');"></div><br />
 		
 		Date: 
-		<div name="date"></div><br />
+		<div name="date" onload="javascript:display('date');"></div><br />
 		
-		<form method=post name=upform action="/profile/uploadPic.js" enctype="multipart/form-data">
+		<form method=post name=upform action="/profile/uploadPic.js" enctype="multipart/form-data" onload="javascript:setInput();">
 			
 			Status:<br />
 			<input type="text" id="inputStatus" value=""><br /><br />
@@ -35,20 +35,11 @@
             <input type=file name=uploadfile>
             <br /><br />
 			
-			<input type="button" name="Submit" value="Submit Changes" onclick="update()/*;LimitAttach(this.form, this.form.uploadfile.value)*/">
+			<input type="button" name="Submit" value="Submit Changes" onclick="update();/*;LimitAttach(this.form, this.form.uploadfile.value)*/">
 			<input type="button" name="" value="Change Estimate Values" onclick="parent.location='#'">
 			<input type="button" value="Reset" onclick="setInput()">
 			<input type="button" value="Cancel" onclick="history.go(-1);return true;">
 		</form>
 		
-		<script type="text/javascript" />
-		
-			display("user");
-			display("date");
-			
-			setInput();
-			
-		</script>
-
 	</body>
 </html>
