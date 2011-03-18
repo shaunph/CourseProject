@@ -3,7 +3,7 @@
 # This script should execute all nodeunit tests in the Tests folder
 #
 
-node ./nodeunit/bin/nodeunit dbtest/*_nodeunit.js
+node ./nodeunit/bin/nodeunit dbtest/*_nodeunit.js tasktest/tasktest_nodeunit.js
 
 
 # Append either the names of the folders containing your
