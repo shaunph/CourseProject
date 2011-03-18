@@ -2,34 +2,25 @@ var exec = require('child_process').exec,
     fs = require('fs'),
     http = require('http'),
     os = require('os'),
-    pagemaker = require('./pagemaker'),
+    pagemaker = require('pagemaker'),
     path = require('path'),
     url = require('url'),
     util = require('util'),
     db = require('./SQLiteHelper'),
     qs = require('querystring');
 
-/* register your new pages here, until the database is working 
-var pages = [["/main.html", "text/html"],
-             ["/jquery-1.5.min.js", "text/javascript"],
-             ["/server_error.html", "text/html"],
-             ["/signup.html", "text/html"],
-             ["/signup.js", "text/javascript"],
-             ["/style.css", "text/css"],
-             ["/test.jpg", "image/jpg"],
-             ["/profile/imgup.js", "text/javascript"],
-             ["/profile/imguptest.html", "text/html"]];
-*/
 var extTypes = [];
 extTypes["html"]="text/html";
 extTypes["htm"]="text/html";
-extTypes["js"]="text/javascript";
+extTypes["js"]="aplication/javascript";
 extTypes["css"]="text/css";
 extTypes["jpg"]="image/jpg";
 extTypes["jpeg"]="image/jpg";
+extTypes["png"]="image/png";
+extTypes["gif"]="image/gif";
    
 var docRoot = "static",
-	dynamicRoot = "dynamic",
+    dynamicRoot = "dynamic",
     errorRoot = "static/error_pages";
 
 /*
@@ -49,61 +40,76 @@ function log(request, statusCode, fileMatch) {
     util.log(strings.join("\t"));
 }
 
-/* Upon receiving a request, try to match it with a file. If
-   no corresponding file is found, respond with a 404 error page. In case
-   an unresolvable exception is encountered, repond with a 500 error page. */
-function resolve(request, response) {
-    //If the user is posting data, call the POST resolver
-    if(request.method=='POST') {
-        resolvePost(request, response);
-    //If the user is retreiving data, call the GET resolver
-    } else if (request.method=='GET') {
-        resolveGet(request,response);
-    }
-}
-
-function resolveGet(request, response) {
-
-    var pathname = url.parse(request.url).pathname;
-
-    //redirect */ to */index.html
-    if (pathname.charAt(pathname.length-1) == "/") { 
-        pathname += "index.html"; 
-    }
-	// if the url does not contain "?", we assume it is static content.
-	//THIS MAY NOT BE A SAFE ASSUMPTION
-	//This is not a safe assumption as some javascript files wont require a
-	//? or any parameters to be passed to it eg. user profile page.
-	if (request.url.indexOf("?") == -1)
-	{
-		sendStaticObj(request, response, pathname);
-    } else {
-		sendDynamicObj(request, response);
-	}
-}
-/* 
-resolvePost is used to resolve a post request. All file uploads will be handled as follows:
-
-In the HTML:
-<form method=post name=upform action="/dir1/dir2/script.js">
-
-will result in a form post calling postReq in the file: ./static/js/dir1/dir2/script.js
-
-the code in the postReq function in script.js will handle the upload from there.
-No posted data is even glanced at by the dispatcher.
-
-Author: Mitchell Ludwig
+/*
+Upon receiving a request, resolve will try to match it with a file. If
+no corresponding file is found, respond with a 404 error page. The lookup
+order is dynamic followed by static.
 */
-function resolvePost(request, response) {
-    var pathname = process.cwd() + "/" + dynamicRoot + url.parse(request.url).pathname;
-    //NOTE: No time to do a path.exists, it will take too long to execute and data will begin to arrive before it is processed.
-    try {
-        console.log("File POST with: " + pathname);
-        var handler = require(pathname);
-        handler.postReq(request,response);
-    } catch (err) {
-        console.log("Error: " + error);
-		error(request, response, 404, pathname);
+function resolve(request, response) {
+    var pathName = url.parse(request.url).pathname;
+    var filePath;
+    var handler;
+
+    // If no file is specified, we want to send a index page
+    if (pathName.charAt(pathName.length-1) == "/") { 
+        // First look for a dynamic index
+        filePath = process.cwd() + "/" + dynamicRoot + pathName + "index.js";
+        path.exists(filePath, function(exists) {
+            // If it exists, send it.
+            if (exists) {
+                handler = require(filePath);
+                handler.getReq(request,response);
+                log(request, 200, filePath);
+            }
+            // If not, check for a static index
+            else {
+                filePath = process.cwd() + "/" + docRoot + pathName + "index.html"; // Get the file location for static  
+                sendStaticObj(request, response, filePath);
+            }
+        });
+    } else {
+        var dynamic = true;                                         // This is used to check if we should try
+                                                                    // sending static content or not.
+        filePath = process.cwd() + "/" + dynamicRoot + pathName;    // Get the file location where the dynamic file would be
+        var extension = filePath.split(".").pop();                  // Get the file extension
+
+        // Check if file is a js file, or if it has no extension
+        if (extension != "js" && extension != filePath) {
+            // If not, we dont want to bother trying to send dynamic content
+            dynamic = false;
+        } 
+        // If there is no extension, append ".js"
+        else if (extension == filePath) {
+            filePath += ".js";
+        }
+        
+        if (dynamic == true) {
+            // NOTE: No time to do a path.exists, in the case of a post request it will take too
+            // long to execute and data chuncks will begin to arrive before node can process it.
+            try {
+                handler = require(filePath);
+                
+                // If we are getting a post request, call the post function
+                if (request.method=='POST') {
+                    handler.postReq(request,response);
+                } 
+                // If we are getting a get request, call the get function
+                else if (request.method=='GET') {
+                    handler.getReq(request,response);
+                }
+                
+                log(request, 200, filePath);
+            } catch (err) {
+                // If there was an error, it means no such dynamic page exists
+                dynamic = false;
+            }
+        }
+        
+        // If no dynamic page was found, try static
+        if (dynamic == false) {
+            filePath = process.cwd() + "/" + docRoot + pathName;    // Get the file location for static
+            sendStaticObj(request, response, filePath);
+        }
     }
 }
 
@@ -113,7 +119,7 @@ GET request for a static object
 */
 function sendStaticObj(request, response, file) {
     var extension = file.split(".").pop();
-    file = "./" + docRoot + file;
+
     path.exists(file, function(exists) {
         if (exists) {
             log(request, 200, file);
@@ -130,7 +136,6 @@ function sendStaticObj(request, response, file) {
 			}
         } else {
             error(request, response, 404, file);
-            console.log("ERROR: file requested does not exist: " + file);
         }
     });
 }
@@ -141,13 +146,18 @@ To make a dynamic page, the js file serving the dynamic page must have a exporte
 function called getReq (exports.getReq=function(request,response){...};
 */
 function sendDynamicObj(request, response) {
-    var pathname = process.cwd() + "/" + dynamicRoot + url.parse(request.url).pathname+'.js';
+    var pathname = process.cwd() + "/" + dynamicRoot + url.parse(request.url).pathname;
+    var extension = pathname.split(".").pop();
+    if(extension!='js') {
+        pathname = pathname + ".js";
+    }
     //NOTE: No time to do a path.exists, it will take too long to execute and data will begin to arrive before it is processed.
     try {
         console.log("File GET with: " + pathname);
         var handler = require(pathname);
         handler.getReq(request,response);
     } catch (err) {
+        console.log(err);
         error(request, response, 404, pathname);
     }
 }
