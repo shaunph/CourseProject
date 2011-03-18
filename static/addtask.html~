@@ -8,13 +8,9 @@
 
 </head>
 
-<body>
+<body onload="initialize()">
 <h1><u> Add a Task</u></h1>
-<<<<<<< HEAD
 <form method=post name=upform action="taskLoad.js" enctype="multipart/form-data">
-=======
-<form onload="javasctipt:initialize();">
->>>>>>> 52117e781d52f9835e1e427269cb60c77749a69a
 <br />
 <br /><b>Task Name: </b><input name="tNom" type="text" id="phrase2" /><br />
 <br /><b>Description: <br /></b><textarea name="desc" id="phrase3" rows="10" cols="85"/></textarea><br />
@@ -24,16 +20,11 @@
 <input type="radio", name="priority", value="low" id="low"> low 
 <input type="radio", name="priority", value="medium" id="medium"> medium 
 <input type="radio", name="priority", value="high" id="high"> high <br />
-<<<<<<< HEAD
 <br /> <b> Status:
 <input type="radio" name="status" value="Not Started" id="NS"> Not Started 
 <input type="radio" name="status" value="Work in Progress" id="WiP"> Work in Progress <br />
 <input type="hidden" name="uNom" value="J DOE" />
 <br /><button type="button" id="enter" onclick="clicked(this.form)">Add Entry</button><br />
-=======
-<br /><b>Additional Comments: <br /></b><textarea id="phrase6" rows="10" cols="85"/></textarea><br />
-<br /><button type="button" id="enter" onclick="javascript:clicked();">Add Entry</button><br />
->>>>>>> 52117e781d52f9835e1e427269cb60c77749a69a
 </form>
 </body>
 </html>

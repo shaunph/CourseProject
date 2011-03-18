@@ -1,5 +1,6 @@
 /* initialize sets up certain set features of the addtask page such as page 
-   title and the default state of the radio button.
+   title and the default state of the radio button. currently does not work with pagemaker
+TODO: integrate with structure
 */
 function initialize() {
     document.title = "Add A Task";
@@ -24,36 +25,9 @@ function clicked(form) {
     var ETR = document.getElementById("phrase4").value;
     var ETL = document.getElementById("phrase5").value;
 
-<<<<<<< HEAD
     if(isNaN(parseFloat(ETR)) || isNaN(parseFloat(ETL))){
         window.alert("Time field entries must be a number");
         return;
     }
     form.submit();
-    //TODO: send to view this task page
-=======
-	var nom = "J Doe"; //temporary filler until user system is up
-	var tnom = document.getElementById("phrase2");
-	var desc = document.getElementById("phrase3");
-	var ETR = document.getElementById("phrase4");
-	var ETL = document.getElementById("phrase5");
-	var com = document.getElementById("phrase6");
-	var date = new Date();
-	
-	//NOTE: .checked is a boolean value that indicates if a button is checked (true = checked, false = unchecked)
-	if(document.getElementById("low").checked){
-		pri = document.getElementById("low").value;
-	}
-	else if(document.getElementById("medium").checked){
-		pri = document.getElementById("medium").value;
-	}
-	else if(document.getElementById("high").checked){
-		pri = document.getElementById("high").value;
-	}
-	t = new Task(tnom, desc, pri, "open", nom, date);
-	//TODO: Taskname check into DB to check for like named tasks
-	t.save();
-	window.alert("<<success>> " + date);
-	document.location="index.html";
->>>>>>> 52117e781d52f9835e1e427269cb60c77749a69a
 }
