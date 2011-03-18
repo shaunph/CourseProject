@@ -9,21 +9,10 @@ var exec = require('child_process').exec,
     db = require('./SQLiteHelper'),
     qs = require('querystring');
 
-/* register your new pages here, until the database is working 
-var pages = [["/main.html", "text/html"],
-             ["/jquery-1.5.min.js", "text/javascript"],
-             ["/server_error.html", "text/html"],
-             ["/signup.html", "text/html"],
-             ["/signup.js", "text/javascript"],
-             ["/style.css", "text/css"],
-             ["/test.jpg", "image/jpg"],
-             ["/profile/imgup.js", "text/javascript"],
-             ["/profile/imguptest.html", "text/html"]];
-*/
 var extTypes = [];
 extTypes["html"]="text/html";
 extTypes["htm"]="text/html";
-extTypes["js"]="text/javascript";
+extTypes["js"]="aplication/javascript";
 extTypes["css"]="text/css";
 extTypes["jpg"]="image/jpg";
 extTypes["jpeg"]="image/jpg";
@@ -62,22 +51,55 @@ function resolve(request, response) {
     }
 }
 
+/*
+Upon receiving a request, resolve will try to match it with a file. If
+no corresponding file is found, respond with a 404 error page. The lookup
+order is dynamic followed by static.
+*/
 function resolveGet(request, response) {
 
-    var pathname = url.parse(request.url).pathname;
+    var pathName = url.parse(request.url).pathname;
+    var filePath;
+    var handler;
 
-    //redirect */ to */index.html
-    if (pathname.charAt(pathname.length-1) == "/") { 
-        pathname += "index.html"; 
-    }
-	// if the url does not contain "?", we assume it is static content.
-	//THIS MAY NOT BE A SAFE ASSUMPTION
-	if (request.url.indexOf("?") == -1)
-	{
-		sendStaticObj(request, response, pathname);
+    // If no file is specified, we want to send a index page
+    if (pathName.charAt(pathName.length-1) == "/") { 
+        // First look for a dynamic index
+        filePath = process.cwd() + "/" + dynamicRoot + pathName + "index.js";
+        path.exists(filePath, function(exists) {
+            // If it exists, send it.
+            if (exists) {
+                log(request, 200, filePath);
+                handler = require(filePath);
+                handler.getReq(request,response);
+            }
+            
+            // If not, check for a static index
+            else {
+                filePath = process.cwd() + "/" + docRoot + pathName + "index.html";
+                path.exists(filePath, function(exists) {
+                    // If it exists, send it.
+                    if (exists) {
+                        sendStaticObj(request, response, filePath);
+                    } else {
+                        // If neither exist, send a 404
+                        error(request, response, 404, file);
+                        console.log("ERROR: file requested does not exist: " + file);
+                    }
+                });
+            }
+        });
     } else {
-		sendDynamicObj(request, response);
-	}
+        // if the url does not contain "?", we assume it is static content.
+        //THIS MAY NOT BE A SAFE ASSUMPTION
+        if (request.url.indexOf("?") == -1)
+        {
+            filePath = process.cwd() + "/" + docRoot + pathName;
+            sendStaticObj(request, response, filePath);
+        } else {
+            sendDynamicObj(request, response);
+        }
+    }
 }
 /* 
 resolvePost is used to resolve a post request. All file uploads will be handled as follows:
@@ -111,7 +133,7 @@ GET request for a static object
 */
 function sendStaticObj(request, response, file) {
     var extension = file.split(".").pop();
-    file = "./" + docRoot + file;
+
     path.exists(file, function(exists) {
         if (exists) {
             log(request, 200, file);
