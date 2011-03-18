@@ -1,9 +1,0 @@
-argv = ['/usr/local/bin/node-waf', 'configure', 'build']
-blddir = '/home/ugc/kellyjj/Desktop/mTest/CourseProject/lib/node-sqlite/build'
-commands = {'dist': 0, 'configure': True, 'distcheck': 0, 'install': 0, 'build': True, 'clean': 0, 'distclean': 0, 'check': 0, 'uninstall': 0}
-cwd = '/home/ugc/kellyjj/Desktop/mTest/CourseProject/lib/node-sqlite'
-environ = {'SSH_ASKPASS': '/usr/libexec/openssh/gnome-ssh-askpass', 'KDE_IS_PRELINKED': '1', 'REMOTEHOST': 'zone06wc', 'HOSTTYPE': 'i386-linux', 'LESSOPEN': '|/usr/bin/lesspipe.sh %s', 'SSH_CLIENT': '172.19.0.117 47875 22', 'LOGNAME': 'kellyjj', 'USER': 'kellyjj', 'INPUTRC': '/etc/inputrc', 'PATH': '/usr/lib/qt-3.3/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin', 'HOME': '/home/ugc/kellyjj', 'LANG': 'en_US.UTF-8', 'KDEDIR': '/usr', 'GROUP': 'ug', 'SHELL': '/bin/tcsh', 'QTINC': '/usr/lib/qt-3.3/include', 'G_BROKEN_FILENAMES': '1', 'OSTYPE': 'linux', 'VENDOR': 'intel', 'QTLIB': '/usr/lib/qt-3.3/lib', 'TERM': 'xterm', 'HOST': 'csc', '_': '/usr/local/bin/node-waf', 'SSH_CONNECTION': '172.19.0.117 47875 136.159.5.16 22', 'SSH_TTY': '/dev/pts/30', 'OLDPWD': '/home/ugc/kellyjj/Desktop/mTest/CourseProject/lib/node-sqlite/deps/mpool-2.1.0', 'HOSTNAME': 'csc', 'SHLVL': '3', 'PWD': '/home/ugc/kellyjj/Desktop/mTest/CourseProject/lib/node-sqlite', 'MAIL': '/var/spool/mail/kellyjj', 'MACHTYPE': 'i386', 'QTDIR': '/usr/lib/qt-3.3'}
-files = []
-hash = 0
-options = {'compile_targets': None, 'force': False, 'verbose': 0, 'nocache': False, 'progress_bar': 0, 'destdir': '', 'keep': False, 'zones': '', 'blddir': '', 'prefix': '/usr/local/', 'jobs': 4, 'srcdir': '', 'check_cxx_compiler': 'g++ icpc sunc++', 'check_c_compiler': 'gcc icc suncc'}
-srcdir = '/home/ugc/kellyjj/Desktop/mTest/CourseProject/lib/node-sqlite'
