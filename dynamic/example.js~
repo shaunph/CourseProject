@@ -3,6 +3,10 @@ var url = require('url');
 var upops = require('uploadOps');
 
 exports.getReq = function (request,response) {
+<<<<<<< HEAD
+    
+=======
+>>>>>>> d836004129d6d5ea9efa3ba4f4fa99fd659216f1
     send(response,url.parse(request.url,true).query);
 }
 

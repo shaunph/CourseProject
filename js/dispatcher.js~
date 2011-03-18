@@ -140,6 +140,7 @@ function sendStaticObj(request, response, file) {
     });
 }
 
+<<<<<<< HEAD
 /*
 sendDynamicObj runs getReq(request,response) in the js file found at url.pathname
 To make a dynamic page, the js file serving the dynamic page must have a exported
@@ -162,6 +163,8 @@ function sendDynamicObj(request, response) {
     }
 }
 
+=======
+>>>>>>> d836004129d6d5ea9efa3ba4f4fa99fd659216f1
 function init(args) {
     if (args.length != 3) {
         console.log("Usage: node dispatcher <port>");
