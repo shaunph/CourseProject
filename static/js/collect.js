@@ -41,7 +41,7 @@ function clicked() {
 		pri = document.getElementById("high").value;
 	}
 	t = new Task(tnom, desc, pri, "open", nom, date);
-	//TODO: Task name check into DB to check for like named tasks
+	//TODO: Taskname check into DB to check for like named tasks
 	t.save();
 	window.alert("<<success>> " + date);
 	document.location="index.html";

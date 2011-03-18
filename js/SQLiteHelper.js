@@ -65,6 +65,17 @@ function accessDB(sql, executionArgs, inputFunction) {
 
 	db = new sqlite.Database();
 
+	inputFunctionWithClose = function(err,row){
+		db.close(function(error) {
+			if(error) {
+				writeLog(error);
+				return -2; // error code for caller
+			} else {
+				inputFunction(err,row);
+			}
+		});
+	}
+
 	db.open(dbLocation, function(error) {
 			if(error) {
 				writeLog(new Date() + "\n\tfunc: accessDB" + error + "\n");
@@ -72,16 +83,9 @@ function accessDB(sql, executionArgs, inputFunction) {
 			}
 
 			if(executionArgs == null)
-				db.execute(sql, inputFunction);
+				db.execute(sql, inputFunctionWithClose);
 			else
-				db.execute(sql, executionArgs, inputFunction);
-	});
-
-	db.close(function(error) {
-		if(error) {
-			writeLog(error);
-			return -2; // error code for caller
-		}
+				db.execute(sql, executionArgs, inputFunctionWithClose);
 	});
 }
 
@@ -103,8 +107,8 @@ exports.addTask = function(taskObj, callback) {
 		}
 
 		for(i = 0; i < rows.length; i++) {
-			if(rows[i].taskName.toLowerCase() ==
-						taskObj.getTaskName().toLowerCase()) {
+			if ((rows != undefined) || (rows[i].taskName.toLowerCase() ==
+						taskObj.getTaskName().toLowerCase())) {
 				writeLog("func: addTask, task " + taskObj.getTaskName() +
 						" already exists.");
 				if (callback != undefined) {
@@ -118,7 +122,7 @@ exports.addTask = function(taskObj, callback) {
 			"(taskName, description, priority, progress, status, user) " +
 			"VALUES (?,?,?,?,?,?)";
 
-		db.execute(sql, [taskObj.getTaskName(), taskObj.getDescription(),
+		accessDB(sql, [taskObj.getTaskName(), taskObj.getDescription(),
 			taskObj.getPriority(), taskObj.getProgress(), taskObj.getStatus(), 
 			taskObj.getUser()],
 			function(error, rows) {
@@ -186,7 +190,7 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 				sql = "INSERT INTO user (email,nickname,password) " +
 						"VALUES (?,?,?)";
 
-				db.execute(sql, [userEmail, userNickname, userPassword],
+				accessDB(sql, [userEmail, userNickname, userPassword],
 						function(error, rows) {
 							if(error) {
 								writeLog(error);
@@ -302,7 +306,7 @@ exports.addComment = function (commentText, commentTaskid, commenterEmail, callb
 
 			sql = "SELECT * FROM task WHERE taskid = ?";
 
-			db.execute(sql, [commentTaskid], function(error, rows) {
+			accessDB(sql, [commentTaskid], function(error, rows) {
 				if(error) {
 					writeLog(error);
 					if (callback != undefined) { callback({status:-2, detail:error}); }
@@ -319,7 +323,7 @@ exports.addComment = function (commentText, commentTaskid, commenterEmail, callb
 				sql = "INSERT INTO comment (thecomment,taskid,email) " +
 						"VALUES (?,?,?)";
 
-				db.execute(sql,
+				accessDB(sql,
 						[commentText, commentTaskid, commenterEmail],
 						function(error, rows) {
 							if(error) {
@@ -377,15 +381,15 @@ exports.getTable = function(tableName, callback) {
 				writeLog(error);
 				if (callback != undefined) { callback({status:-2, detail:error}); }
 				return -2;
-			}
-
-			if (callback != undefined) { callback({status:0, rows:rows, detail:error}); }
+			} 
+			db.close(function(error) {
+				if(error){
+					throw error;
+				} else {
+					if (callback != undefined) { callback({status:0, rows:rows, detail:error}); }
+				}
+			});
 		});
-	});
-
-	db.close(function(error) {
-		if(error)
-			throw error;
 	});
 }
 
@@ -480,16 +484,17 @@ exports.getCommentsForTask = function(taskid, callback) {
 				if (callback != undefined) { callback({status:-2, detail:error}); }
 				return -2;
 			}
-
-			if (callback != undefined) { callback({status:0, rows:rows, detail:error}); }
+			db.close(function(error) {
+				if(error) {
+					writeLog(error);
+					if (callback != undefined) { callback({status:-2, detail:error}); }
+					return -2;
+				} else {
+					if (callback != undefined) { callback({status:0, rows:rows, detail:error}); }
+				}
+			});
 		});
 	});
 
-	db.close(function(error) {
-		if(error) {
-			writeLog(error);
-			if (callback != undefined) { callback({status:-2, detail:error}); }
-			return -2;
-		}
-	});
+
 }
