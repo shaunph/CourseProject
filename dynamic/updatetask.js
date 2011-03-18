@@ -5,8 +5,8 @@ var db = require('./../js/SQLiteHelper'),
 
 exports.getReq = function(request, response) {
 	var params = url.parse(request.url).query;
-	var index = params.indexOf('=');
-	loadTask(response, parseInt(params.substring(index+1)));
+	test(response);
+	// loadTask(response, ''); once there are tasks available
 }
 
 /* 
@@ -49,7 +49,7 @@ function displayUpdate(response, taskObj) {
 			"<input type='button' name='Submit' value='Submit Changes' onclick='update()/*;LimitAttach(this.form, this.form.uploadfile.value)*/'>"+
 			"<input type='button' name='' value='Change Estimate Values' onclick='parent.location=\'#\''>"+
 			"<input type='button' value='Reset' onclick='setInput()'>"+
-			"<input type='button' value='Cancel' onclick='history.go(-1);return true;'>"+
+			"<input type='button' value='Go Back' onclick='history.go(-1);return true;'>"+
 
 		"</form>"
 	);
@@ -115,12 +115,12 @@ function setInput() {
 }
 
 /*
- * Takes in response and the task's id, calling the database and storing the result in loadedTask.
+ * Loads a task
  */
 function loadTask(response, id){
 	db.getTask(id, function(callback){
 		var row = callback.row[0];
-		var loadedTask = new task.Task(row.taskName, row.description, row.priority, row.status, row.user, new Date(row.date));
+		var loadedTask = new task.Task(row.taskName, row.description, row.priority, row.status, row.user, row.date);
 		displayUpdate(response, loadedTask);
 	});
 }
@@ -128,6 +128,7 @@ function loadTask(response, id){
 /*
  * Updates the task object's attributes from the input values by calling modifyTask().
  * Afterwards, the new attribute values will be saved in the database.
+ * Temporary until a better way to save is found.
  */
 function update() {
 	var field1 = document.getElementById('inputTaskName').value;
@@ -147,4 +148,10 @@ function update() {
 	
 	taskObj.modifyTask(field1, field2, field3, field4);
 	db.updateTask(taskObj, callback);
+}
+
+/* Test coding for a task object */
+function test(response) {
+	var taskObj = new task.Task("taskName", "desc", "low", "status", "user", "date");
+	displayUpdate(taskObj, response);
 }
