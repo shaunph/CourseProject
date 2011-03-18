@@ -58,3 +58,7 @@ Fri Mar 18 2011 13:38:02 GMT-0600 (MDT)
 	task 54 by J DOE added.
 Fri Mar 18 2011 13:53:41 GMT-0600 (MDT)
 	task 334 by J DOE added.
+Fri Mar 18 2011 14:20:51 GMT-0600 (MDT)
+	task 34535 by J DOE added.
+Fri Mar 18 2011 14:21:05 GMT-0600 (MDT)
+	func: addTask, task 3 already exists.
