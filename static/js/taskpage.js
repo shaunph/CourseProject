@@ -1,6 +1,6 @@
 /*
     This function inserts the specified task information into div tags.
-    These div tags must have a 'name' attribute, equal to one of Task's instance variables.
+    These div tags must havde a 'name' attribute, equal to one of Task's instance variables.
 
     type - The name attribute of the div tag. name is the desired Task variable to display.
     (width) - An optional argument. Specifies the maximum width of the displayed text.
