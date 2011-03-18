@@ -33,7 +33,5 @@ function clicked() {
         	window.alert("Time field entries must be a number");
 		return;
     	}
-
-	form.submit();
-	document.location="index.html";
+	form.submit();	
 }
