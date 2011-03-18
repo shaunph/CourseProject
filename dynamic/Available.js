@@ -1,4 +1,4 @@
-var db = require('../js/SQLiteHelper'),
+var db = require('SQLiteHelper'),
 	qs = require('querystring'),
 	url = require('url');
 

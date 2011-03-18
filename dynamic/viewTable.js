@@ -1,7 +1,7 @@
-var db = require('../js/SQLiteHelper'),
-	jaml = require('../js/jaml'),
+var db = require('SQLiteHelper'),
+	jaml = require('jaml'),
 	tables = require('renderTable'),
-	pagemaker = require('../js/pagemaker'),
+	pagemaker = require('pagemaker'),
 	url = require('url');
 
 
@@ -47,7 +47,10 @@ var tableToSelectForm = function(row){
  */
 
 exports.getReq = function (req, res) {
-	var lookup = url.parse(req.url , parseQueryString=true).query.table;
+	// Collects the ?table supplied parameter and 
+	// stores it in lookup. This is the specific table to be displayed.
+	// If no table of this name exists, none is rendered 
+	var lookup = url.parse(req.url , true).query.table;
 	var page = new StandardPage();
 
 	// inital setup of page

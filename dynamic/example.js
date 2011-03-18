@@ -1,4 +1,4 @@
-var pagemaker = require('./../js/pagemaker');
+var pagemaker = require('pagemaker');
 var url = require('url');
 
 exports.getReq = function (request,response) {

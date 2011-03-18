@@ -73,9 +73,13 @@ var tasks =	[["Begin the morning","Begin the morning by saying to thyself, I sha
 		["Everything","Everything which is in any way beautiful is beautiful in itself, and terminates in itself, not having praise as part of itself. Neither worse then nor better is a thing made by being praised."]];
 
 // list of user emails to be used with adding tasks and comments
-var users = ['russell@domain.com', 'hilbert@domain.com', 'zermelo@domain.com', 
-		'tarski@domain.com', 'zorn@domain.com', 
-		'kripke@domain.com', 'quine@domain.com'];
+var users = [['russell@domain.uk', 'Russell'], 
+		['hilbert@domain.de', 'Hilbert'], 
+		['zermelo@domain.de', 'Zermelo'], 
+		['tarski@domain.ru', 'Tarski'], 
+		['zorn@domain.de', 'Zorn'], 
+		['kripke@domain.com',' Kripke'], 
+		['quine@domain.com', 'Quine']];
 
 // more quotes from Meditations, to be used as comments
 var comments = 	["Think continually how many physicians are dead after often contracting their eyebrows over the sick",
@@ -120,27 +124,14 @@ db.open(dbLocation, function (error) {
 		throw error;
 	} else {
 		// inserts all users
-		db.execute("INSERT INTO user (email, nickname,password) "
-				+"VALUES ('russell@domain.com','Russell',?)",
-			[password],function (error) { console.log(error); });
-		db.execute("INSERT INTO user (email, nickname,password) "
-				+"VALUES ('hilbert@domain.com','Hilbert',?)",
-			[password],function (error) { console.log(error); });
-		db.execute("INSERT INTO user (email, nickname,password) "
-				+"VALUES ('zermelo@domain.com','Zermelo',?)",
-			[password],function (error) { console.log(error); });
-		db.execute("INSERT INTO user (email, nickname,password) "
-				+"VALUES ('tarski@domain.com','Tarski',?)",
-			[password],function (error) { console.log(error); });
-		db.execute("INSERT INTO user (email, nickname,password) "
-				+"VALUES ('zorn@domain.com','Zorn',?)",
-			[password],function (error) { console.log(error); });
-		db.execute("INSERT INTO user (email, nickname,password) "
-				+"VALUES ('kripke@domain.com','Kripke',?)",
-			[password],function (error) { console.log(error); });
-		db.execute("INSERT INTO user (email, nickname,password) "
-				+"VALUES ('quine@domain.com','Quine',?)",
-			[password],function (error) { console.log(error); });
+		for (i = 0; i < users.length; i++){
+			users[i][2] = password;
+			db.execute("INSERT INTO user (email, nickname,"
+					+ "password) VALUES (?,?,?)",
+				users[i], function (error) { 
+				console.log(error); 
+			});
+		}
 
 		//inserts tasks
 		for (i = 0; i < tasks.length; i++) {
@@ -148,13 +139,14 @@ db.open(dbLocation, function (error) {
 			tasks[i][2] = "Low";
 			tasks[i][3] = "Closed";
 			// assigned user is chosen randomly
-			tasks[i][4] = users[Math.floor(Math.random()*users.length)];
+			tasks[i][4] = users[Math.floor(Math.random()*users.length)][0];
 			tasks[i][5] = new Date().toString();
 			db.execute("INSERT INTO task (taskName,"
 				+"description,priority,status," 
-				+"user,date) VALUES (?,?,?,?,?,?)", tasks[i],
-				function(error){ if (error) console.log(error);}
-			);
+				+"user,date) VALUES (?,?,?,?,?,?)", 
+				tasks[i], function(error){ 
+					if (error) console.log(error);
+				});
 		}
 
 		//inserts functions
@@ -164,7 +156,7 @@ db.open(dbLocation, function (error) {
 			// randomly chooses a task to comment on
 			comment[1] = Math.floor(Math.random()*tasks.length) + 1;
 			// randomly chooses a user to make the comment
-			comment[2] = users[Math.floor(Math.random()*users.length)];
+			comment[2] = users[Math.floor(Math.random()*users.length)][0];
 			db.execute("INSERT INTO comment (thecomment,"
 				+"taskid,email) VALUES (?,?,?)", comment,
 				function(error){ if (error) console.log(error);}

@@ -2,7 +2,7 @@ var path = require('path');
 var fs = require('fs');
 var basepath = fs.realpathSync("../");
 var sqlite = require(basepath + '/lib/node-sqlite/sqlite');
-var slh = require(basepath + "/js/SQLiteHelper");
+var slh = require("SQLiteHelper");
 var dbLocation = (basepath + "/db/main.db"); // database location in file system
 
 
