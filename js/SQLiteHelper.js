@@ -184,7 +184,7 @@ exports.addUser = function(userEmail, userNickname, userPassword, callback) {
 
 			if(rows.length != 0) {
 				writeLog("func: addUser, email " + userEmail + " already exists.");
-				if (callback != undefined) { callback({status:-2, detail:{message:"user exists"}}); }
+				if (callback != undefined) { callback({status:-1, detail:{message:"user exists"}}); }
 				return -1; // error code for caller
 			} else {
 				sql = "INSERT INTO user (email,nickname,password) " +
@@ -223,11 +223,11 @@ exports.nickExists = function (nickName, callback) {
 				if (callback != undefined) { callback({status:-2, detail:error}); }
 			}
 			else if(rows.length != 0) {
-				writeLog("user: " + nickName + " exists.");
+				writeLog("nickname: " + nickName + " exists.");
 				if (callback != undefined) { callback({status:0, exists:true, detail:error}); }
 			}
 			else {
-				writeLog("user: " + nickName + " does not exist.");
+				writeLog("nickname: " + nickName + " does not exist.");
 				if (callback != undefined) { callback({status:0, exists:false, detail:error}); }
 			}
 	});
@@ -248,11 +248,11 @@ exports.userExists = function (userEmail, callback) {
 				if (callback != undefined) { callback({status:-2, detail:error}); }
 			}
 			else if(rows.length != 0) {
-				writeLog("user: " + userEmail + " exists.");
+				writeLog("user email: " + userEmail + " exists.");
 				if (callback != undefined) { callback({status:0, exists:true, detail:error}); }
 			}
 			else {
-				writeLog("user: " + userEmail + " does not exist.");
+				writeLog("user email: " + userEmail + " does not exist.");
 				if (callback != undefined) { callback({status:0, exists:false, detail:error}); }
 			}
 	});

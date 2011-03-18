@@ -10,7 +10,7 @@ exports.getReq = function (req, res ) {
 	var params = url.parse(req.url, true).query;
 
 	if(params.Email != undefined) {
-		db.nickExists(params.Email, function(codes) {
+		db.userExists(params.Email, function(codes) {
 			if(codes.status == 0) {
 				if(codes.exists == false) {
 					res.end("Available");
@@ -28,7 +28,7 @@ exports.getReq = function (req, res ) {
 		});
 	}	
 	else if(params.Username != undefined) {
-		db.userExists(params.Username, function(codes) {
+		db.nickExists(params.Username, function(codes) {
 			if(codes.status == 0) {
 				if(codes.exists == false) {
 					res.end("Available");
