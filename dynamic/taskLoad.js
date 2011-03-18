@@ -39,8 +39,7 @@ exports.postReq = function (request, response) {
             console.log("Error in taskLoad.js->postReq: " + error);
         }
     });
-    response.end();
     //response.write();
-    //response.end('<meta http-equiv="refresh" content="0; URL=index.html">');
+    response.end('<meta http-equiv="refresh" content="0; URL=index.html">');
     //response.end("<html> <body> Task Processed <br /> <br /> </body> </html>");
 };

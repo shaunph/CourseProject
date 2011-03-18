@@ -101,7 +101,7 @@ function modifyTask(taskName, description, priority, status) {
 }
 
 // This function saves the calling Task into the DB
-function save() {
+function tSave() {
 	/* TODO: If the calling task is already in the database, 
 			 	update this task in the database.
 			 If the calling task is not in the database (ie a new task),

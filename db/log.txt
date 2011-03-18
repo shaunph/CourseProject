@@ -30,3 +30,27 @@ Fri Mar 18 2011 10:15:30 GMT-0600 (MDT)
 	task dgfd by J DOE added.
 Fri Mar 18 2011 10:19:44 GMT-0600 (MDT)
 	func: addTask, task dgfd already exists.
+Fri Mar 18 2011 11:44:17 GMT-0600 (MDT)
+	task we by J DOE added.
+Fri Mar 18 2011 11:46:00 GMT-0600 (MDT)
+	func: addTask, task we already exists.
+Fri Mar 18 2011 12:54:22 GMT-0600 (MDT)
+	task as by J DOE added.
+Fri Mar 18 2011 13:01:20 GMT-0600 (MDT)
+	func: addTask, task as already exists.
+Fri Mar 18 2011 13:05:56 GMT-0600 (MDT)
+	func: addTask, task as already exists.
+Fri Mar 18 2011 13:10:13 GMT-0600 (MDT)
+	func: addTask, task as already exists.
+Fri Mar 18 2011 13:11:17 GMT-0600 (MDT)
+	func: addTask, task as already exists.
+Fri Mar 18 2011 13:16:38 GMT-0600 (MDT)
+	task 3 by J DOE added.
+Fri Mar 18 2011 13:17:05 GMT-0600 (MDT)
+	task 33 by J DOE added.
+Fri Mar 18 2011 13:17:43 GMT-0600 (MDT)
+	func: addTask, task 3 already exists.
+Fri Mar 18 2011 13:19:51 GMT-0600 (MDT)
+	task topper turkey by J DOE added.
+Fri Mar 18 2011 13:20:38 GMT-0600 (MDT)
+	task 34 by J DOE added.
