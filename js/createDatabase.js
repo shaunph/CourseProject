@@ -11,6 +11,7 @@
 		user(email, nickname, password)
 		task(taskid, taskName, description, priority, status, user, date)
 		comment(thecomment, taskid, creator)
+		estimate(taskid, timeSpent, timeRemaining)
 */
 
 sqlite = require('./../lib/node-sqlite/sqlite');
@@ -71,6 +72,18 @@ db.open(dbLocation, function (error) {
 		console.log("comment table created.");
 	});
 
+	db.execute("CREATE TABLE estimate (" +
+		"taskid NUMBER," + // FOREIGN KEY
+		"timeSpent NUMBER," +
+		"timeRemaining NUMBER)", 
+		function (error) {
+			if(error) {
+				console.log("Error creating estimate table.");
+				throw error;
+			}
+
+		console.log("Estimate table created.");
+	});
 });
 
 db.close(function(error) {

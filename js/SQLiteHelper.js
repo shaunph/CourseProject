@@ -8,7 +8,8 @@
 		addUser(String userEmail, String userNickname, String userPassword, function callback)
 	To add a comment, use the function
 		addComment(String commentText, int taskid, String commenterEmail)
-
+	To add an estimate(int taskid, int timeSpent, int timeRemaining)
+		
 	Error codes:
 		0: everythings OK
 		-1: error from above (opening db, closing db, ....)
@@ -338,6 +339,71 @@ exports.addComment = function (commentText, commentTaskid, commenterEmail, callb
 						}
 				);
 			});
+	});
+}
+
+/**
+	Parameter1: a taskid that the estmate refers to. (int)
+	Parameter2: time spent fo the task. (int)
+	Parameter3: the estimated remaining time of the task. (int)
+	callback  : a function
+	
+	This function adds an estimate to the estimate table in the database.
+*/
+exports.addEstimate = function (estTaskid, estTimeSpent, estTimeRemaining, callback) {
+
+	var sql = "SELECT * FROM task WHERE taskid = ?";
+	
+	accessDB(sql, [estTaskid], function(error, rows){
+		if(error){
+			writeLog(error);
+			if(callback != undefined) { callback({status:-2, detail:error});}
+			return -2; // error code for caller
+		}
+		
+		if(rows.length == 0) {
+			writeLog("func: addEstimate, taskid " + estTaskid + " not found.");
+			if(callback != undefined) { callback({status:-1, detail:error});}
+			return -1; // error code for caller
+		}
+		
+	});
+	
+	var sql = "SELECT * FROM estimate WHERE taskid = ?";
+	accessDB(sql, [estTaskid], function(error, rows){
+		if(error){
+			writeLog(error);
+			if(callback != undefined) { callback({status:-2, detail:error});}
+			return -2; // error code for caller
+		}
+		
+		if(rows.length == 0) {
+			sql = "INSERT INTO estimate (taskid,timeSpent,timeRemaining) VALUES (?,?,?)"
+			db.execute(sql, [estTaskid, estTimeSpent, estTimeRemaining],
+				function(error, rows) {
+					if(error) {
+						writeLog(error);
+						if(callback != undefined) { callback({status:-1, detail:error});}
+						return -1; // error code for caller
+					}
+
+					writeLog("estimate of task " + estTaskid + " added.");
+					if (callback != undefined) { callback({status:0, detail:error});
+			});
+		} else {
+			sql = "UPDATE estimate (timeSpent,timeRemaining) VALUES(?,?) WHERE taskid="+estTaskid;
+			db.execute(sql, [estTimespent, estTimeRemaining],
+				function(error, rows){
+					if(error) {
+						writeLog(error);
+						if(callback != undefined) { callback({status:-2, detail:error});}
+						return -2;
+					}
+					
+					writeLog("estimate of task " + estTaskid " updated");
+					if (callback != undefined) { callback({status:0, detail:error});
+				});		
+		}		
 	});
 }
 
