@@ -1,5 +1,3 @@
-var task = require('./task');
-
 /*
     This function inserts the specified task information into div tags.
     These div tags must have a 'name' attribute, equal to one of Task's instance variables.
@@ -9,13 +7,14 @@ var task = require('./task');
 */
 function display(type, width) {
 	var output, containerList;
-	
+	console.log(1);
 	// If optional argument 'width' is not provided, use a default width of 30em.
 	if (width === undefined)
 		width = "30em";
 	
 	switch(type) {
 		case "taskName":
+			console.log(2);
 			output = taskObj.getTaskName();
 			break;
 		case "id":
@@ -37,7 +36,7 @@ function display(type, width) {
 			output = taskObj.getDate();
 			break;
 		default:
-			alert("ERROR: Unknown Task type.");
+			//alert("ERROR: Unknown Task type.");
 			return;
 	}
 
@@ -51,16 +50,3 @@ function display(type, width) {
 		containerList[i].innerHTML = output;
 	}
 }
-
-
-
-/*
-    Any page that links to the task page will send a task ID, which will be used here to reference the
-	database for the task data. This data will be used as arguments to the Task constructor to create the 
-    below object.
-
-    For now, these are test parameters. 
-*/
-var taskObj = new task.Task("TaskNameHere", "This is a test description. ", "priority", "status", "user", "date");
-
-document.title = taskObj.getTaskName() + " Details";	// Just display the title on the html page
