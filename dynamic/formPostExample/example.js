@@ -5,6 +5,7 @@ write the actual file, once one can determine the current user
 decide where to store profile pics.
 */
 
+var pagemaker = require('pagemaker');
 var upops = require('uploadOps');
    
 /*
@@ -28,9 +29,18 @@ exports.postReq = function (request, response) {
         //Make one huge data Buffer that holds the entire HTTP request data section
         var dataBuffer = bops.join(allChunks);
         //Extract the file from the data Buffer.
-        try {
+        try {	
+            page1 = new StandardPage();
+            page1.setTitle("Test Page");
+            page1.setContent("This is a dynamically generated test page <br />");
             var parsed = upops.parseMultipartFormdata(dataBuffer);
-            console.log(parsed["uploadfile"].toString());
+            for(var i in parsed)
+            {
+                page1.addContent(i + ": " + parsed[i] + "<br />");
+            }
+            response.writeHead(200, {'Content-Type': 'text/html'});
+            response.write(page1.toHTML());
+            response.end();
         } catch (error) {
             //Log errors
             console.log("Error in uploadpic.js->postReq: " + error);

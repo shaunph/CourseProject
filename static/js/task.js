@@ -56,7 +56,8 @@ exports.Task = function(taskName, description, priority, progress, status, user)
 	this.setUser(user);
 	
 	this.modifyTask = modifyTask;
-	this.save = save;
+	//this.save = save;
+	//TODO: use for task modification on the database
 }
 
 function setTaskName(newTaskName) {
@@ -125,7 +126,7 @@ function modifyTask(taskName, description, priority, progress, status, user) {
 }
 
 // This function saves the calling Task into the DB
-function save() {
+function tSave() {
 	/* TODO: If the calling task is already in the database, 
 			 	update this task in the database.
 			 If the calling task is not in the database (ie a new task),

@@ -1,5 +1,6 @@
-var pagemaker = require('./../js/pagemaker');
+var pagemaker = require('pagemaker');
 var url = require('url');
+var upops = require('uploadOps');
 
 exports.getReq = function (request,response) {
     send(response,url.parse(request.url,true).query);

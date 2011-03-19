@@ -44,6 +44,8 @@ db.open(dbLocation, function (error) {
 		"taskid INTEGER PRIMARY KEY AUTOINCREMENT," +
 		"taskName TEXT," +
 		"description TEXT," +
+		"timeLeft TEXT," +
+		"timeSpent TEXT," +
 		"priority TEXT," +
 		"progress TEXT," +
 		"status TEXT," +
