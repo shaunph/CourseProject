@@ -4,20 +4,10 @@
 
 var fs = require('fs');
 var path = require('path');
-var basepath;
-var currDir = path.basename(process.cwd());
 
-if (currDir == 'tests')
-{
-    basepath = '../';
-}
-else if (currDir == 'CourseProject')
-{
-    basepath = './';
-}
-else
-{
-    basepath = '../../';
-}
-
-exports.mainpath = fs.realpathSync(basepath);
+exports.mainpath = function () {
+    var currDir = process.cwd();
+    for (var nextDir = currDir.split("/"); nextDir.pop() != 'CourseProject'; currDir = nextDir.join("/")){
+    }
+    return currDir;
+};
