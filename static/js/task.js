@@ -46,7 +46,8 @@ exports.Task = function(taskName, description, priority, status, user, date) {
 	this.setStatus = setStatus;
 
 	this.modifyTask = modifyTask;
-	this.save = save;
+	//this.save = save;
+	//TODO: use for task modification on the database
 }
 
 function loadTask(id) {
