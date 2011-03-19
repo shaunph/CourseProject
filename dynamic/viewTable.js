@@ -67,17 +67,23 @@ exports.getReq = function (req, res) {
 			page.addContent(tables.tableToHTML(err.rows));
 			page.addContent(tableToSelectForm(err.rows));
 
-			db.getTable(lookup ,function (err2,row2){
-				if (err2.status != 0) {
-					console.log(err2);
-				}else{
-					//if query succeeds, adds table to page
-					page.addContent( tables.tableToHTML(err2.rows));
-				}
-				// sends page to client
+			if (lookup != undefined){
+				db.getTable(lookup ,function (err2,row2){
+					if (err2.status != 0) {
+						console.log(err2);
+						throw new Error(err2.detail.message);
+					}else{
+						//if query succeeds, adds table to page
+						page.addContent( tables.tableToHTML(err2.rows));
+					}
+					// sends page to client
+					res.write(page.toHTML());
+					res.end();
+				});
+			}else{
 				res.write(page.toHTML());
 				res.end();
-			});
+			}
 		}
 	});
 }
