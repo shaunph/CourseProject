@@ -119,12 +119,12 @@ exports.addTask = function(taskObj, callback) {
 		}
 		
 		sql = "INSERT INTO task " +
-			"(taskName, description, priority, progress, status, user) " +
-			"VALUES (?,?,?,?,?,?)";
+			"(taskName, description, timeSpent, timeLeft, priority, progress, status, user) " +
+			"VALUES (?,?,?,?,?,?,?,?)";
 
-		accessDB(sql, [taskObj.getTaskName(), taskObj.getDescription(),
-			taskObj.getPriority(), taskObj.getProgress(), taskObj.getStatus(), 
-			taskObj.getUser()],
+		accessDB(sql, [taskObj.getTaskName(), taskObj.getDescription(), 
+		taskObj.getTimeSpent(), taskObj.getTimeLeft(), taskObj.getPriority(), 
+		taskObj.getProgress(), taskObj.getStatus(), taskObj.getUser()],
 			function(error, rows) {
 				if(error) {
 					writeLog(error);
