@@ -9,5 +9,5 @@ exports.mainpath = function () {
     var currDir = process.cwd();
     for (var nextDir = currDir.split("/"); nextDir.pop() != 'CourseProject'; currDir = nextDir.join("/")){
     }
-    return currDir;
+    return currDir+"/";
 };
