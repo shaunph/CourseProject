@@ -3,20 +3,6 @@ var dbHelper = require('./../js/SQLiteHelper'),
 	pagemaker = require('./../node_modules/pagemaker'),
 	url = require('url');
 
-// Important Note: Until a save function is implemented, the temporary saveTestTask() 
-// function is used to add a test Task object. To run this for the first time, follow these steps:
-//		1) Create the database
-//		2) Connect to the server and click on Task page
-//		3) Comment out saveTestTask() and uncomment loadTask(response, parseInt(params.substring(index+1)));
-//		4) Connect to the server again and click on Task page
-//		
-//		or alternatively:
-//		1) Create the database
-//		2) In the terminal: sqlite3 db/main.db
-//		3) Add tasks manually to the task table
-//		4) Comment out saveTestTask() and uncomment loadTask(response, parseInt(params.substring(index+1)));
-//		5) Connect to the server and click on Task page 
-
 exports.getReq = function (request,response) {
 	saveTestTask();	// This will be removed once tasks can be saved
 
