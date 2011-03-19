@@ -1,6 +1,6 @@
 
 
-exports.getReq = function (req, res) {
+exports.getReq = function(req, res) {
 
 
 

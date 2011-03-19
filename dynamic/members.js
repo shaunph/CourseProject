@@ -21,7 +21,7 @@ exports.getReq = function(request, response) {
 
         console.log("Table retrieved.");
         
-        var membersPage = new pagemaker.StandardPage();
+        var membersPage = new StandardPage();
         membersPage.setTitle("Members");
 
         membersPage.addContent("<h3>");

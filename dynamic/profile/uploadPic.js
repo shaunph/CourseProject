@@ -5,14 +5,8 @@ write the actual file, once one can determine the current user
 decide where to store profile pics.
 */
 
-var exec = require('child_process').exec;
-var fs = require('fs');
-var http = require('http');
-var os = require('os');
-var path = require('path');
-var url = require('url');
-var util = require('util');
-    
+var upops = require('uploadOps');
+   
 /*
 postReq will process the HTTP POST request, and extract the profile picture and save it as <username>.<ext> somewhere.
 TODO: 
@@ -35,7 +29,8 @@ exports.postReq = function (request, response) {
         var dataBuffer = bops.join(allChunks);
         //Extract the file from the data Buffer.
         try {
-            var fileBuffer = bops.extractFileFromResponse(dataBuffer);
+            var parsed = upops.parseMultipartFormdata(dataBuffer);
+            console.log(parsed["uploadfile"].toString());
         } catch (error) {
             //Log errors
             console.log("Error in uploadpic.js->postReq: " + error);

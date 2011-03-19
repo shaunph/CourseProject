@@ -12,4 +12,13 @@ then
 	exit 1
 fi
 
-node js/dispatcher.js $1
+if [ -f lib/node-sqlite/sqlite3_bindings.node ]
+then
+	node js/dispatcher.js $1
+else
+	echo "building node sqlite bindings..."
+	cd lib/node-sqlite/ &&
+	./build.sh &&
+	cd ../../ &&
+	node js/dispatcher.js $1
+fi
