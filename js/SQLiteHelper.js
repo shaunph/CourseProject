@@ -432,14 +432,16 @@ exports.getTask = function(taskid, callback) {
 				if (callback != undefined) { callback({status:-2, detail:error}); }
 				return -2;
 			}
-
-			if (callback != undefined) { callback({status:0, rows:rows, detail:error}); }
+			db.close(function(error) {
+				if(error) {
+					writeLog(error);
+					if (callback != undefined) { callback({status:-2, detail:error}); }
+					return -2;
+				} else {
+					if (callback != undefined) { callback({status:0, rows:rows, detail:error}); }
+				}
+			});
 		});
-	});
-
-	db.close(function(error) {
-		if(error)
-			throw error;
 	});
 }
 
