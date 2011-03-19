@@ -2,31 +2,29 @@
 <html>
 <head>
 
-    <script type="text/javascript"
-            src="js/collect.js">
-    </script>
-
-    <script type="text/javascript"
-            src="js/task.js">
-    </script>
+<script type="text/javascript"
+    src="js/collect.js">
+</script>
 
 </head>
 
 <body>
 <h1><u> Add a Task</u></h1>
-
-<form onload="javasctipt:initialize();">
+<form method=post name=upform action="taskLoad.js" enctype="multipart/form-data">
 <br />
-<br /><b>Task Name: </b><input type="text" id="phrase2" /><br />
-<br /><b>Description: <br /></b><textarea id="phrase3" rows="10" cols="85"/></textarea><br />
-<br /><b>Estimated Time Remaining: </b><input type="text" id="phrase4" />hrs<br />
-<br />Time Spent: <input type="text" id="phrase5" />hrs<br />
-<br /> <b> Priority: </b>
+<br /><b>Task Name: </b><input name="tNom" type="text" id="phrase2" /><br />
+<br /><b>Description: <br /></b><textarea name="desc" id="phrase3" rows="10" cols="85"/></textarea><br />
+<br /><b>Estimated Time Remaining: <input name="ETR" type="text" id="phrase4" /> hrs<br />
+<br />Time Spent: <input name="timeS" type="text" id="phrase5" /> hrs<br />
+<br /> <b> Priority:
 <input type="radio", name="priority", value="low" id="low"> low 
 <input type="radio", name="priority", value="medium" id="medium"> medium 
 <input type="radio", name="priority", value="high" id="high"> high <br />
-<br /><b>Additional Comments: <br /></b><textarea id="phrase6" rows="10" cols="85"/></textarea><br />
-<br /><button type="button" id="enter" onclick="javascript:clicked();">Add Entry</button><br />
+<br /> <b> Status:
+<input type="radio" name="status" value="Not Started" id="NS"> Not Started 
+<input type="radio" name="status" value="Work in Progress" id="WiP"> Work in Progress <br />
+<input type="hidden" name="uNom" value="J DOE" />
+<br /><button type="button" id="enter" onclick="clicked(this.form)">Add Entry</button><br />
 </form>
 </body>
 </html>
