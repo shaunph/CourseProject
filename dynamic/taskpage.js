@@ -18,7 +18,7 @@ var dbHelper = require('./../js/SQLiteHelper'),
 //		5) Connect to the server and click on Task page 
 
 exports.getReq = function (request,response) {
-	//saveTestTask();	// This will be removed once tasks can be saved
+	saveTestTask();	// This will be removed once tasks can be saved
 
 	var params = url.parse(request.url).query;
 	var index = params.indexOf('=');
@@ -66,5 +66,5 @@ function loadTask(response, id) {
 function saveTestTask() {
 	var testTask = new task("test name", "a description", "0", "0", "High", "Not started", "Open", "test@test.com");
 
-	dbHelper.addTask(testTask, function(error) {});
+	dbHelper.addTask(testTask, function(error) {return;});
 }
