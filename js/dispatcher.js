@@ -72,7 +72,7 @@ function resolve(request, response) {
                                                                     // sending static content or not.
         filePath = process.cwd() + "/" + dynamicRoot + pathName;    // Get the file location where the dynamic file would be
         var extension = filePath.split(".").pop();                  // Get the file extension
-
+	
         // Check if file is a js file, or if it has no extension
         if (extension != "js" && extension != filePath) {
             // If not, we dont want to bother trying to send dynamic content
@@ -88,7 +88,6 @@ function resolve(request, response) {
             // long to execute and data chuncks will begin to arrive before node can process it.
             try {
                 handler = require(filePath);
-                
                 // If we are getting a post request, call the post function
                 if (request.method=='POST') {
                     handler.postReq(request,response);
@@ -101,6 +100,7 @@ function resolve(request, response) {
                 log(request, 200, filePath);
             } catch (err) {
                 // If there was an error, it means no such dynamic page exists
+				// It could also mean theres an error on the dynamic page.
                 dynamic = false;
             }
         }
