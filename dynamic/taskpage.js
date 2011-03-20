@@ -1,9 +1,7 @@
 var dbHelper = require('SQLiteHelper'),
 	task = require('task'),
 	pagemaker = require('pagemaker'),
-	url = require('url'),
-	fs = require('fs'),
-	util = require('util');
+	url = require('url');
 
 /*
  * Before linking to this page for the first time, uncomment saveTestTask() 
