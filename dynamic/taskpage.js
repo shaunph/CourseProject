@@ -1,7 +1,9 @@
 var dbHelper = require('SQLiteHelper'),
 	task = require('task'),
 	pagemaker = require('pagemaker'),
-	url = require('url');
+	url = require('url'),
+	fs = require('fs'),
+	util = require('util');
 
 /*
  * Before linking to this page for the first time, uncomment saveTestTask() 
@@ -20,7 +22,7 @@ exports.getReq = function (request,response) {
 
 	var params = url.parse(request.url).query;
 	var index = params.indexOf('=');
-	loadTask(response, parseInt(params.substring(index+1)));
+	loadTask(request, response, parseInt(params.substring(index+1)));
 }
 
 function displayTaskPage(response, id, taskValues) {
@@ -51,9 +53,16 @@ function displayTaskPage(response, id, taskValues) {
 	response.end();
 }
 
-function loadTask(response, id) {
+function loadTask(request, response, id) {
 	dbHelper.getTask(id, function(callbackObj) {
 			var loadRow = callbackObj.rows[0];	// Always 0 because getTask only gets 1 row, namely the row with taskid = id
+			if (loadRow == undefined) {	// If task doesn't exist in db
+				var errorPage = process.cwd() + "/static/error_pages/404.html"; 
+				pagemaker.ParsePage(errorPage, function (html) {
+					response.end(html);
+				});
+				return;
+			}
 			var loadedTask = new task.task(loadRow.taskName, loadRow.description, loadRow.timeSpent, loadRow.timeLeft, 
 											loadRow.priority, loadRow.progress, loadRow.status, loadRow.user);
 			displayTaskPage(response, id, loadedTask);
