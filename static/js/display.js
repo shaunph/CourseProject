@@ -50,3 +50,17 @@ function display(type, width) {
 		containerList[i].innerHTML = output;
 	}
 }
+
+/*
+ * 	Test object to display.
+ */
+var taskObj = new Task("TaskNameHere", 123, "This is a test description. ", "priority", "status", "user", "date");
+
+document.title = taskObj.getTaskName() + " Details";	// Just display the title on the html page
+
+display('taskName');
+display('description', '30em');
+display('priority');
+display('status');
+display('user');
+display('date');
