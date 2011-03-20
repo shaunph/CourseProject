@@ -1,7 +1,5 @@
 var fs = require('fs');
-var basepath = fs.realpathSync("../");
-var task = require(basepath + '/static/js/task');
-//var Task = task.Task
+var task = require('task').task;
 
 /*
  * Tests for Task using NodeUnit
@@ -10,9 +8,6 @@ var task = require(basepath + '/static/js/task');
  *
  * To run this test specifically, within the /tests/ directory, use:
  * 		node ./nodeunit/bin/nodeunit tasktest/tasktest_nodeunit.js 
- 
- NOTE TEST WITH () and (null) and (undefined)
- LOOP THROUGH INVALID INPUTS, USE | AS SEPARATOR
  */
 
 
@@ -23,14 +18,14 @@ exports.TaskTests = {
 		var testTask;
 		
 		test.doesNotThrow(function() {
-			testTask = new task.Task("name", "", "Low", "", "Open", "test@test.com");
+			testTask = new task("name", "", "0", "0", "Low", "", "Open", "test@test.com");
 		});
 		
 		test.doesNotThrow(function() {
-			testTask.modifyTask("A name", "A description", "Low", "Progress message", "Open", "test@test.com");
+			testTask.modifyTask("A name", "A description", "1", "1", "Low", "Progress message", "Open", "test@test.com");
 		});
 		
-		test.ok(testTask instanceof task.Task);
+		test.ok(testTask instanceof task);
 		
 		test.done();
     },
@@ -38,7 +33,7 @@ exports.TaskTests = {
     "Test 2: Task Name can only be a String/Number": function (test) {
         test.expect(6);
 		
-		var nameTask = new task.Task("name", "", "Low", "", "Open", "test@test.com");;
+		var nameTask = new task("name", "", "0", "0", "Low", "", "Open", "test@test.com");;
 		var invalidInput = ["", new Object()];
 		var validInput = ["A String name", 3];
 		
@@ -61,7 +56,7 @@ exports.TaskTests = {
 	"Test 3: Task Description can only be an Empty String/String/Number": function (test) {
         test.expect(9);
 		
-		var descriptTask = new task.Task("name", "", "Low", "", "Open", "test@test.com");
+		var descriptTask = new task("name", "", "0", "0", "Low", "", "Open", "test@test.com");
 		var invalidInputs = [new Object(), null, undefined];
 		var validInputs = ["", 'A String Description', 1];
 		
@@ -84,7 +79,7 @@ exports.TaskTests = {
 	"Test 4: Task Priority must be a valid String (Low, Medium, High)": function (test) {
         test.expect(12);
 
-		var priorityTask = new task.Task("name", "", "Low", "", "Open", "test@test.com");
+		var priorityTask = new task("name", "", "0", "0", "Low", "", "Open", "test@test.com");
 		var invalidInputs = ["", "Not a valid Priority", 4, new Object(), null, undefined];
 		var validInputs = ["Low", "Medium", "High"];
 		
@@ -107,7 +102,7 @@ exports.TaskTests = {
 	"Test 5: Task Progress can only be an Empty String/String/Number": function (test) {
         test.expect(9);
 
-		var progressTask = new task.Task("name", "", "Low", "", "Open", "test@test.com");
+		var progressTask = new task("name", "", "0", "0", "Low", "", "Open", "test@test.com");
         var invalidInputs = [new Object(), null, undefined];
 		var validInputs = ["", "This is a valid Progress message", 1];
 		
@@ -130,7 +125,7 @@ exports.TaskTests = {
 	"Test 6: Task Status must be a valid valid String (Open or Closed)": function (test) {
         test.expect(10);
 
-		var statusTask = new task.Task("name", "", "Low", "", "Open", "test@test.com");
+		var statusTask = new task("name", "", "0", "0", "Low", "", "Open", "test@test.com");
 		var invalidInputs = ["", "This is not a valid Status", 5, new Object(), null, undefined];
 		var validInputs = ["Open", "Closed"];
 		
@@ -160,13 +155,13 @@ exports.TaskTests = {
 		
 		for (var i = 0 ; i < invalidInputs.length ; i++) {
 			test.throws(function() {
-				userTask = new task.Task("name", "", "Low", "", "Open", invalidInputs[i]);
+				userTask = new task("name", "", "0", "0", "Low", "", "Open", invalidInputs[i]);
 			});
 		}
 		
 		for (var j = 0 ; j < validInputs.length ; j++) {
 			test.doesNotThrow(function() {
-				userTask = new task.Task("name", "", "Low", "", "Open", validInputs[j]);
+				userTask = new task("name", "", "0", "0", "Low", "", "Open", validInputs[j]);
 			});
 			test.equals(userTask.getUser(), validInputs[j]);
 		}
