@@ -1,9 +1,9 @@
 body
 {
-font-size:75%;
-background-color:#111111;
-color:#CCCCCC;
-margin:10px;
+	font-size:75%;
+	background-color:#111111;
+	color:#CCCCCC;
+	margin:10px;
 }
 
 h1 {font-size:200%};
@@ -21,21 +21,24 @@ a:hover {color:#red;}
 #header
 {
 	width:100%;
+	height: 200px;
 	float:left;
 	color:#EEEEEE;
-	background:#AAAAAA
+	background:#AAAAAA;
+	text-align:center;
+	font-size: 30px;
 }
 #menus
 {
 	width:20%;
 	float:left;
 	color:#EEEEEE;
-	background:#AAAAAA
+	background:#AAAAAA;
 }
 #content
 {
 	width:80%;
 	float:left;
 	color:#111111;
-	background:#FFFFFF
+	background:#FFFFFF;
 }
