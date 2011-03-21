@@ -1,12 +1,11 @@
-var db = require('./../js/SQLiteHelper'),
-	task = require('./../static/js/task'),
-	pagemaker = require('./../js/pagemaker'),
+var	//db = require('SQLiteHelper'),
+	task = require('task'),
+	pagemaker = require('pagemaker'),
 	url = require('url');
 
 exports.getReq = function(request, response) {
-	var params = url.parse(request.url).query;
 	test(response);
-	// loadTask(response, ''); once there are tasks available
+	//loadTask(response, url.parse(request.url,true).query);
 }
 
 /* 
@@ -17,110 +16,63 @@ function displayUpdate(response, taskObj) {
 	response.writeHead(200, {'Content-Type': 'text/html'});
 
 	page1 = new StandardPage();
-	page1.setTitle("Update " + taskObj.getTaskName());
+	page1.setTitle("Update Task");
 	
-	page1.setContent("<h1>Update</h1>");
+	page1.setContent("Id: " + taskObj.getId() + "<br /><br />");
+	page1.addContent("User: " + taskObj.getUser() + "<br /><br />");
+	page1.addContent("Date: " + taskObj.getDate() + "<br /><br />");
 	
-	page1.setContent("User: ");
-	page1.addContent(taskObj.getUser());
-	
-	page1.setContent("Date: ");
-	page1.addContent(taskObj.getDate());
-	
-	page1.setContent(
+	page1.addContent(
 		"<form method=post name=upform action='/profile/uploadPic.js' enctype='multipart/form-data'>"+
 			
-			"Status:<br />"+
-			"<input type='text' id='inputStatus' value=''><br /><br />"+
+			"Name: "+
+			"<input type='text' value='"+taskObj.getTaskName()+"'><br /><br />"+
+			
+			"Status: "+
+			"<input type='text' id='inputStatus' value='"+taskObj.getStatus()+"'><br /><br />"+
 			
 			"Description:<br />"+
-			"<textarea id='inputDescription' rows='10' cols='85'></textarea> <br /><br />"+
+			"<textarea id='inputDescription' rows='10' cols='85'>"+taskObj.getDescription()+"</textarea><br /><br />"+
 			
 			"Priority:"+
-			"<input type='radio' name='level' value='low'>Low "+
-			"<input type='radio' name='level' value='medium'>Medium "+
-			"<input type='radio' name='level' value='high'>High <br /><br />"+
+			"<input type='radio' name='level' value='low'"+checkPriority(taskObj,'low')+">Low "+
+			"<input type='radio' name='level' value='medium'"+checkPriority(taskObj,'medium')+">Medium "+
+			"<input type='radio' name='level' value='high'"+checkPriority(taskObj,'high')+">High <br /><br />"+
 			
 			"Attachment:"+
             "<input type='hidden' name='MAX_FILE_SIZE' value='500' />"+
             "<input type=file name=uploadfile>"+
             "<br /><br />"+
 			
-			"<input type='button' name='Submit' value='Submit Changes' onclick='update()/*;LimitAttach(this.form, this.form.uploadfile.value)*/'>"+
+			"<input type='button' name='Submit' value='Submit Changes' onclick='update()'>"+/*;LimitAttach(this.form, this.form.uploadfile.value)*/
 			"<input type='button' name='' value='Change Estimate Values' onclick='parent.location=\'#\''>"+
-			"<input type='button' value='Reset' onclick='setInput()'>"+
+			"<input type='button' value='Reset' onclick='history.go(0)'>"+
 			"<input type='button' value='Go Back' onclick='history.go(-1);return true;'>"+
 
 		"</form>"
 	);
 	
-	page1.addContent(setInput());
-	
-	page1.addMenuItem("Home", "/index.html");
-	page1.addMenuItem("Display Task", "");
-	page1.addMenuItem("Task List", "");
+	page1.addMenuItem("Home", "/");
+	page1.addMenuItem("Display Task", "/taskpage?id=" + taskObj.getId());
+	page1.addMenuItem("Task List", "#");
 	
 	response.write(page1.toHTML());
 	response.end();
 }
 
-/* 
- * Takes in id string and the name of the wanted task object attribute.
- * Sets the value of the input's value as the attribute.
- */
-function inputDisplay(id, name) {
-	var displayValue;
-	switch(name) {
-		case "taskName":
-			displayValue = taskObj.getTaskName();
-			break;
-		case "description":
-			displayValue = taskObj.getDescription();
-			break;
-		case "status":
-			displayValue = taskObj.getStatus();
-			break;
-		default:
-			alert("Invalid Name");
-			return;
-	}
-	document.getElementById(id).value = displayValue;
-}
-
-/* Checks the corresponding radio button of the priority level of the task. */
-function checkPriority() {
-	switch(taskObj.getPriority()) {
-		case "low":
-			document.getElementsByName('level')[0].checked = true;
-			break;
-		case "medium":
-			document.getElementsByName('level')[1].checked = true;
-			break;
-		case "high":
-			document.getElementsByName('level')[2].checked = true;
-			break;
-		default:
-			alert("Invalid Priority Level");
-			return;
-	}
-}
-
-/* Sets the appropriate input to each of the update fields both initially and when resetting the fields. */
-function setInput() {
-	inputDisplay("inputTaskName", "taskName");
-	inputDisplay("inputStatus", "status");
-	inputDisplay("inputDescription", "description");
-	
-	checkPriority();
+/* Checks if the current radio button matches the task's priority level. */
+function checkPriority(taskObj, current) {
+	if (taskObj.getPriority() == current)
+		return " checked ";
 }
 
 /*
  * Loads a task
  */
-function loadTask(response, id){
-	db.getTask(id, function(callback){
+function loadTask(response, param){
+	db.getTask(param["id"], function(callback){
 		var row = callback.row[0];
-		var loadedTask = new task.Task(row.taskName, row.description, row.priority, row.status, row.user, row.date);
+		var loadedTask = new task.task(row.taskName, row.description, row.priority, row.status, row.user, row.date);
 		displayUpdate(response, loadedTask);
 	});
 }
@@ -152,6 +104,6 @@ function update() {
 
 /* Test coding for a task object */
 function test(response) {
-	var taskObj = new task.Task("taskName", "desc", "low", "status", "user", "date");
-	displayUpdate(taskObj, response);
+	var taskObj = new task.task("taskName", "desc", "0", "0", "low", "status", "user", "date");
+	displayUpdate(response, taskObj);
 }
