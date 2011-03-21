@@ -23,3 +23,10 @@ or even just
 csc:5678
 
 if you are running your browser on a machine which is within the cpsc network.
+
+
+Before opening the task page, make sure a database is created first using:
+
+$ node js/createDatabase.js
+
+from the CourseProject folder.
