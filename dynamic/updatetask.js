@@ -72,7 +72,7 @@ function checkPriority(taskObj, current) {
 function loadTask(response, param){
 	db.getTask(param["id"], function(callback){
 		var row = callback.row[0];
-		var loadedTask = new task.task(row.taskName, row.description, row.priority, row.status, row.user, row.date);
+		var loadedTask = new task.Task(row.taskName, row.description, row.priority, row.status, row.user, row.date);
 		displayUpdate(response, loadedTask);
 	});
 }
@@ -104,6 +104,6 @@ function update() {
 
 /* Test coding for a task object */
 function test(response) {
-	var taskObj = new task.task("taskName", "desc", "0", "0", "low", "status", "user", "date");
+	var taskObj = new task.Task("taskName", "desc", "low", "status", "user", "date");
 	displayUpdate(response, taskObj);
 }
