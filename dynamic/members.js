@@ -5,7 +5,7 @@
  * Time: 11:09 PM
  */
 
-var basepath = "../";
+var basepath = require('basepath').mainpath;
 var slh = require(basepath + "node_modules/SQLiteHelper.js");
 var pagemaker = require(basepath + "node_modules/pagemaker.js");
 
