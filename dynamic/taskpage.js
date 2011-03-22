@@ -3,15 +3,22 @@ var dbHelper = require('SQLiteHelper'),
 	pagemaker = require('pagemaker'),
 	url = require('url');
 
-/*
- * Before linking to this page for the first time, uncomment saveTestTask() 
- * and comment out loadTask(response, parseInt(params.substring(index+1)))
- *
- * Once a task has been saved in your db, comment out saveTestTask(); and 
+/* NOTE:
+ * When testing this page with an actual task object, uncomment saveTestTask() 
+ * and comment out loadTask(response, parseInt(params.substring(index+1))). 
+ * 
+ * Connect to the server, click the task page link and close the server.
+ * (This should add a task and display an error page)
+ * 
+ * Once a task has been saved in your db, comment out saveTestTask() and 
  * uncomment loadTask(response, parseInt(params.substring(index+1)))
  *
  * Click on the link to this page again.
  * The task page should now be displayed successfully.
+ *
+ * Trying to save and load at once will result in a bug where either the database
+ * open, executes, and closes out of sequence, or Node's garbage collector
+ * removing an open database. (Thanks Nick for pointing this out)
  */
 	
 	
@@ -55,7 +62,7 @@ function loadTask(request, response, id) {
 	dbHelper.getTask(id, function(callbackObj) {
 			try {
 				var loadRow = callbackObj.rows[0];	// Always 0 because getTask only gets 1 row, namely the row with taskid = id
-			} catch(error) {
+			} catch(error) {	// If database isn't created yet
 				var errorPage = process.cwd() + "/static/error_pages/500.html"; 	// 500 or 503?
 				pagemaker.ParsePage(errorPage, function (html) {
 					response.end(html);
