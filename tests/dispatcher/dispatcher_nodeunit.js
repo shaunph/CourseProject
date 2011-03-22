@@ -1,6 +1,6 @@
 var path = require('path');
 var fs = require('fs');
-var basepath = require('basepath').mainpath;
+var basepath = require('../basepath').mainpath;
 var http = require('http');
 var server;
 
