@@ -53,7 +53,15 @@ function displayTaskPage(response, id, taskValues) {
 
 function loadTask(request, response, id) {
 	dbHelper.getTask(id, function(callbackObj) {
-			var loadRow = callbackObj.rows[0];	// Always 0 because getTask only gets 1 row, namely the row with taskid = id
+			try {
+				var loadRow = callbackObj.rows[0];	// Always 0 because getTask only gets 1 row, namely the row with taskid = id
+			} catch(error) {
+				var errorPage = process.cwd() + "/static/error_pages/500.html"; 	// 500 or 503?
+				pagemaker.ParsePage(errorPage, function (html) {
+					response.end(html);
+				});
+				return;
+			}
 			if (loadRow == undefined) {	// If task doesn't exist in db
 				var errorPage = process.cwd() + "/static/error_pages/404.html"; 
 				pagemaker.ParsePage(errorPage, function (html) {
