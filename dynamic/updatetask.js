@@ -23,38 +23,46 @@ function displayUpdate(response, taskObj) {
 	page1.addContent("Date: " + taskObj.getDate() + "<br /><br />");
 	
 	page1.addContent(
-		"<form method=post name=upform action='/profile/uploadPic.js' enctype='multipart/form-data'>"+
+		"<form method=get action='update.js'>"+
+			
+			"<input type='hidden' name='id' value='"+taskObj.getId()+"'>"+
 			
 			"Name: "+
-			"<input type='text' value='"+taskObj.getTaskName()+"'><br /><br />"+
+			"<input type='text' name='name' onclick='this.select()' value='"+taskObj.getTaskName()+"'><br /><br />"+
 			
 			"Status: "+
-			"<input type='text' id='inputStatus' value='"+taskObj.getStatus()+"'><br /><br />"+
+			"<input type='text' name='status' onclick='this.select()' value='"+taskObj.getStatus()+"'><br /><br />"+
 			
 			"Description:<br />"+
-			"<textarea id='inputDescription' rows='10' cols='85'>"+taskObj.getDescription()+"</textarea><br /><br />"+
+			"<textarea name='description' onclick='this.select()' rows='10' cols='85'>"+taskObj.getDescription()+"</textarea><br /><br />"+
 			
 			"Priority:"+
 			"<input type='radio' name='level' value='low'"+checkPriority(taskObj,'low')+">Low "+
 			"<input type='radio' name='level' value='medium'"+checkPriority(taskObj,'medium')+">Medium "+
 			"<input type='radio' name='level' value='high'"+checkPriority(taskObj,'high')+">High <br /><br />"+
 			
-			"Attachment:"+
-            "<input type='hidden' name='MAX_FILE_SIZE' value='500' />"+
-            "<input type=file name=uploadfile>"+
-            "<br /><br />"+
-			
-			"<input type='button' name='Submit' value='Submit Changes' onclick='update()'>"+/*;LimitAttach(this.form, this.form.uploadfile.value)*/
-			"<input type='button' name='' value='Change Estimate Values' onclick='parent.location=\'#\''>"+
+			"<input type='submit' name='changes' value='Submit Changes'>"+
+			"<input type='button' name='' value='Change Estimate Values' onclick='parent.location=\'/\''>"+
 			"<input type='button' value='Reset' onclick='history.go(0)'>"+
 			"<input type='button' value='Go Back' onclick='history.go(-1);return true;'>"+
 
 		"</form>"
 	);
 	
+	page1.addContent(
+		"<form method=post name=upform action='fileUpload/uploadFile.js' enctype='multipart/form-data'>"+
+			"Attachment:"+
+            "<input type='hidden' name='MAX_FILE_SIZE' value='500' />"+
+            "<input type=file name=uploadfile>"+
+			"<br />"+
+			
+			"<input type='button' name='Submit' value='Upload Attachment' onclick='LimitAttach(this.form, this.form.uploadfile.value)'>"+
+		"</form>"
+	);
+	
 	page1.addMenuItem("Home", "/");
 	page1.addMenuItem("Display Task", "/taskpage?id=" + taskObj.getId());
-	page1.addMenuItem("Task List", "#");
+	page1.addMenuItem("Task List", "/");
 	
 	response.write(page1.toHTML());
 	response.end();
@@ -72,38 +80,13 @@ function checkPriority(taskObj, current) {
 function loadTask(response, param){
 	db.getTask(param["id"], function(callback){
 		var row = callback.row[0];
-		var loadedTask = new task.Task(row.taskName, row.description, row.priority, row.status, row.user, row.date);
+		var loadedTask = new task.Task(row.taskName, row.description, row.timeSpent, row.timeLeft, row.priority, row.status, row.user, row.date);
 		displayUpdate(response, loadedTask);
 	});
 }
 
-/*
- * Updates the task object's attributes from the input values by calling modifyTask().
- * Afterwards, the new attribute values will be saved in the database.
- * Temporary until a better way to save is found.
- */
-function update() {
-	var field1 = document.getElementById('inputTaskName').value;
-	var field2 = document.getElementById('inputDescription').value;
-	var field3;
-	var field4 = document.getElementById('inputStatus').value;
-	
-	if (document.getElementsByName('level')[0].checked) {
-		field3 = "low";
-	}
-	else if (document.getElementsByName('level')[1].checked) {
-		field3 = "medium";
-	}
-	else if (document.getElementsByName('level')[2].checked){
-		field3 = "high";
-	}
-	
-	taskObj.modifyTask(field1, field2, field3, field4);
-	db.updateTask(taskObj, callback);
-}
-
 /* Test coding for a task object */
 function test(response) {
-	var taskObj = new task.Task("taskName", "desc", "low", "status", "user", "date");
+	var taskObj = new task.task("taskName", "desc", "0", "0", "low", "status", "user", "date");
 	displayUpdate(response, taskObj);
 }
