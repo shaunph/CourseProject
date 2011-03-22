@@ -40,6 +40,11 @@ a:hover {color:#red;}
 	background:#FFFFFF
 }
 
+#mainPageCenter{
+	width:60%;
+	float:left;
+}
+
 DIV.feedUser{
 	width:100%;
 	float:left;
