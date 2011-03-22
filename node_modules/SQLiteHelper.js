@@ -14,7 +14,7 @@
 		-1: error from above (opening db, closing db, ....)
 		-2: insertion or deletion object already exists or doesn't exist, etc...)
 */
-var basepath = "../";
+var basepath = require('basepath').mainpath;
 sqlite = require(basepath + 'lib/node-sqlite/sqlite');
 fs = require('fs');
 path = require('path');
