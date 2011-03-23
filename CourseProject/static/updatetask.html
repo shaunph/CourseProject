@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type="text/javascript" src="/js/task.js"></script>
+		<script type="text/javascript" src="/js/taskpage.js"></script>
+		<script type="text/javascript" src="/js/updatetask.js"></script>
+	</head>
+	<body>
+		<h1>Update</h1>
+		<form>
+			Task Name: <input type="text" id="inputTaskName" value=""><br /><br />
+		</form>
+		
+		User: 
+		<div name="user" onload="javascript:display('user');"></div><br />
+		
+		Date: 
+		<div name="date" onload="javascript:display('date');"></div><br />
+		
+		<form method=post name=upform action="/profile/uploadPic.js" enctype="multipart/form-data" onload="javascript:setInput();">
+			
+			Status:<br />
+			<input type="text" id="inputStatus" value=""><br /><br />
+			
+			Description:<br />
+			<textarea id="inputDescription" rows="10" cols="85"></textarea> <br /><br />
+			
+			Priority:
+			<input type="radio" name="level" value="low">Low 
+			<input type="radio" name="level" value="medium">Medium 
+			<input type="radio" name="level" value="high">High <br /><br />
+			
+			Attachment:
+            <input type="hidden" name="MAX_FILE_SIZE" value="500" />
+            <input type=file name=uploadfile>
+            <br /><br />
+			
+			<input type="button" name="Submit" value="Submit Changes" onclick="update();/*;LimitAttach(this.form, this.form.uploadfile.value)*/">
+			<input type="button" name="" value="Change Estimate Values" onclick="parent.location='#'">
+			<input type="button" value="Reset" onclick="setInput()">
+			<input type="button" value="Cancel" onclick="history.go(-1);return true;">
+		</form>
+		
+	</body>
+</html>
