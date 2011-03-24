@@ -125,15 +125,15 @@ function sendStaticObj(request, response, file) {
             log(request, 200, file);
             response.writeHead(200, {'Content-Type': extTypes[extension]});
 
-			if(extension == "html" || extension == "htm") {
+            if(extension == "html" || extension == "htm") {
 
-				pagemaker.ParsePage(file, function (html) {
-					response.end(html);
-				});
+                pagemaker.ParsePage(file, function (html) {
+                    response.end(html);
+                });
 
-			} else {
-				util.pump(fs.createReadStream(file), response, function () {});
-			}
+            } else {
+                util.pump(fs.createReadStream(file), response, function () {});
+            }
         } else {
             error(request, response, 404, file);
         }
