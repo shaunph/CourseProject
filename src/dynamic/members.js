@@ -40,7 +40,7 @@ exports.getReq = function(request, response) {
             }
         }
         membersPage.addContent("</h3>");
-		membersPage.standardMenus();
+        membersPage.standardMenus();
 
         response.write(membersPage.toHTML());
         response.end();
