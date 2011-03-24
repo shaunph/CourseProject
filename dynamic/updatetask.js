@@ -60,9 +60,7 @@ function displayUpdate(response, taskObj) {
 		"</form>"
 	);
 	
-	page1.addMenuItem("Home", "/");
-	page1.addMenuItem("Display Task", "/taskpage?id=" + taskObj.getId());
-	page1.addMenuItem("Task List", "/");
+	page1.standardMenus();
 	
 	response.write(page1.toHTML());
 	response.end();
