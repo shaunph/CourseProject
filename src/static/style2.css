@@ -410,3 +410,27 @@ input, textarea
 }
 
 
+DIV.feedUser{
+ width:100%;
+ float:left;
+ text-decoration:underline;
+ color:#222222
+}
+
+DIV.feedTopic{
+ width:70%;
+ float:left;
+ color:#222288
+} 
+
+DIV.feedCreated{
+ width:30%;
+ float:right;
+ color:#2222DD
+}
+
+DIV.feedEntry{
+	width:250;
+	float:right;
+	color:#2222DD
+}
