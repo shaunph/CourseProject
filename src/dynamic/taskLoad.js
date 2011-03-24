@@ -28,10 +28,10 @@ exports.postReq = function (request, response) {
         //Extract the file from the data Buffer.
         try {
             var parsed = upops.parseMultipartFormdata(dataBuffer);
-	    var date = new Date();
-	    var aTask = new task(parsed["tNom"].toString(), parsed["desc"].toString(), parsed["ETR"].toString(), parsed["timeS"].toString(), parsed["priority"].toString(), parsed["status"].toString(), parsed["uNom"].toString(), date);
-	    db.addTask(aTask);	  	   
-	    
+        var date = new Date();
+        var aTask = new task(parsed["tNom"].toString(), parsed["desc"].toString(), parsed["ETR"].toString(), parsed["timeS"].toString(), parsed["priority"].toString(), parsed["status"].toString(), parsed["uNom"].toString(), date);
+        db.addTask(aTask);             
+        
         } catch (error) {
             //Log errors
             console.log("Error in taskLoad.js->postReq: " + error);
