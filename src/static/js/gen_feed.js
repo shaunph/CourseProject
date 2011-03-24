@@ -8,6 +8,3 @@ function pullGenFeedsTo(divID){
 		$("div.#"+divID).html("<h1>Feeds</h1>" + data);
 	});
 }
-
-// executes this function onload
-pullGenFeedsTo("FeedsBox");

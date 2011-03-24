@@ -4,7 +4,7 @@ exports.getReq = function(req, res) {
 
 
     var page = new StandardPage();
-    page.setContent("Not yet implemented");
+    page.setContent("<h1>Not yet implemented</h1>");
     page.standardMenus();
 
     res.writeHead(200, {'content-type':'text/html'});

@@ -1,6 +1,6 @@
-var db = require('../js/SQLiteHelper'),
-    qs = require('querystring'),
-    url = require('url');
+var db = require('SQLiteHelper'),
+   qs = require('querystring'),
+   url = require('url');
 
 
 exports.getReq = function (req, res ) {

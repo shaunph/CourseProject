@@ -29,7 +29,7 @@ db.open(dbLocation, function (error) {
 
     db.execute("CREATE TABLE user (" +
         "email TEXT PRIMARY KEY," +
-        "nickname TEXT," +
+        "nickname TEXT UNIQUE," +
         "password TEXT," +
         "created TIMESTAMP DEFAULT CURRENT_TIMESTAMP)",
         function (error) {
@@ -43,7 +43,7 @@ db.open(dbLocation, function (error) {
 
     db.execute("CREATE TABLE task (" +
         "taskid INTEGER PRIMARY KEY AUTOINCREMENT," +
-        "taskName TEXT," +
+        "taskName TEXT UNIQUE," +
         "description TEXT," +
         "timeLeft TEXT," +
         "timeSpent TEXT," +
@@ -63,7 +63,8 @@ db.open(dbLocation, function (error) {
     );
 
     db.execute("CREATE TABLE comment (" +
-        "thecomment TEXT," + // do i need a primary key?
+        "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+        "thecomment TEXT," + 
         "taskid NUMBER," + // FOREIGN KEY(taskid) REFERENCES task(taskid)
         "email TEXT," + // FOREIGN KEY(creator) REFERENCES user(email)
         "created TIMESTAMP DEFAULT CURRENT_TIMESTAMP)",
