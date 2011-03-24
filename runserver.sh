@@ -14,11 +14,12 @@ fi
 
 if [ -f src/lib/node-sqlite/sqlite3_bindings.node ]
 then
-	node src/js/dispatcher.js $1
+	cd src
+	node js/dispatcher.js $1
 else
 	echo "building node sqlite bindings..."
 	cd src/lib/node-sqlite/ &&
 	./build.sh &&
-	cd ../../../ &&
-	node src/js/dispatcher.js $1
+	cd ../../ &&
+	node js/dispatcher.js $1
 fi
