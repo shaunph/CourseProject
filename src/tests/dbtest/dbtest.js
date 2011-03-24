@@ -1,4 +1,4 @@
-var basepath = "../../";
+var basepath = require('basepath').mainpath;
 var sqlite = require(basepath + 'lib/node-sqlite/sqlite');
 var slh = require("SQLiteHelper");
 var fs = require('fs');

@@ -1,6 +1,6 @@
 var path = require('path');
 var fs = require('fs');
-var basepath = require('../basepath').mainpath;
+var basepath = require('basepath').mainpath;
 var sqlite = require(basepath + '/lib/node-sqlite/sqlite');
 var slh = require("SQLiteHelper");
 var dbLocation = (basepath + '/tests/db/main.db');
