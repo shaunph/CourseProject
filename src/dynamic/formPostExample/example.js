@@ -29,7 +29,7 @@ exports.postReq = function (request, response) {
         //Make one huge data Buffer that holds the entire HTTP request data section
         var dataBuffer = bops.join(allChunks);
         //Extract the file from the data Buffer.
-        try {	
+        try {
             page1 = new StandardPage();
             page1.setTitle("Test Page");
             page1.setContent("This is a dynamically generated test page <br />");

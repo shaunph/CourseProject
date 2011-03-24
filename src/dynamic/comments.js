@@ -12,7 +12,7 @@ exports.postReq = function (request,response) {
 }
 
 send = function (response, taskId) {
-	response.writeHead(200, {'Content-Type': 'text/html'});
+    response.writeHead(200, {'Content-Type': 'text/html'});
 
     // If taskid isn't set, return an error
     if (taskId == undefined) {
@@ -73,7 +73,7 @@ send = function (response, taskId) {
             response.end();
             
         });
-	
-	}
-	
+    
+    }
+    
 }
