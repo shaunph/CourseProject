@@ -1,9 +1,8 @@
 body
 {
-font-size:75%;
-background-color:#111111;
-color:#CCCCCC;
-margin:10px;
+	background-color:#111111;
+	color:#CCCCCC;
+	margin:10px;
 }
 
 h1 {font-size:200%};
@@ -21,21 +20,95 @@ a:hover {color:#red;}
 #header
 {
 	width:100%;
+	height: 200px;
 	float:left;
 	color:#EEEEEE;
-	background:#AAAAAA
+	background:#AAAAAA;
+	text-align:center;
 }
+
+#header-project
+{
+	width:100%;
+	height: 75%;
+	float: left;
+	color: #EEEEEE;
+	background:#AAAAAA;
+	-moz-background:#AAAAAA;
+	text-align: center;
+	font-weight: bold;
+	font-size: 60px;	
+}
+
+#header-title
+{
+	width: 100%;
+	height: 75%;
+	float: left;
+	color: #EEEEEE;
+	background: #AAAAAA;
+	-moz-background: #AAAAAA;
+	text-align: center;
+	font-weight: normal;
+	font-size: 30px;
+}
+
 #menus
 {
 	width:20%;
+	height: 100%;
 	float:left;
 	color:#EEEEEE;
-	background:#AAAAAA
+	background:#AAAAAA;
 }
+
+#menu-item
+{
+	border: #cccccc 4px inset;
+	padding-left: 10px;
+	font-weight: bold;
+	font-size: 20px;
+}
+
 #content
 {
 	width:80%;
 	float:left;
 	color:#111111;
-	background:#FFFFFF
+	background:#AAAAAA;
+}
+
+#mainPageCenter{
+	width:60%;
+	float:left;
+}
+
+DIV.feedUser{
+	width:100%;
+	float:left;
+	text-decoration:underline;
+	color:#222222
+}
+
+DIV.feedTopic{
+	width:70%;
+	float:left;
+	color:#222288
+}
+
+DIV.feedCreated{
+	width:30%;
+	float:right;
+	color:#2222DD
+}
+
+DIV.feedEntry{
+	width:250;
+	float:right;
+	color:#2222DD
+}
+
+DIV.feed{
+	width:260;
+	float:right;
 }

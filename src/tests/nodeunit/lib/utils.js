@@ -135,7 +135,7 @@ exports.sandbox = function (files, /*optional*/sandbox) {
 exports.httputil = function (cgi, envReady) {
     var hostname = process.env.HOSTNAME || 'localhost';
     var port = process.env.PORT || 3000;
-	
+    
     var server = http.createServer(cgi);
     server.listen(port, hostname);
   
