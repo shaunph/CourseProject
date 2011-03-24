@@ -5,7 +5,7 @@
 //	of the given divID to the feed data
 function pullGenFeedsTo(divID){
 	$.get('feedGen?', function(data) {
-		document.getElementById(divID).innerHTML = data;
+		$("div.#"+divID).html(data);
 	});
 }
 
