@@ -1,17 +1,7 @@
 var jaml = require('jaml');
 var db = require('SQLiteHelper');
+var pagemake = require('pagemaker');
 
-/*
- * Jaml template to convert a row returned from SQLite into a proper
- * feed entry
- */
-Jaml.register('feedentry', function(row){
-	div({class:'feedEntry'},
-		div({class:'feedUser'}, row.UserName),
-		div({class:'feedTopic'}, row.Topic),
-		div({class:'feedCreated'}, row.Created)
-	);
-});
 
 
 /*
