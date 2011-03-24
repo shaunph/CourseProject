@@ -33,6 +33,7 @@ exports.postReq = function (request, response) {
             page1 = new StandardPage();
             page1.setTitle("Test Page");
             page1.setContent("This is a dynamically generated test page <br />");
+			page1.standardMenus();
             var parsed = upops.parseMultipartFormdata(dataBuffer);
             for(var i in parsed)
             {

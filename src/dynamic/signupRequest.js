@@ -1,6 +1,6 @@
-var db = require('../js/SQLiteHelper');
+var db = require('SQLiteHelper');
 var qs = require('querystring');
-var pagemaker = require('../js/pagemaker');
+var pagemaker = require('pagemaker');
 
 exports.postReq = function(req, res) {
 
@@ -20,15 +20,15 @@ exports.postReq = function(req, res) {
 			page1.standardMenus();
 			if(codes.status == 0) {
 				page1.setTitle("Success");
-				page1.setContent("Signup successfull! <br />");
+				page1.setContent("<h1>Signup successfull!</h1> <br />");
 			}
 			else if(codes.status == -1) {
 				page1.setTitle("Error");
-				page1.setContent("User already exists in DB");
+				page1.setContent("<h1>User already exists in DB</h1>");
 			}
 			else if(codes.status == -2) {
 				page1.setTitle("Error");
-				page1.setContent("Internal error while signing up");
+				page1.setContent("<h1>Internal error while signing up</h1>");
 			}
 			
 			res.write(page1.toHTML());
