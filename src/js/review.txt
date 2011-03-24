@@ -1,0 +1,25 @@
+All lines: Replace tabs with spaces as per http://javascript.crockford.com/code.html
+Most if statements:
+    The proper form is to have one space after the if, and one space before the curly brace, and to always have them as block ifs, not inline ifs. Example:
+        if (some==thing) {
+            do.stuff();
+        } else {
+            do.otherStuff();
+        }
+All callbacks: Use proper line breaks to split it into multiple, readable lines.
+All error returns: Consider throwing errors instead
+Line 17-18: Consider removing basepath and replacing Line 18 with:
+ var sqlite = require('../lib/node-sqlite/sqlite');
+Lines 18-20: keyword var is needed here
+Lines 36-46: consider moving the code to open the write stream to outside of the function, that way you only need to execute it once
+Line 62, 388: Consider throwing a more descriptive error, rather than an empty string.
+Line 71, 83, 113, 127, 151, 152, 184, 293, 300, 309, 316, 328, 372, 379, 424, 431, and 442: Consider throwing an error, instead of returning a negative number
+Lines 74-77, 101, 387-388: Use proper braces {}, as per http://javascript.crockford.com/code.html, if statements must be block ifs, not inline. Even if there is only one line to execute.
+Line 92: Capitalize "task" to "Task".
+Lines 106-107: These should be on one line, as per http://javascript.crockford.com/code.html
+Lines 106-107: Consider precomputing taskObj.getTaskName().toLowerCase() and storing it as a variable.
+Line 111, 127, 132, 151, 156, 178, 183, 193, 199, 219, 223, 227, 244, 248, 252, 269, 273, 292, 299, 308, 315, 326, 333, 371, 378, 382, 423, 430, 434, 441: Use proper line breaks to split it into multiple, readable lines.
+Lines 121-124, 153-154, 186-187, 189-190, 196-198, 220-221, 245-246, 249-250, 270-271, 297-298, 313-314, 319-320, 322-324, 331-332: Use proper line breaks, this should be one line
+Line 171: Consider accepting a User object, as the addTask method accepts a Task object
+Line 210: Capitalize "this" to "This"
+Line 74, 98: "null" should be "undefined"
