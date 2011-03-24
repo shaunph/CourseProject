@@ -4,7 +4,7 @@
 # Usage: ./runserver.sh <port>
 
 # To start the server without using this script, use:
-# $ node js/dispatcher.js <port>
+# $ node src/js/dispatcher.js <port>
 
 if [ $# -ne 1 ]
 then
@@ -12,13 +12,13 @@ then
 	exit 1
 fi
 
-if [ -f lib/node-sqlite/sqlite3_bindings.node ]
+if [ -f src/lib/node-sqlite/sqlite3_bindings.node ]
 then
-	node js/dispatcher.js $1
+	node src/js/dispatcher.js $1
 else
 	echo "building node sqlite bindings..."
-	cd lib/node-sqlite/ &&
+	cd src/lib/node-sqlite/ &&
 	./build.sh &&
-	cd ../../ &&
-	node js/dispatcher.js $1
+	cd ../../../ &&
+	node src/js/dispatcher.js $1
 fi
