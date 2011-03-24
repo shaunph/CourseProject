@@ -129,7 +129,7 @@ ul li
   float: left;
   margin: 0px 0px 15px 0px;
   padding: 8px 0px 0px 0px;
-  height: 184px;
+  //height: 184px;
 }
 
 #menu ul, #addlinks ul
@@ -235,172 +235,92 @@ input, textarea
 
 body
 { background: #FFFFFF url(img/back_2.png) repeat-x;
-
   color: #3E4244;
-
 }
-
-
 
 blockquote
-
 { background-color: #F1F4F5;
-
   color: #3E4244;
-
   border-color: #D4DBDE;
-
 }
-
-
 
 #links, #links a
-
 { background-color: transparent;
-
   color: #3E4244;
-
 }
-
-
 
 #links a:hover
-
 { background-color: transparent;
-
   color: #FFFFFF;
-
 }
-
-
 
 #logo
-
 { background: #8D9299 url(img/logo_2.jpg) no-repeat;
-
   color: #3E4244;
-
   border-color: #FFFFFF;
-
 }
-
-
 
 #logo h1
-
 { background-color: transparent;
-
   color: #FFFFFF;
-
 }  
 
-
-
 #content, #column1, #column2
-
 { background-color: #FFFFFF;
-
   color: #3E4244;
-
 } 
-
-
 
 #column2 h1
-
 { background: transparent;
-
   color: #3E4244;
-
   border-color: #F1F4F5;
-
 }
-
-
 
 #menu, #addlinks, .sidebaritem
-
 { background: #FFFFFF url(img/box_2.png) repeat-x;
-
   color: #3E4244;
-
 }
-
-
 
 #menu li a, #addlinks li a
-
 { background-color: transparent;
-
   color: #3E4244;
-
   border-color: #FFFFFF;
-
 } 
-
-
 
 #menu li a:hover, #menu li a#selected, #addlinks li a:hover
-
 { background-color: #8D9299; 
-
   color: #FFFFFF;
-
   border-color: #FFFFFF;
-
 } 
 
-
-
 .sidebaritem a, #column2 a
-
 { background-color: transparent;
-
   color: #2780F9;
-
 }
-
-
 
 .sidebaritem a:hover, #column2 a:hover
-
 { background-color: #F1F4F5;
-
   color: #3E4244;
-
 }
-
-
 
 #footer, #footer a
-
 { background-color: #8D9299;
-
   color: #3E4244;
-
 }
-
-
 
 #footer a:hover
-
-{ background: #8D9299;
-
-  color: #FFFFFF;
-
+{ 
+    background: #8D9299;
+    color: #FFFFFF;
 }
 
-
-
 input, textarea
-
 { background-color: #FFFFFF;
-
   color: #3E4244;
-
   border-color: #616D7B;
+}
 
-}.submit
+.submit
 { font-family: verdana, arial, sans-serif;
   font-size: 100%; 
   border: 1px solid;
@@ -414,6 +334,8 @@ DIV.feedUser{
  width:100%;
  float:left;
  text-decoration:underline;
+ font-weight: bold;
+ font-size: 14px;
  color:#222222
 }
 
@@ -424,13 +346,16 @@ DIV.feedTopic{
 } 
 
 DIV.feedCreated{
- width:30%;
- float:right;
- color:#2222DD
+    width:100%;
+    float:left;
+    color:#2222DD;
+    font-style: italics;
+    font-size: 8px;
 }
 
 DIV.feedEntry{
-	width:250;
-	float:right;
-	color:#2222DD
+	width:100%;
+	float:left;
+	color:#2222DD;
+	margin: 3px;
 }

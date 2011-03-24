@@ -5,9 +5,9 @@
 //	of the given divID to the feed data
 function pullGenFeedsTo(divID){
 	$.get('feedGen?', function(data) {
-		$("div.#"+divID).html(data);
+		$("div.#"+divID).html("<h1>Feeds</h1>" + data);
 	});
 }
 
 // executes this function onload
-pullGenFeedsTo("mainpagefeed");
+pullGenFeedsTo("FeedsBox");
