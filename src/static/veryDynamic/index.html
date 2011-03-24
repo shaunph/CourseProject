@@ -3,13 +3,7 @@
 	<head>
 		<title>Example of live GETs!</title>
 		<script type="text/javascript" src="/js/jquery-1.5.min.js"></script>
-		<script type="text/javascript">
-            function change(field, url) {
-                $.get(url, function(data) {
-                    $('#'+field).html(data);
-                });
-            }
-        </script>
+		<script type="text/javascript" src="clientside.js"></script>
 	</head>
 	<body>
         <p> This is an example of how to have data pulled from the server live, without the user needing to navigate through pages </p>

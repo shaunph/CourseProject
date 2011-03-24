@@ -9,9 +9,7 @@ This module is intended as an example of the topic discussed in class,
  Wikipedia article for Win, and displays a totally win picture. If not, the
  serverside code sends the response to indicate a failure to enter "win".
 */
-var pagemaker = require('pagemaker'); //Helper module for dynamic page generation
 var url = require('url'); //Helper module for url parsing
-var upops = require('uploadOps'); //Helper module for common upload operations
 
 //Processes dynamic GET requests
 exports.getReq = function (request,response) {
