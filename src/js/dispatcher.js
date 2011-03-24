@@ -6,7 +6,7 @@ var exec = require('child_process').exec,
     path = require('path'),
     url = require('url'),
     util = require('util'),
-    db = require('./SQLiteHelper'),
+    db = require('SQLiteHelper'),
     qs = require('querystring');
 
 var extTypes = [];
