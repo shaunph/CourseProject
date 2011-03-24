@@ -5,7 +5,7 @@
  * 
  * If you have any trouble or questions,
  * send me an email at cdebavel@ucalgary.ca
- *			- Charles
+ *            - Charles
  *
  *****************************************************
 

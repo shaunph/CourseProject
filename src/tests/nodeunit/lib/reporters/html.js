@@ -51,10 +51,10 @@ exports.run = function (files, options) {
     sys.puts('pre { font: 11px Andale Mono; margin-left: 1em; padding-left: 1em; margin-top:0; font-size:smaller;}');
     sys.puts('.assertion_message { margin-left: 1em; }');
     sys.puts('  ol {' +
-    '	list-style: none;' +
-    '	margin-left: 1em;' +
-    '	padding-left: 1em;' +
-    '	text-indent: -1em;' +
+    '    list-style: none;' +
+    '    margin-left: 1em;' +
+    '    padding-left: 1em;' +
+    '    text-indent: -1em;' +
     '}');
     sys.puts('  ol li.pass:before { content: "\\2714 \\0020"; }');
     sys.puts('  ol li.fail:before { content: "\\2716 \\0020"; }');

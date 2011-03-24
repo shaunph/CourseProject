@@ -23,7 +23,7 @@ exports.getReq = function (request,response) {
 //Sends the response back to the client
 send = function (response, parameters) {
     //Write a 200 header to indicate normal error-free operation
-	response.writeHead(200, {'Content-Type': 'text/html'});
+    response.writeHead(200, {'Content-Type': 'text/html'});
     //Compare the text to "win" and respond appropriately
     if (parameters['attack']=="win") {
         response.write('<a href="http://en.wikipedia.org/wiki/Win">VICTORY!</a><br /><img src="riverTam.png" />');
@@ -31,5 +31,5 @@ send = function (response, parameters) {
         response.write("DEFEAT! You must win to acheive victory, and you tried to " + parameters['attack']);
     }
     //Send the response and mark it as complete
-	response.end();
+    response.end();
 }
