@@ -429,3 +429,8 @@ DIV.feedCreated{
  color:#2222DD
 }
 
+DIV.feedEntry{
+	width:250;
+	float:right;
+	color:#2222DD
+}
