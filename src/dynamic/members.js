@@ -5,9 +5,8 @@
  * Time: 11:09 PM
  */
 
-var basepath = require('basepath').mainpath;
-var slh = require(basepath + "node_modules/SQLiteHelper.js");
-var pagemaker = require(basepath + "node_modules/pagemaker.js");
+var slh = require("SQLiteHelper.js");
+var pagemaker = require("pagemaker.js");
 
 exports.getReq = function(request, response) {
     
@@ -41,6 +40,7 @@ exports.getReq = function(request, response) {
             }
         }
         membersPage.addContent("</h3>");
+        membersPage.standardMenus();
 
         response.write(membersPage.toHTML());
         response.end();

@@ -12,7 +12,6 @@ send = function (response, parameters) {
     page1 = new StandardPage();
     page1.setTitle("Test Page");
     page1.setContent("This is a dynamically generated test page <br />");
-    
     page1.addContent("Here are the parameters passed to this page: <br />");
     for(var i in parameters)
     {
@@ -26,7 +25,8 @@ send = function (response, parameters) {
         page1.addContent(Math.random() + "<br />");
     }
     
-    page1.addMenuItem("home", "/");
+
+    page1.standardMenus();
 
     response.write(page1.toHTML());
     
