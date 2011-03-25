@@ -16,7 +16,7 @@ exports.getReq = function (request,response) {
 	
 	db.getRecentActivity(function (error){
 		if (error.status != 0){
-			repsonse.end(error.detail.message);
+			response.end(error.detail.message);
 			throw error;
 		} else {
 			response.end(Jaml.render('feedentry',(error.rows)));
