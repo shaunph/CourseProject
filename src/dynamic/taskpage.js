@@ -24,7 +24,7 @@ var dbHelper = require('SQLiteHelper'),
 	
 exports.getReq = function (request,response) {
 	//saveTestTask();	// This will be removed once tasks can be saved
-	loadTask(request, response, parseInt(url.parse(request.url, true).query));
+	loadTask(request, response, (url.parse(request.url, true).query)['id']);
 }
 
 function displayTaskPage(response, id, taskValues) {
