@@ -1,6 +1,6 @@
-var db = require('../js/SQLiteHelper');
+var db = require('SQLiteHelper');
 var qs = require('querystring');
-var pagemaker = require('../js/pagemaker');
+var pagemaker = require('pagemaker');
 
 exports.postReq = function(req, res) {
 

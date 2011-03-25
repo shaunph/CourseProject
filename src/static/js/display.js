@@ -1,4 +1,12 @@
 /*
+	== NOTE: == 
+	Once "add task" and "update task" functionalities are working and in the mainline,
+	I will check if this file is utilized at all. If not, I'll remove it.
+	If you have any objections, please contact me.
+
+	- Chris (nguyen__chris@hotmail.com)
+	=-=-=-=-=-=
+
     This function inserts the specified task information into div tags.
     These div tags must have a 'name' attribute, equal to one of Task's instance variables.
 
@@ -35,7 +43,7 @@ function display(type, width) {
             output = taskObj.getDate();
             break;
         default:
-            alert("ERROR: Unknown Task type.");
+            //alert("ERROR: Unknown Task type.");
             return;
     }
 
@@ -53,16 +61,15 @@ function display(type, width) {
 
 
 /*
-    Any page that links to the task page will send a task ID, which will be used here to reference the
-    database for the task data. This data will be used as arguments to the Task constructor to create the 
-    below object.
-
-    For now, these are test parameters. 
+    Test object to display.
 */
-var taskObj = new Task("TaskNameHere", 123, "This is a test description. ", "priority", "status", "user", "date");
+var taskObj = new Task("TaskNameHere", "This is a test description.", "0", "0", "Low", "progress", "Open", "user");
 
 document.title = taskObj.getTaskName() + " Details";    // Just display the title on the html page
 
+/*
+	Test values to display.
+*/
 display('taskName');
 display('description', '30em');
 display('priority');
