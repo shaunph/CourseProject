@@ -8,6 +8,8 @@ var exec = require('child_process').exec,
     util = require('util'),
     db = require('SQLiteHelper'),
     qs = require('querystring');
+    error404 = require('../static/error_pages/404');
+    error500 = require('../static/error_pages/500');
 
 var extTypes = [];
 extTypes["html"]="text/html";
@@ -29,7 +31,11 @@ error sends an error page in response to a bad request
 function error(request, response, code, file) {
     log(request, code, file);
     response.writeHead(code, {"Content-Type": "text/html"});
-    util.pump(fs.createReadStream(errorRoot + "/" + code + ".html"), response, function(){});
+    if(code == 404) {
+        error404.getReq(request, response);
+    } else if(code == 500) {
+        error500.getReq(request, response);
+    }
 }
 
 /*
