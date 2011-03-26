@@ -1,4 +1,5 @@
 var exec = require('child_process').exec,
+    basepath = require('basepath').mainpath,
     fs = require('fs'),
     http = require('http'),
     os = require('os'),
@@ -7,8 +8,8 @@ var exec = require('child_process').exec,
     url = require('url'),
     util = require('util'),
     db = require('SQLiteHelper'),
-    qs = require('querystring');
-    errorPage = require('../static/error_pages/errorPage');
+    qs = require('querystring'),
+    errorPage = require(basepath + '/static/error_pages/errorPage');
 
 var extTypes = [];
 extTypes["html"]="text/html";
