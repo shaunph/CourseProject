@@ -31,12 +31,14 @@ exports.postReq = function (request, response) {
         //Extract the file from the data Buffer.
         try {
             var parsed = upops.parseMultipartFormdata(dataBuffer);
-            var date = new Date();
-	    var stat = 1;
+            var date = new Date(); //date of task creation, created here to improve accuracy
+	    var stat = 1; //status of task: 1 = new task, 0 = task already exists
             aTask = new task(parsed["tNom"].toString(), parsed["desc"].toString(), parsed["ETR"].toString(), 
 			parsed["timeS"].toString(), parsed["priority"].toString(), 
 				parsed["status"].toString(), parsed["uNom"].toString(), date);          
 
+	    //checks the task table for a like-named task and collects its location if there
+	    // makes use of example in documentation
 	    db.getTable("task", function(obj) {
 	        var n;
 	        for (i = 0; i < obj.rows.length; i++) {
@@ -46,10 +48,11 @@ exports.postReq = function (request, response) {
 	                break;
 	            }
 		}
-	        if (stat == 1) {
+	        if (stat == 1) { //if 1, then the task was not in the database
 
-		    db.addTask(aTask);
+		    db.addTask(aTask); //only call if it is known there is no like task, possible to remove checking feature in SQLiteHelper
 
+		    //dynamic pages based off example shown by Mitchel on the main site 
 	            response.writeHead(200, {'Content-Type': 'text/html'});
 	            tPage = new StandardPage();
 	            tPage.setTitle('Post-Task Page');
@@ -66,8 +69,8 @@ exports.postReq = function (request, response) {
                     response.end(); 
 	        }
 
-	        else {
-
+	        else { //otherwise, the name was taken and the stored task shown
+		      //uses documented example from SQLiteHelper
 	            response.writeHead(200, {'Content-Type': 'text/html'});
 	            tPage = new StandardPage();
 	            tPage.setTitle('Post-Task Page');
