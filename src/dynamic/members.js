@@ -5,8 +5,8 @@
  * Time: 11:09 PM
  */
 
-var slh = require("SQLiteHelper.js");
-var pagemaker = require("pagemaker.js");
+var slh = require("SQLiteHelper");
+var pagemaker = require("pagemaker");
 
 exports.getReq = function(request, response) {
     
