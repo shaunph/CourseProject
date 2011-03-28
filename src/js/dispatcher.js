@@ -1,4 +1,5 @@
 var exec = require('child_process').exec,
+    basepath = require('basepath').mainpath,
     fs = require('fs'),
     http = require('http'),
     os = require('os'),
@@ -7,7 +8,8 @@ var exec = require('child_process').exec,
     url = require('url'),
     util = require('util'),
     db = require('SQLiteHelper'),
-    qs = require('querystring');
+    qs = require('querystring'),
+    errorPage = require(basepath + '/static/error_pages/errorPage');
 
 var extTypes = [];
 extTypes["html"]="text/html";
@@ -29,7 +31,9 @@ error sends an error page in response to a bad request
 function error(request, response, code, file) {
     log(request, code, file);
     response.writeHead(code, {"Content-Type": "text/html"});
-    util.pump(fs.createReadStream(errorRoot + "/" + code + ".html"), response, function(){});
+    if(code != 200) {
+        errorPage.getReq(request, response, code);
+    }
 }
 
 /*
