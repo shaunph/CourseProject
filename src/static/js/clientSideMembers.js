@@ -10,13 +10,13 @@
 
  */
 function membersLoad(field, url) {
-        $.get(url, function(data) {
-        $('#'+field).html(data);
+    $.get(url, function(data) {
+        $('#' + field).html(data);
     });
 }
 
 function clearBox(field) {
-    document.getElementById(field).value = "";
+    $('#' + field).val("");
 }
 
 membersLoad('membersList', 'members.js?');

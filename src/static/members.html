@@ -1,20 +1,22 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html>
 <head>
-        <title>Members Page</title>
-		<script src="js/clientSideMembers.js" type="text/javascript"></script>
+    <title>Members Page</title>
+    <script src="/js/clientSideMembers.js" type="text/javascript"></script>
 </head>
 <body>
-    <h1>Members</h1><br /><br />
+<h1>Members</h1><br/>
 
-    <form>
-        <input type=button value="Refresh" onclick="membersLoad('membersList', 'members.js?');"><br /><br />
-        <input type=button id ="searchButton" value="Search"
-               onclick="membersLoad('membersList', 'members.js?searchTerm=' + $('#searchBox').val());">
-        <input type=text id="searchBox" value="Enter search term" onfocus="clearBox('searchBox')" >
-    </form>
+<form>
+    <input type=button value="Refresh" onclick="membersLoad('membersList', 'members.js?');"><br/><br/><br/>
+    <input type=text id="searchBox" value="Enter search term" onfocus="clearBox('searchBox')"><br/>
+    <input type=button id="searchButton" value="Search"
+           onclick="membersLoad('membersList',
+               'members.js?searchTerm=' + $('#searchBox').val() + '&caseCheckBox=' + $('#caseCheckBox:checked').val());">
+    <br />
+    <label>Case sensitive: </label><input type=checkbox id="caseCheckBox">
+</form>
 
-    <div id="membersList" style="display:block;"></div>
+<div class="membersList" id="membersList"></div>
 </body>
 </html>

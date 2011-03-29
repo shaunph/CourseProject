@@ -46,33 +46,40 @@ function loadMembers(parameters, response) {
         // check if this is a search or a pageload/refresh
         if(parameters['searchTerm'] == undefined) {
             searchTerm = ""; //pageload/refresh
+        } else if(parameters['caseCheckBox'] == 'on') {
+            searchTerm = parameters['searchTerm']; // search case sensitive
         } else {
-             searchTerm = parameters['searchTerm'].toLowerCase(); // search
+             searchTerm = parameters['searchTerm'].toLowerCase(); // search case INsensitive
         }
 
         // create table headings
         var membersPage = "";
-        membersPage = membersPage.concat("<h3><table border=\"1\"><tr>" +
-                "<td><span style=\"color: #000000; \">Member E-mail</td>" +
-                "<td><span style=\"color: #000000; \">Member Nickname</td>" +
-                "<td><span style=\"color: #000000; \">Member Password (useful for testing?)</td>" +
-                "</tr></h3>");
+        membersPage = membersPage.concat("<h3>" +
+                "<div class='row'>" +
+                "<div class='membersHeading'>Member E-mail</div>" +
+                "<div class='membersHeading'>Member Nickname</div>" +
+                "<div class='membersHeading'>Member Password (useful for testing?)</div>" +
+                "</h3></div>");
 
         for(i = 0; i < obj.rows.length; i++) {
 
-            rowEmail = obj.rows[i].email.toLowerCase();
-            rowNickname = obj.rows[i].nickname.toLowerCase();
+            if(parameters['caseCheckBox'] == 'on') {
+                rowEmail = obj.rows[i].email;
+                rowNickname = obj.rows[i].nickname;
+            } else {
+                rowEmail = obj.rows[i].email.toLowerCase();
+                rowNickname = obj.rows[i].nickname.toLowerCase();
+            }
 
             if(rowEmail.indexOf(searchTerm) != -1 || rowNickname.indexOf(searchTerm) != -1) {
-                membersPage = membersPage.concat("<tr>" +
-                        "<td><span style=\"color: #000000; \">" + obj.rows[i].email + "</td>" +
-                        "<td><span style=\"color: #000000; \">" + obj.rows[i].nickname + "</td>" +
-                        "<td><span style=\"color: #000000; \">" + obj.rows[i].password + "</td>" +
-                        "</tr>");
+                membersPage = membersPage.concat("<div class='row'>" +
+                        "<div class='membersEntry'>" + obj.rows[i].email + "</div>" +
+                        "<div class='membersEntry'>" + obj.rows[i].nickname + "</div>" +
+                        "<div class='membersEntry'>" + obj.rows[i].password + "</div>" +
+                        "</div>");
             }
         }
 
-        membersPage = membersPage.concat("</table>");
 
         response.write(membersPage);
         response.end();
