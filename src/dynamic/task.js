@@ -1,7 +1,11 @@
 var dbHelper = require('SQLiteHelper'),
 	task = require('task'),
 	pagemaker = require('pagemaker'),
-	url = require('url');
+	url = require('url'),
+	basepath = require('basepath').mainpath,
+	
+	//TODO: temporary fix until we rethink error handling
+	errorPage = require(basepath + '/static/error_pages/errorPage');
 
 /* NOTE:
  * When testing this page with an actual task object, uncomment saveTestTask() 
@@ -56,26 +60,21 @@ function displayTaskPage(response, id, taskValues) {
 }
 
 function loadTask(request, response, id) {
+
 	dbHelper.getTask(id, function(callbackObj) {
 			try {
 				var loadRow = callbackObj.rows[0]; // Always 0 because getTask only gets 1 row, namely the row with taskid = id
 			} catch(error) { // If database isn't created yet
-				var errorPage = process.cwd() + "/static/error_pages/500.html"; // 500 or 503?
-				pagemaker.ParsePage(errorPage, function (html) {
-					response.end(html);
-				});
-				return;
+				errorPage.getReq(request, response, 500);
 			}
+			
 			if (loadRow == undefined) { // If task doesn't exist in db
-				var errorPage = process.cwd() + "/static/error_pages/404.html";
-				pagemaker.ParsePage(errorPage, function (html) {
-					response.end(html);
-				});
-				return;
-			}
-			var loadedTask = new task.task(loadRow.taskName, loadRow.description, loadRow.timeSpent,
+				errorPage.getReq(request, response, 404);
+			} else {
+				var loadedTask = new task.task(loadRow.taskName, loadRow.description, loadRow.timeSpent,
 						loadRow.timeLeft, loadRow.priority, loadRow.progress, loadRow.status, loadRow.user);
-			displayTaskPage(response, id, loadedTask);
+				displayTaskPage(response, id, loadedTask);
+			}
 	});
 }
 
