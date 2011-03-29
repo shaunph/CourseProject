@@ -105,7 +105,8 @@ function resolve(request, response) {
                 log(request, 200, filePath);
             } catch (err) {
                 // If there was an error, it means no such dynamic page exists
-				// It could also mean theres an error on the dynamic page.
+                // It could also mean theres an error on the dynamic page,
+                //  in which case dynamic should not be false.
                 dynamic = false;
             }
         }
