@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Members Page</title>
+    <script src="/js/clientSideMembers.js" type="text/javascript"></script>
+</head>
+<body>
+<h1>Members</h1><br/>
+
+<form>
+    <input type=button value="Refresh" onclick="membersLoad('membersList', 'members.js?');"><br/><br/><br/>
+    <input type=text id="searchBox" value="Enter search term" onfocus="clearBox('searchBox')"><br/>
+    <input type=button id="searchButton" value="Search"
+           onclick="membersLoad('membersList',
+               'members.js?searchTerm=' + $('#searchBox').val() + '&caseCheckBox=' + $('#caseCheckBox:checked').val());">
+    <br />
+    <label>Case sensitive: </label><input type=checkbox id="caseCheckBox">
+</form>
+
+<div class="membersList" id="membersList"></div>
+</body>
+</html>
