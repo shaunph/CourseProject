@@ -5,11 +5,30 @@
  * Time: 11:09 PM
  */
 
-var slh = require("SQLiteHelper");
-var pagemaker = require("pagemaker");
+url = require('url');
+slh = require('SQLiteHelper');
+pagemaker = require('pagemaker');
 
+/**
+ * 
+ * @param request
+ * @param response
+ */
 exports.getReq = function(request, response) {
-    
+
+    var parameters = url.parse(request.url,true).query;
+    loadMembers(parameters, response);
+}
+
+/**
+ *
+ * @param parameters
+ * @param response
+ */
+function loadMembers(parameters, response) {
+
+    response.writeHead(200, {'Content-Type' : 'text/html'});
+
     console.log("Getting table...");
 
     slh.getTable("user", function(obj) {
@@ -19,30 +38,50 @@ exports.getReq = function(request, response) {
         }
 
         console.log("Table retrieved.");
-        
-        var membersPage = new StandardPage();
-        membersPage.setTitle("Members");
 
-        membersPage.addContent("<h3>");
+        var searchTerm;
+        var rowEmail;
+        var rowNickname;
+
+        // check if this is a search or a pageload/refresh
+        if(parameters['searchTerm'] == undefined) {
+            searchTerm = ""; //pageload/refresh
+        } else if(parameters['caseCheckBox'] == 'on') {
+            searchTerm = parameters['searchTerm']; // search case sensitive
+        } else {
+             searchTerm = parameters['searchTerm'].toLowerCase(); // search case INsensitive
+        }
+
+        // create table headings
+        var membersPage = "";
+        membersPage = membersPage.concat("<h3>" +
+                "<div class='row'>" +
+                "<div class='membersHeading'>Member E-mail</div>" +
+                "<div class='membersHeading'>Member Nickname</div>" +
+                "<div class='membersHeading'>Member Password (useful for testing?)</div>" +
+                "</h3></div>");
+
         for(i = 0; i < obj.rows.length; i++) {
-            if(i == 0) {
-                membersPage.addContent("<table border=\"1\">");
+
+            if(parameters['caseCheckBox'] == 'on') {
+                rowEmail = obj.rows[i].email;
+                rowNickname = obj.rows[i].nickname;
+            } else {
+                rowEmail = obj.rows[i].email.toLowerCase();
+                rowNickname = obj.rows[i].nickname.toLowerCase();
             }
 
-            membersPage.addContent("<tr>" +
-                    "<td><span style=\"color: #000000; \">" + obj.rows[i].email + "</td>" +
-                    "<td><span style=\"color: #000000; \">" + obj.rows[i].nickname + "</td>" +
-                    "<td><span style=\"color: #000000; \">" + obj.rows[i].password + "</td>" +
-                    "</tr>");
-
-            if(i == obj.rows.length - 1) {
-                membersPage.addContent("</table>");
+            if(rowEmail.indexOf(searchTerm) != -1 || rowNickname.indexOf(searchTerm) != -1) {
+                membersPage = membersPage.concat("<div class='row'>" +
+                        "<div class='membersEntry'>" + obj.rows[i].email + "</div>" +
+                        "<div class='membersEntry'>" + obj.rows[i].nickname + "</div>" +
+                        "<div class='membersEntry'>" + obj.rows[i].password + "</div>" +
+                        "</div>");
             }
         }
-        membersPage.addContent("</h3>");
-        membersPage.standardMenus();
 
-        response.write(membersPage.toHTML());
+
+        response.write(membersPage);
         response.end();
     });
 }

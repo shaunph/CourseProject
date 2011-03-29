@@ -9,7 +9,7 @@ var exec = require('child_process').exec,
     util = require('util'),
     db = require('SQLiteHelper'),
     qs = require('querystring'),
-    errorPage = require(basepath + '/static/error_pages/errorPage');
+    errorPage = require(basepath + '/dynamic/error_pages/errorPage');
 
 var extTypes = [];
 extTypes["html"]="text/html";
