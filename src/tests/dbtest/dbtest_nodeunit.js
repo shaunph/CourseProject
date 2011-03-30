@@ -2,9 +2,9 @@ var path = require('path');
 var fs = require('fs');
 var basepath = require('basepath').mainpath;
 var sqlite = require(basepath + '/lib/node-sqlite/sqlite');
-var slh = require("SQLiteHelper");
+var slh = require('SQLiteHelper');
 var dbLocation = (basepath + '/tests/db/main.db');
-var task = require(basepath + '/static/js/task');
+var task = require('task');
 
 
 /**
@@ -83,7 +83,7 @@ exports.DataBaseTests = {
     'Test That Tasks Can Be Added': function (test) {
         test.expect(1);
         
-        var someTask = new task.Task("taskname","descr","Low","Not Started","test@testsitedoesntexist.com",Date());
+        var someTask = new task.task("taskname","descr","0","0","Low","Not Started","Open","test@testsitedoesntexist.com");
         var succeeded = false;
         slh.addTask(someTask,
                     function (retV) {
