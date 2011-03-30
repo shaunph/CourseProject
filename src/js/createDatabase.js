@@ -13,11 +13,12 @@
         comment(thecomment, taskid, creator)
 */
 
-sqlite = require('./../lib/node-sqlite/sqlite');
-fs = require('fs');
+var basepath = require('basepath').mainpath;
 
+var sqlite = require(basepath + 'lib/node-sqlite/sqlite');
+var fs = require('fs');
 var db = sqlite.Database();
-var dbLocation = "./db/main.db"; // location of database
+var dbLocation = basepath + "db/main.db"; // location of database
 
 fs.mkdir('./db', 0777);
 

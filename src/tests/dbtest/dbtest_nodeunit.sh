@@ -1,10 +1,8 @@
 #!/bin/sh
 
 cd ..
-node ../js/createDatabase.js	#TEMPORARY. remove when the callback in createDatabase is implemented
+cd ..
+node js/createDatabase.js
 
-# Have to run dbtest_nodeunit from the tests directory because right now SQLite uses the
-# working directory to refer to main.db
-node nodeunit/bin/nodeunit dbtest/dbtest_nodeunit.js
+node tests/nodeunit/bin/nodeunit tests/dbtest/dbtest_nodeunit.js
 
-rm -r ./db
