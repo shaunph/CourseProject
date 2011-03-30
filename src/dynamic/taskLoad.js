@@ -48,13 +48,13 @@ exports.postReq = function (request, response) {
 	                tPage.setTitle('Post-Task Page');
  	                tPage.setContent("<h1> THE FOLLOWING TASK WAS ADDED </h1> <br />");
 	                tPage.standardMenus();
-	                tPage.addContent("Task Name: " + aTask.getTaskName() + " <br /><br />");
+	                tPage.addContent("<div align='left'> Task Name: " + aTask.getTaskName() + " <br /><br />");
 	                tPage.addContent("Description: " + aTask.getDescription() + " <br /><br />");
 	                tPage.addContent("Time Spent: " + aTask.getTimeSpent() + " <br /><br />");
 	                tPage.addContent("Time Left: " + aTask.getTimeLeft() + " <br /><br />");
 	                tPage.addContent("Priority: " + aTask.getPriority() + " <br /><br />");
 	                tPage.addContent("Status: " + aTask.getStatus() + " <br /><br />");
-	                tPage.addContent("<a href='index.html'><b>Back to Main</b></a>");	
+	                tPage.addContent("<a href='index.html'><b>Back to Main</b></a> </div>");	
 	                response.write(tPage.toHTML());
                         response.end(); 
 	            }
@@ -67,7 +67,7 @@ exports.postReq = function (request, response) {
  	                tPage.setContent("<h1> THE TASK NAME WAS TAKEN </h1> <br />");
 	                tPage.standardMenus();
 		        tPage.addContent("<b>This is the task currently in the database:</b> <br /><br />");
-	                tPage.addContent("Task Name: " + obj.rows[status].taskName + " <br /><br />");
+	                tPage.addContent("<div align='left'> Task Name: " + obj.rows[status].taskName + " <br /><br />");
 	                tPage.addContent("Description: " + obj.rows[status].description + " <br /><br />");
 	                tPage.addContent("Time Spent: " + obj.rows[status].timeLeft + " <br /><br />");
 	                tPage.addContent("Time Left: " + obj.rows[status].timeSpent + " <br /><br />");
@@ -75,7 +75,7 @@ exports.postReq = function (request, response) {
 	                tPage.addContent("Status: " + obj.rows[status].status + " <br /><br />");
 	                tPage.addContent("Creator: " + obj.rows[status].user + " <br /><br />");
 	                tPage.addContent("Date Made: " + obj.rows[status].date + " <br /><br />");
-	                tPage.addContent("<a href='index.html'><b>Back to Main</b></a>");	
+	                tPage.addContent("<a href='index.html'><b>Back to Main</b></a> </div>");	
 	                response.write(tPage.toHTML());
                         response.end();
 	            }
