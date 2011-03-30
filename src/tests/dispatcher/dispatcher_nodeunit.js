@@ -21,7 +21,7 @@ exports.DispatcherTests = {
         } catch (e) { console.log(e); }
         
         var tester = require(basepath + 'js/dispatcher.js');
-        server = http.createClient(7777, host='csc');
+        server = http.createClient(7777, host='localhost');
         test.done();
     },
     
