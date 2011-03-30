@@ -9,7 +9,7 @@ var exec = require('child_process').exec,
     util = require('util'),
     db = require('SQLiteHelper'),
     qs = require('querystring'),
-    errorPage = require(basepath + '/static/error_pages/errorPage');
+    errorPage = require(basepath + '/dynamic/error_pages/errorPage');
 
 var extTypes = [];
 extTypes["html"]="text/html";
@@ -105,6 +105,8 @@ function resolve(request, response) {
                 log(request, 200, filePath);
             } catch (err) {
                 // If there was an error, it means no such dynamic page exists
+                // It could also mean theres an error on the dynamic page,
+                //  in which case dynamic should not be false.
                 dynamic = false;
             }
         }

@@ -1,6 +1,8 @@
 #!/bin/sh
 
 cd ..
+cd ..
+node js/createDatabase.js
 
-node nodeunit/bin/nodeunit dispatcher/dispatcher_nodeunit.js
+node tests/nodeunit/bin/nodeunit tests/dispatcher/dispatcher_nodeunit.js
 

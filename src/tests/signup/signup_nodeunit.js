@@ -1,8 +1,8 @@
 var path = require('path');
 var fs = require('fs');
 var basepath = require('basepath').mainpath;
-var sqlite = require(basepath + '/lib/node-sqlite/sqlite');
-var dbLocation = (basepath + '/tests/db/main.db');
+var sqlite = require(basepath + 'lib/node-sqlite/sqlite');
+var dbLocation = (basepath + 'db/main.db');
 var http = require('http');
 var server;
 
@@ -15,7 +15,7 @@ var server;
 exports.SignupTests = {
     'Set-up': function (test) {
         // A bit of a hack. Setting argv to have a port number, then running dispatcher.
-        process.argv[2] = 5555;
+        process.argv[2] = 7777;
         
         // Need to change the directory so that the dispatcher can find the files to send back
         try {
@@ -23,7 +23,7 @@ exports.SignupTests = {
         } catch (e) { console.log(e); }
         
         var tester = require(basepath + '/js/dispatcher.js');
-        server = http.createClient(5555, host='csc');
+        server = http.createClient(7777, host='localhost');
         test.done();
     },
     

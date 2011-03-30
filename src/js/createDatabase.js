@@ -13,13 +13,14 @@
         comment(thecomment, taskid, creator)
 */
 
-sqlite = require('./../lib/node-sqlite/sqlite');
-fs = require('fs');
+var basepath = require('basepath').mainpath;
 
+var sqlite = require(basepath + 'lib/node-sqlite/sqlite');
+var fs = require('fs');
 var db = sqlite.Database();
-var dbLocation = "./db/main.db"; // location of database
+var dbLocation = basepath + "db/main.db"; // location of database
 
-fs.mkdir('./db', 0777);
+fs.mkdir(basepath + 'db', 0777);
 
 db.open(dbLocation, function (error) {
     if(error) {
@@ -45,12 +46,12 @@ db.open(dbLocation, function (error) {
         "taskid INTEGER PRIMARY KEY AUTOINCREMENT," +
         "taskName TEXT UNIQUE," +
         "description TEXT," +
-        "timeLeft TEXT," +
         "timeSpent TEXT," +
+        "timeLeft TEXT," +
         "priority TEXT," +
+        "progress TEXT," +
         "status TEXT," +
         "user TEXT," +
-        "date TEXT," +
         "created TIMESTAMP DEFAULT CURRENT_TIMESTAMP)",
         function (error) {
             if(error) {

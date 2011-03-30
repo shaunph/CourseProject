@@ -3,10 +3,11 @@
 # This script should execute all nodeunit tests in the Tests folder
 #
 
-node ../js/createDatabase.js	#TEMPORARY. remove when the callback in createDatabase is implemented
-node ./nodeunit/bin/nodeunit dbtest/dbtest_nodeunit.js
-node ./nodeunit/bin/nodeunit dispatcher/dispatcher_nodeunit.js
-node ./nodeunit/bin/nodeunit signup/signup_nodeunit.js
+cd ..
+node ./js/createDatabase.js
+node ./tests/nodeunit/bin/nodeunit ./tests/dbtest/dbtest_nodeunit.js
+node ./tests/nodeunit/bin/nodeunit ./tests/dispatcher/dispatcher_nodeunit.js
+node ./tests/nodeunit/bin/nodeunit ./tests/signup/signup_nodeunit.js
 
 echo "Remove database?"
 CONFIRM="Yes No"
