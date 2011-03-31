@@ -128,7 +128,7 @@ exports.TaskTests = {
     },
 
     "Test 6: Task Status must be a valid String (Open or Closed)": function(test) {
-        test.expect(10);
+        test.expect(12);
 
         var statusTask = new task("name", "", "0", "0", "Low", "", "Open", "test@test.com");
         var invalidInputs = ["", "This is not a valid Status", "open", "closed", 5, new Object(), null, undefined];
