@@ -52,13 +52,17 @@ exports.postReq = function (request, response) {
 	                tPage.addContent("Time Left: " + aTask.getTimeLeft() + " <br /><br />");
 	                tPage.addContent("Time Spent: " + aTask.getTimeSpent() + " <br /><br />");
 	                tPage.addContent("Priority: " + aTask.getPriority() + " <br /><br />");
-		        tPage.addContent("Progress: " + aTask.getProgress() + " <br /><br />");
+		            tPage.addContent("Progress: " + aTask.getProgress() + " <br /><br />");
 	                tPage.addContent("Status: " + aTask.getStatus() + " <br /><br />");
 	                tPage.addContent("<a href='index.html'><b>Back to Main</b></a> </div>");
-			tPage.addContent("<br /><a href='/viewTask.js?param1=" + aTask.getTaskName() + "'><b>Look up Task</b></a>");	
 	                response.write(tPage.toHTML());
-                        response.end(); 
+                    response.end(); 
 	            }
+
+                else if (status == -2){
+                    response.writeHead(500);
+                    response.end();
+                }
 
 	            else { //otherwise, the name was taken and the stored task shown
 
@@ -67,13 +71,13 @@ exports.postReq = function (request, response) {
 	                tPage.setTitle('Post-Task Page');
  	                tPage.setContent("<h1> THE TASK NAME WAS TAKEN </h1> <br />");
 	                tPage.standardMenus();
-		        tPage.addContent("<b>This is the task currently in the database:</b> <br /><br />");
+		            tPage.addContent("<b>This is the task currently in the database:</b> <br /><br />");
 	                tPage.addContent("<div align='left'> Task Name: " + obj.rows[status].taskName + " <br /><br />");
 	                tPage.addContent("Description: " + obj.rows[status].description + " <br /><br />");
 	                tPage.addContent("Time Left: " + obj.rows[status].timeLeft + " <br /><br />");
 	                tPage.addContent("Time Spent: " + obj.rows[status].timeSpent + " <br /><br />");
 	                tPage.addContent("Priority: " + obj.rows[status].priority + " <br /><br />");
-			tPage.addContent("Progress: " + obj.rows[status].progress + " <br /><br />");
+			        tPage.addContent("Progress: " + obj.rows[status].progress + " <br /><br />");
 	                tPage.addContent("Status: " + obj.rows[status].status + " <br /><br />");
 	                tPage.addContent("Creator: " + obj.rows[status].user + " <br /><br />");
 	                tPage.addContent("<a href='index.html'><b>Back to Main</b></a> </div>");	
