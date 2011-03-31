@@ -82,10 +82,10 @@ exports.TaskTests = {
     },
 
     "Test 4: Task Priority must be a valid String (Low, Medium, High)": function(test) {
-        test.expect(12);
+        test.expect(15);
 
         var priorityTask = new task("name", "", "0", "0", "Low", "", "Open", "test@test.com");
-        var invalidInputs = ["", "Not a valid Priority", 4, new Object(), null, undefined];
+        var invalidInputs = ["", "Not a valid Priority", "low", "medium", "high", 4, new Object(), null, undefined];
         var validInputs = ["Low", "Medium", "High"];
         
         for (var i = 0 ; i < invalidInputs.length ; i++) {
@@ -131,7 +131,7 @@ exports.TaskTests = {
         test.expect(10);
 
         var statusTask = new task("name", "", "0", "0", "Low", "", "Open", "test@test.com");
-        var invalidInputs = ["", "This is not a valid Status", 5, new Object(), null, undefined];
+        var invalidInputs = ["", "This is not a valid Status", "open", "closed", 5, new Object(), null, undefined];
         var validInputs = ["Open", "Closed"];
         
         for (var i = 0 ; i < invalidInputs.length ; i++) {
