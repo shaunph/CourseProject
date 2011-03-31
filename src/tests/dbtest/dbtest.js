@@ -163,7 +163,7 @@ function addTaskTest(){
 
     slh.addTask(taskObj,
         function(error){
-            if (error.status == 0){
+            if (error.status == -1){
                 dbtest.addToLog("user task added successfully\n");
                 dbtest.callNext();
             }

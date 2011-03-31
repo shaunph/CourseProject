@@ -39,7 +39,7 @@ exports.postReq = function (request, response) {
 	    db.getTable("task", function(obj) {
 	
  	        db.addTask(aTask, function(status) {
-	            if (status == -1) { //if -1, then the task was not in the database
+	            if (status.status == -1) { //if -1, then the task was not in the database
 
 		        //dynamic pages based off example shown by Mitchel on the main site 
 	                response.writeHead(200, {'Content-Type': 'text/html'});
@@ -59,7 +59,7 @@ exports.postReq = function (request, response) {
                         response.end(); 
 	            }
 
-                else if (status == -2){
+                else if (status.status == -2){
                     response.writeHead(500);
                     response.end();
                 }
@@ -72,14 +72,14 @@ exports.postReq = function (request, response) {
  	                tPage.setContent("<h1> THE TASK NAME WAS TAKEN </h1> <br />");
 	                tPage.standardMenus();
 		        tPage.addContent("<b>This is the task currently in the database:</b> <br /><br />");
-	                tPage.addContent("<div align='left'> Task Name: " + obj.rows[status].taskName + " <br /><br />");
-	                tPage.addContent("Description: " + obj.rows[status].description + " <br /><br />");
-	                tPage.addContent("Time Left: " + obj.rows[status].timeLeft + " <br /><br />");
-	                tPage.addContent("Time Spent: " + obj.rows[status].timeSpent + " <br /><br />");
-	                tPage.addContent("Priority: " + obj.rows[status].priority + " <br /><br />");
-		        tPage.addContent("Progress: " + obj.rows[status].progress + " <br /><br />");
-	                tPage.addContent("Status: " + obj.rows[status].status + " <br /><br />");
-	                tPage.addContent("Creator: " + obj.rows[status].user + " <br /><br />");
+	                tPage.addContent("<div align='left'> Task Name: " + obj.rows[status.status].taskName + " <br /><br />");
+	                tPage.addContent("Description: " + obj.rows[status.status].description + " <br /><br />");
+	                tPage.addContent("Time Left: " + obj.rows[status.status].timeLeft + " <br /><br />");
+	                tPage.addContent("Time Spent: " + obj.rows[status.status].timeSpent + " <br /><br />");
+	                tPage.addContent("Priority: " + obj.rows[status.status].priority + " <br /><br />");
+		        tPage.addContent("Progress: " + obj.rows[status.status].progress + " <br /><br />");
+	                tPage.addContent("Status: " + obj.rows[status.status].status + " <br /><br />");
+	                tPage.addContent("Creator: " + obj.rows[status.status].user + " <br /><br />");
 	                tPage.addContent("<a href='index.html'><b>Back to Main</b></a> </div>");	
 	                response.write(tPage.toHTML());
                         response.end();
