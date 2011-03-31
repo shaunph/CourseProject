@@ -79,8 +79,9 @@ function loadTask(request, response, id) {
 }
 
 // Saves a test task to the DB. Will be removed once tasks can be saved.
+/*
 function saveTestTask() {
     var testTask = new task.task("test name", "a description", "0", "0", "High", "Not started", "Open", "test@test.com");
 
     dbHelper.addTask(testTask, function(error) {return;});
-}
+}*/
