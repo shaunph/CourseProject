@@ -4,6 +4,8 @@ var task = require('task').task;
 /*
  * Tests for task using NodeUnit
  *
+ * TODO: Provide tests for task estimation.
+ *
  * Usage:
  *
  * To run this test specifically, within the tests/ directory, use:
