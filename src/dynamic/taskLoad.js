@@ -30,8 +30,8 @@ exports.postReq = function (request, response) {
         //Extract the file from the data Buffer.
         try {
             var parsed = upops.parseMultipartFormdata(dataBuffer);
-            aTask = new task(parsed["tNom"].toString(), parsed["desc"].toString(), parsed["ETR"].toString(), 
-			parsed["timeS"].toString(), parsed["priority"].toString(), 
+            aTask = new tsk.task(parsed["tNom"].toString(), parsed["desc"].toString(), parsed["timeS"].toString(), 
+			parsed["ETR"].toString(), parsed["priority"].toString(), 
 				parsed["prog"].toString(), "Open", parsed["uNom"].toString());          
 
 	    //checks the task table for a like-named task and collects its location if there
@@ -49,8 +49,8 @@ exports.postReq = function (request, response) {
 	                tPage.standardMenus();
 	                tPage.addContent("<div align='left'> Task Name: " + aTask.getTaskName() + " <br /><br />");
 	                tPage.addContent("Description: " + aTask.getDescription() + " <br /><br />");
-	                tPage.addContent("Time Spent: " + aTask.getTimeSpent() + " <br /><br />");
 	                tPage.addContent("Time Left: " + aTask.getTimeLeft() + " <br /><br />");
+	                tPage.addContent("Time Spent: " + aTask.getTimeSpent() + " <br /><br />");
 	                tPage.addContent("Priority: " + aTask.getPriority() + " <br /><br />");
 		        tPage.addContent("Progress: " + aTask.getProgress() + " <br /><br />");
 	                tPage.addContent("Status: " + aTask.getStatus() + " <br /><br />");
@@ -69,8 +69,8 @@ exports.postReq = function (request, response) {
 		        tPage.addContent("<b>This is the task currently in the database:</b> <br /><br />");
 	                tPage.addContent("<div align='left'> Task Name: " + obj.rows[status].taskName + " <br /><br />");
 	                tPage.addContent("Description: " + obj.rows[status].description + " <br /><br />");
-	                tPage.addContent("Time Spent: " + obj.rows[status].timeLeft + " <br /><br />");
-	                tPage.addContent("Time Left: " + obj.rows[status].timeSpent + " <br /><br />");
+	                tPage.addContent("Time Left: " + obj.rows[status].timeLeft + " <br /><br />");
+	                tPage.addContent("Time Spent: " + obj.rows[status].timeSpent + " <br /><br />");
 	                tPage.addContent("Priority: " + obj.rows[status].priority + " <br /><br />");
 			tPage.addContent("Progress: " + obj.rows[status].progress + " <br /><br />");
 	                tPage.addContent("Status: " + obj.rows[status].status + " <br /><br />");
