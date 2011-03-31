@@ -54,7 +54,8 @@ exports.postReq = function (request, response) {
 	                tPage.addContent("Priority: " + aTask.getPriority() + " <br /><br />");
 		        tPage.addContent("Progress: " + aTask.getProgress() + " <br /><br />");
 	                tPage.addContent("Status: " + aTask.getStatus() + " <br /><br />");
-	                tPage.addContent("<a href='index.html'><b>Back to Main</b></a> </div>");	
+	                tPage.addContent("<a href='index.html'><b>Back to Main</b></a> </div>");
+			tPage.addContent("<br /><a href='/viewTask.js?param1=" + aTask.getTaskName() + "'><b>Look up Task</b></a>");	
 	                response.write(tPage.toHTML());
                         response.end(); 
 	            }
