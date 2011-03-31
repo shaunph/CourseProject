@@ -8,20 +8,41 @@
 
 if [ $# -ne 1 ]
 then
-	echo "Usage: runserver.sh <port>"
-	exit 1
+    echo "Usage: $0 --clean"
+    echo "OR     $0 <port>"
+    exit 1
 fi
 
-if [ -f src/lib/node-sqlite/sqlite3_bindings.node ]
+cd src &&
+
+if [ $1 == "--clean" ]
 then
-	cd src
-	node js/createDatabase.js
-	node js/dispatcher.js $1
-else
-	echo "building node sqlite bindings..."
-	cd src/lib/node-sqlite/ &&
-	./build.sh &&
-	cd ../../ &&
-	node js/createDatabase.js
-	node js/dispatcher.js $1
+    echo "removing src/db/ and node-sqlite build files..."
+    rm -v -rf db
+    rm -v lib/node-sqlite/sqlite3_bindings.node
+    rm -v -rf lib/node-sqlite/build
+    rm -v -rf lib/node-sqlite/deps/mpool-2.1.0/*.a
+    rm -v -rf lib/node-sqlite/deps/mpool-2.1.0/*.o
+    rm -v lib/node-sqlite/.lock-wscript
+else 
+    if [ ! -f lib/node-sqlite/sqlite3_bindings.node ]
+    then
+        echo "building node sqlite bindings..." &&
+        cd lib/node-sqlite/ &&
+        ./build.sh &&
+        cd ../../ &&
+        sqlite=1
+    fi
+
+    if [ ! -f db/main.db ]
+    then
+        echo "building db..." &&
+        node js/createDatabase.js &&
+        db=1
+    fi
+
+    if [ -z $sqlite -a -z $db ]
+    then
+        node js/dispatcher.js $1
+    fi
 fi
