@@ -33,7 +33,7 @@ exports.postReq = function (request, response) {
             var date = new Date(); //date of task creation, created here to improve accuracy
             aTask = new task(parsed["tNom"].toString(), parsed["desc"].toString(), parsed["ETR"].toString(), 
 			parsed["timeS"].toString(), parsed["priority"].toString(), 
-				parsed["status"].toString(), parsed["uNom"].toString(), date);          
+				parsed["prog"].toString(), "Open", parsed["uNom"].toString());          
 
 	    //checks the task table for a like-named task and collects its location if there
 	    // makes use of example in documentation
@@ -53,6 +53,7 @@ exports.postReq = function (request, response) {
 	                tPage.addContent("Time Spent: " + aTask.getTimeSpent() + " <br /><br />");
 	                tPage.addContent("Time Left: " + aTask.getTimeLeft() + " <br /><br />");
 	                tPage.addContent("Priority: " + aTask.getPriority() + " <br /><br />");
+		        tPage.addContent("Progress: " + aTask.getProgress() + " <br /><br />");
 	                tPage.addContent("Status: " + aTask.getStatus() + " <br /><br />");
 	                tPage.addContent("<a href='index.html'><b>Back to Main</b></a> </div>");	
 	                response.write(tPage.toHTML());
@@ -72,9 +73,9 @@ exports.postReq = function (request, response) {
 	                tPage.addContent("Time Spent: " + obj.rows[status].timeLeft + " <br /><br />");
 	                tPage.addContent("Time Left: " + obj.rows[status].timeSpent + " <br /><br />");
 	                tPage.addContent("Priority: " + obj.rows[status].priority + " <br /><br />");
+			tPage.addContent("Progress: " + obj.rows[status].progress + " <br /><br />");
 	                tPage.addContent("Status: " + obj.rows[status].status + " <br /><br />");
 	                tPage.addContent("Creator: " + obj.rows[status].user + " <br /><br />");
-	                tPage.addContent("Date Made: " + obj.rows[status].date + " <br /><br />");
 	                tPage.addContent("<a href='index.html'><b>Back to Main</b></a> </div>");	
 	                response.write(tPage.toHTML());
                         response.end();
