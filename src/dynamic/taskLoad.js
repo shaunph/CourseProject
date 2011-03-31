@@ -30,7 +30,6 @@ exports.postReq = function (request, response) {
         //Extract the file from the data Buffer.
         try {
             var parsed = upops.parseMultipartFormdata(dataBuffer);
-            var date = new Date(); //date of task creation, created here to improve accuracy
             aTask = new task(parsed["tNom"].toString(), parsed["desc"].toString(), parsed["ETR"].toString(), 
 			parsed["timeS"].toString(), parsed["priority"].toString(), 
 				parsed["prog"].toString(), "Open", parsed["uNom"].toString());          
