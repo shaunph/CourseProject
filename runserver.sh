@@ -15,11 +15,13 @@ fi
 if [ -f src/lib/node-sqlite/sqlite3_bindings.node ]
 then
 	cd src
+	node js/createDatabase.js
 	node js/dispatcher.js $1
 else
 	echo "building node sqlite bindings..."
 	cd src/lib/node-sqlite/ &&
 	./build.sh &&
 	cd ../../ &&
+	node js/createDatabase.js
 	node js/dispatcher.js $1
 fi

@@ -1,3 +1,5 @@
+var task = require('task').task;
+
 /* 
  * Similar to display() in taskpage.js, but doesn't utilize innerHTML.
  * Displays specified values within an input area.
@@ -79,5 +81,5 @@ function update() {
 /* TODO: Take in an id from the task list page and call loadTask() from task.js */
 //var taskObj = loadTask(id);
 
-var taskObj = new Task("TaskName", "desc", "low", "status", "user", "date");
+var taskObj = new task("TaskName", "desc", "0", "0", "Low", "progress", "Open", "user");
 document.title = "Update " + taskObj.getTaskName();
