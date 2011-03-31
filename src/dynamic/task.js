@@ -5,7 +5,7 @@ var dbHelper = require('SQLiteHelper'),
     basepath = require('basepath').mainpath,
     
     //TODO: temporary fix until we rethink error handling
-    errorPage = require(basepath + '/static/error_pages/errorPage');
+    errorPage = require(basepath + '/dynamic/error_pages/errorPage');
 
 /* NOTE:
  * When testing this page with an actual task object, uncomment saveTestTask() 
