@@ -17,7 +17,7 @@ var task = require('task').task;
 
 
 exports.TaskTests = {
-    "Test 1: Tasks can be created and modified": function (test) {
+    "Test 1: Tasks can be created and modified": function(test) {
         test.expect(3);
         
         var testTask;
@@ -35,10 +35,10 @@ exports.TaskTests = {
         test.done();
     },
 
-    "Test 2: Task Name can only be a String/Number": function (test) {
+    "Test 2: Task Name can only be a String/Number": function(test) {
         test.expect(8);
         
-        var nameTask = new task("name", "", "0", "0", "Low", "", "Open", "test@test.com");;
+        var nameTask = new task("name", "", "0", "0", "Low", "", "Open", "test@test.com");
         var invalidInput = ["", new Object(), null, undefined];
         var validInput = ["A String name", 3];
         
@@ -58,7 +58,7 @@ exports.TaskTests = {
         test.done();
     },
 
-    "Test 3: Task Description can only be an Empty String/String/Number": function (test) {
+    "Test 3: Task Description can only be an Empty String/String/Number": function(test) {
         test.expect(9);
         
         var descriptTask = new task("name", "", "0", "0", "Low", "", "Open", "test@test.com");
@@ -67,7 +67,7 @@ exports.TaskTests = {
         
         for (var i = 0 ; i < invalidInputs.length ; i++) {
             test.throws(function() {
-                objDesc.setDescription(invalidInputs[i]);
+                descriptTask.setDescription(invalidInputs[i]);
             });
         }
         
@@ -81,7 +81,7 @@ exports.TaskTests = {
         test.done();
     },
 
-    "Test 4: Task Priority must be a valid String (Low, Medium, High)": function (test) {
+    "Test 4: Task Priority must be a valid String (Low, Medium, High)": function(test) {
         test.expect(12);
 
         var priorityTask = new task("name", "", "0", "0", "Low", "", "Open", "test@test.com");
@@ -104,7 +104,7 @@ exports.TaskTests = {
         test.done();
     },
 
-    "Test 5: Task Progress can only be an Empty String/String/Number": function (test) {
+    "Test 5: Task Progress can only be an Empty String/String/Number": function(test) {
         test.expect(9);
 
         var progressTask = new task("name", "", "0", "0", "Low", "", "Open", "test@test.com");
@@ -127,7 +127,7 @@ exports.TaskTests = {
         test.done();
     },
 
-    "Test 6: Task Status must be a valid valid String (Open or Closed)": function (test) {
+    "Test 6: Task Status must be a valid String (Open or Closed)": function(test) {
         test.expect(10);
 
         var statusTask = new task("name", "", "0", "0", "Low", "", "Open", "test@test.com");
@@ -151,7 +151,7 @@ exports.TaskTests = {
     },
 
     //TODO: This test should check if the user is a valid email address (as String type).
-    "Test 7: User can only be a non-empty String": function (test) {
+    "Test 7: User can only be a non-empty String": function(test) {
         test.expect(7);
         
         var userTask;
