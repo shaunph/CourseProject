@@ -1,20 +1,12 @@
 <!DOCTYPE html>
-<!--
-
-
--->
 <html>
     <head>
         <title>Sign-In Page</title>
-    </head>
-    <body>
-        <!--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->
-        <!--Form for sign-in input, between the slashes this can be extracted
-            and put into other (possibly just main) pages, by convention put
-            imports into the head of the other pages. -->
         <!--Import the accompanying js file for the html and the jquery js-->
         <script type="text/javascript" src="js/signin.js"></script>
         <script type="text/javascript" src="js/jquery-1.5.min.js"></script>
+    </head>
+    <body>
         <form action="signinRequest.js" id="signInData" name="signInData" method="post">
             <p>Sign-in</p>
             <!--Email/Nickname label assigned to a text field-->
@@ -29,10 +21,9 @@
             <br />
             <!--Submit button-->
             <input type="submit" id="loginButton" name="loginButton" value="Login"
-                onkeyup="hitLogin();" /><br />
+                onclick="hitLogin();" /><br />
             <p id=loginStatus ></p>
         </form>
-		<!--////////////////////////////////////////////////////////////// -->
     </body>
 </html>
 

@@ -1,10 +1,11 @@
 
 /*
+signinRequest.js takes a request from static/signin.html and sets the cookies
+for the user and logs them in.
 */
 
 var db = require('SQLiteHelper');
 var querystring = require('querystring');
-var pagemaker = require('pagemaker');
 
 
 exports.postReq = function(request, response){
@@ -21,11 +22,11 @@ exports.postReq = function(request, response){
 	request.on('end', function(){
         queryFields = queryString.parse(rawData);
 
-        if(db.userExists(queryFields.identityIn, function(){})){
+        //if(db.userExists(queryFields.identityIn, function(){})){
             
-        }else if(db.nickExists(queryFields.identityIn, function(){})){
+        //}else if(db.nickExists(queryFields.identityIn, function(){})){
 
-        }
+        //}
     });
 
 

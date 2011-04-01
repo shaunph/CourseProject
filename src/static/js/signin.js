@@ -1,10 +1,7 @@
 
 /*
-When the user hits the 'login' button the hitLogin function is called. The value
-of the identity and password are checked against the database and if they are 
-both correct then the login function is called and the user is signed in. If one
-or the other are incorrect then the badLoginNotify function is called and the 
-user is given an error.
+signin.js first confirms that the information the user submits is in the 
+database, and then enables the submit button.
 */
 function hitLogin(){
 
@@ -15,14 +12,7 @@ function hitLogin(){
     // If construct to determine whether to login or give an error
     if(identifierCheck(iden)){
         if (passwordCheck(iden, pass)){
-            $('#loginStatus').html("got this far");
-            //getReq = function(request, response){
-
-                
-                
-                
-                
-            //}        
+            loginButton.disabled = false; //remove?
         }else{
             badLoginNotify();
         }
