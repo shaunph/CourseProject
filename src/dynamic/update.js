@@ -30,9 +30,10 @@ result = function(response, results) {
     page = new StandardPage();
     page.setTitle("Update Results");
     page.setContent("");
-
+console.log(results.id + " " + results.description + " " + results.level + " " + results.progress + " " + results.status);
+console.log(results);
     try {
-        db.updateTask(results.id, results.name, results.description, results.level, results.progress, results.status, function(callback) {});
+        db.updateTask(results.id, results.description, results.level, results.progress, results.status, function(callback) {});
         page.addContent("Task was updated successfully.<br />");
     } catch(e) {
         page.addContent("Error occurred. Could not update task.<br />");

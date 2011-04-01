@@ -19,14 +19,13 @@ function displayUpdate(response, id, taskObj) {
 
     page.setContent("User: " + taskObj.getUser() + "<br /><br />");
     page.addContent("Date: " + taskObj.getDate() + "<br /><br />");
+    page.addContent("Name: " + taskObj.getTaskName() + "<br /><br />");
 
     page.addContent(
         "<form method=post action='update'>"+
 
             "<input type='hidden' name='id' value='"+id+"'>"+
-
-            "Name: "+
-            "<input type='text' name='name' onclick='this.select()' value='"+taskObj.getTaskName()+"'><br /><br />"+
+            "<input type='hidden' name='name' value='"+taskObj.getTaskName()+"'>"+
 
             "Status: "+
             "<input type='radio' name='status' value='Open'"+checkStatus(taskObj,'Open')+"'>Open "+
