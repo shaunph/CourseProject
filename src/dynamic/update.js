@@ -1,5 +1,4 @@
 var db = require('SQLiteHelper'),
-    task = require('task').task,
     querystring = require('querystring'),
     pagemaker = require('pagemaker');
 
@@ -33,7 +32,7 @@ result = function(response, results) {
     page.setContent("");
 
     try {
-        db.updateTask(results.id, results.name, results.description, results.level, results.status, function(callback) {});
+        db.updateTask(results.id, results.name, results.description, results.level, results.progress, results.status, function(callback) {});
         page.addContent("Task was updated successfully.<br />");
     } catch(e) {
         page.addContent("Error occurred. Could not update task.<br />");
