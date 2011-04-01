@@ -53,39 +53,37 @@ function resolve(request, response) {
     var filePath;
 
     // If no file is specified, we want to send a index page
-    if (pathName === "/") { 
-        // Simply call resolve again with the pathname switched to index.html.
+    if (pathName.charAt(pathName.length - 1) === "/") { 
         // TODO: if somebody creates a dynamic index page, please replace this with "index"
-        request.url = "/index.html";
-        resolve(request, response);
-    } else {
-        // Means there was no file extension i.e. dynamic
-        if (pathName.split(".").length === 1) {
-            filePath = basepath + dynamicRoot + pathName + ".js";
+        request.url += "index.html";
+        pathName += "index.html";
+    }
+    // Means there was no file extension i.e. dynamic
+    if (pathName.split(".").length === 1) {
+        filePath = basepath + dynamicRoot + pathName + ".js";
 
-            // NOTE: No time to do a path.exists, in the case of a post request it will take too
-            // long to execute and data chunks will begin to arrive before node can process it.
-            try {
-                var handler = require(filePath);
+        // NOTE: No time to do a path.exists, in the case of a post request it will take too
+        // long to execute and data chunks will begin to arrive before node can process it.
+        try {
+            var handler = require(filePath);
 
-                if (request.method === 'POST') {
-                    handler.postReq(request, response);
-                } else if (request.method === 'GET') {
-                    handler.getReq(request, response);
-                }
-                log(request, 200, filePath);
-            } catch (err) {
-                // If there was an error, it means no such dynamic page exists,
-                // or there is an error on the dynamic page.
-                // Thus we chop off the ".js" we added and try for a static page.
-                filePath = basepath + staticRoot + pathName;
-                SendStaticObj(request, response, filePath);
+            if (request.method === 'POST') {
+                handler.postReq(request, response);
+            } else if (request.method === 'GET') {
+               handler.getReq(request, response);
             }
-        } else {
-            // If no dynamic page was found, try static
-	    filePath = basepath + staticRoot + pathName;
+            log(request, 200, filePath);
+        } catch (err) {
+            // If there was an error, it means no such dynamic page exists,
+            // or there is an error on the dynamic page.
+            // Thus we chop off the ".js" we added and try for a static page.
+            filePath = basepath + staticRoot + pathName;
             sendStaticObj(request, response, filePath);
         }
+    } else {
+        // If no dynamic page was found, try static
+        filePath = basepath + staticRoot + pathName;
+        sendStaticObj(request, response, filePath);
     }
 }
 
