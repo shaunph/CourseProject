@@ -70,7 +70,7 @@ function resolve(request, response) {
 
                 if (request.method === 'POST') {
                     handler.postReq(request, response);
-		} else if (request.method === 'GET') {
+                } else if (request.method === 'GET') {
                     handler.getReq(request, response);
                 }
                 log(request, 200, filePath);
