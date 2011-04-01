@@ -6,41 +6,31 @@ var dbHelper = require('SQLiteHelper'),
     
     //TODO: temporary fix until we rethink error handling
     errorPage = require(basepath + '/dynamic/error_pages/errorPage');
-
-/* NOTE:
- * When testing this page with an actual task object, uncomment saveTestTask() 
- * and comment out loadTask(response, parseInt(params.substring(index+1))). 
- * 
- * Connect to the server, click the task page link and close the server.
- * (This should add a task and display an error page)
- * 
- * Once a task has been saved in your db, comment out saveTestTask() and 
- * uncomment loadTask(response, parseInt(params.substring(index+1)))
- *
- * Click on the link to this page again.
- * The task page should now be displayed successfully.
- *
- * Trying to save and load at once will result in a bug where either the database
- * open, executes, and closes out of sequence, or Node's garbage collector
- * removing an open database. (Thanks Nick for pointing this out)
- */
     
     
 exports.getReq = function (request,response) {
-    //saveTestTask();    // This will be removed once tasks can be saved
     loadTask(request, response, (url.parse(request.url, true).query)['id']);
 }
 
 function displayTaskPage(response, id, taskValues) {
     var taskPage = new StandardPage();
-    taskPage.setTitle(taskValues.getTaskName() + " Details");
+	var taskName = taskValues.getTaskName();
+    taskPage.setTitle(taskName + " Details");
     
-    taskPage.setContent("<h3>Description</h3>");
+	taskPage.setContent("<h1>" + taskName + "</h1>");
+	
+    taskPage.addContent("<h3>Description</h3>");
     taskPage.addContent(taskValues.getDescription());
     
+	taskPage.addContent("<h3>Time spent so far</h3>");
+	taskPage.addContent(taskValues.getTimeSpent());
+	
+	taskPage.addContent("<h3>Estimated time remaining</h3>");
+	taskPage.addContent(taskValues.getTimeLeft());
+	
     taskPage.addContent("<h3>Priority</h3>");
-    taskPage.addContent(taskValues.getPriority());
-
+	taskPage.addContent(taskValues.getPriority());
+	
     taskPage.addContent("<h3>Progress</h3>");
     taskPage.addContent(taskValues.getProgress());
     
@@ -77,11 +67,3 @@ function loadTask(request, response, id) {
             }
     });
 }
-
-// Saves a test task to the DB. Will be removed once tasks can be saved.
-/*
-function saveTestTask() {
-    var testTask = new task.task("test name", "a description", "0", "0", "High", "Not started", "Open", "test@test.com");
-
-    dbHelper.addTask(testTask, function(error) {return;});
-}*/
