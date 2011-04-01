@@ -27,7 +27,7 @@ function displayUpdate(response, id, taskObj) {
             "<input type='hidden' name='id' value='"+id+"'>"+
             "<input type='hidden' name='name' value='"+taskObj.getTaskName()+"'>"+
 
-            "Status: "+
+            "Status: <br />"+
             "<input type='radio' name='status' value='Open'"+checkStatus(taskObj,'Open')+"'>Open "+
             "<input type='radio' name='status' value='Closed'"+checkStatus(taskObj,'Closed')+"'>Closed <br /><br />"+
 
@@ -37,7 +37,7 @@ function displayUpdate(response, id, taskObj) {
             "Description:<br />"+
             "<textarea name='description' onclick='this.select()' rows='10' cols='85'>"+taskObj.getDescription()+"</textarea><br /><br />"+
 
-            "Priority:"+
+            "Priority:<br />"+
             "<input type='radio' name='level' value='Low'"+checkPriority(taskObj,'Low')+">Low "+
             "<input type='radio' name='level' value='Medium'"+checkPriority(taskObj,'Medium')+">Medium "+
             "<input type='radio' name='level' value='High'"+checkPriority(taskObj,'High')+">High <br /><br />"+
@@ -90,7 +90,7 @@ function loadTask(response, param){
             var loadedTask = new task(row.taskName, row.description, row.timeSpent, row.timeLeft, row.priority, row.progress, row.status, row.user);
             displayUpdate(response, param["id"], loadedTask);
         } catch (e) {
-			message(response);
+            message(response);
 		}
     });
 }
