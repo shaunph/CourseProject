@@ -20,6 +20,7 @@ extTypes["jpg"]="image/jpg";
 extTypes["jpeg"]="image/jpg";
 extTypes["png"]="image/png";
 extTypes["gif"]="image/gif";
+extTypes["ico"]="image/vnd.microsoft.icon";
    
 var docRoot = "static",
     dynamicRoot = "dynamic",
@@ -125,7 +126,6 @@ GET request for a static object
 */
 function sendStaticObj(request, response, file) {
     var extension = file.split(".").pop();
-
     path.exists(file, function(exists) {
         if (exists) {
             log(request, 200, file);
