@@ -30,18 +30,15 @@ else
         echo "building node sqlite bindings..." &&
         cd lib/node-sqlite/ &&
         ./build.sh &&
-        cd ../../ &&
-        sqlite=1
+        cd ../../
     fi
 
     if [ ! -f db/main.db ]
     then
         echo "building db..." &&
-        node js/createDatabase.js &&
-        db=1
+        node js/createDatabase.js
     fi
-
-    if [ -z $sqlite -a -z $db ]
+    if [ $? ]
     then
         node js/dispatcher.js $1
     fi
