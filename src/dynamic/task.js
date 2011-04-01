@@ -5,7 +5,7 @@ var dbHelper = require('SQLiteHelper'),
     basepath = require('basepath').mainpath,
     
     //TODO: temporary fix until we rethink error handling
-    errorPage = require(basepath + '/static/error_pages/errorPage');
+    errorPage = require(basepath + '/dynamic/error_pages/errorPage');
 
 /* NOTE:
  * When testing this page with an actual task object, uncomment saveTestTask() 
@@ -79,8 +79,9 @@ function loadTask(request, response, id) {
 }
 
 // Saves a test task to the DB. Will be removed once tasks can be saved.
+/*
 function saveTestTask() {
     var testTask = new task.task("test name", "a description", "0", "0", "High", "Not started", "Open", "test@test.com");
 
     dbHelper.addTask(testTask, function(error) {return;});
-}
+}*/
