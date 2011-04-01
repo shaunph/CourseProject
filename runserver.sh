@@ -33,11 +33,9 @@ else
         cd ../../
     fi
 
-    if [ ! -f db/main.db ]
-    then
-        echo "building db..." &&
-        node js/createDatabase.js
-    fi
+    echo "building db..." &&
+    node js/createDatabase.js
+
     if [ $? -eq 0 ]
     then
         node js/dispatcher.js $1
