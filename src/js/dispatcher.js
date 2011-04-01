@@ -52,36 +52,31 @@ order is dynamic followed by static.
 function resolve(request, response) {
     var pathName = url.parse(request.url).pathname;
     var filePath;
-    var handler;
-
 
     // If no file is specified, we want to send a index page
     if (pathName == "/") { 
-        // Simply call resolve again with the pathname switch to index.html.
+        // Simply call resolve again with the pathname switched to index.html.
         // TODO: if somebody creates a dynamic index page, please replace this with "index"
         request.url = "/index.html";
         resolve(request, response);
     } else {
-
         // Means there was no file extension i.e. dynamic
         if (pathName.split(".").length == 1) {
-
             filePath = basepath + dynamicRoot + pathName + ".js";
 
             // NOTE: No time to do a path.exists, in the case of a post request it will take too
             // long to execute and data chunks will begin to arrive before node can process it.
             try {
-                handler = require(filePath);
-                
+                var handler = require(filePath);
+
                 // If we are getting a post request, call the post function
-                if (request.method=='POST') {
+                if (request.method == 'POST') {
                     handler.postReq(request,response);
                 } 
                 // If we are getting a get request, call the get function
-                else if (request.method=='GET') {
+                else if (request.method == 'GET') {
                     handler.getReq(request,response);
                 }
-                
                 log(request, 200, filePath);
             } catch (err) {
                 // If there was an error, it means no such dynamic page exists,
@@ -111,7 +106,6 @@ function sendStaticObj(request, response, file) {
             response.writeHead(200, {'Content-Type': extTypes[extension]});
 
             if(extension == "html" || extension == "htm") {
-
                 pagemaker.ParsePage(file, function (html) {
                     response.end(html);
                 });
@@ -123,28 +117,6 @@ function sendStaticObj(request, response, file) {
             error(request, response, 404, file);
         }
     });
-}
-
-/*
-sendDynamicObj runs getReq(request,response) in the js file found at url.pathname
-To make a dynamic page, the js file serving the dynamic page must have a exported
-function called getReq (exports.getReq=function(request,response){...};
-*/
-function sendDynamicObj(request, response) {
-    var pathname = process.cwd() + "/" + dynamicRoot + url.parse(request.url).pathname;
-    var extension = pathname.split(".").pop();
-    if(extension!='js') {
-        pathname = pathname + ".js";
-    }
-    //NOTE: No time to do a path.exists, it will take too long to execute and data will begin to arrive before it is processed.
-    try {
-        console.log("File GET with: " + pathname);
-        var handler = require(pathname);
-        handler.getReq(request,response);
-    } catch (err) {
-        console.log(err);
-        error(request, response, 404, pathname);
-    }
 }
 
 function init(args) {
@@ -165,6 +137,5 @@ function init(args) {
         console.log("date/time\t  remote ip\tstatus\trequest  ->  resolution");
     }
 }
-
 
 init(process.argv);
