@@ -11,7 +11,6 @@
         user(email, nickname, password)
         task(taskid, taskName, description, priority, status, user, date)
         comment(thecomment, taskid, creator)
-		estimate(taskid, timeSpent, timeRemaining)
 */
 
 var basepath = require('basepath').mainpath;
@@ -78,19 +77,6 @@ db.open(dbLocation, function (error) {
 
         console.log("comment table created.");
     });
-
-	db.execute("CREATE TABLE estimate (" +
-		"taskid NUMBER," + 
-		"timeSpent NUMBER," +
-		"timeRemaining NUMBER)", 
-		function (error) {
-			if(error) {
-				console.log("Error creating estimate table.");
-				throw error;
-			}
-
-		console.log("estimate table created.");
-	});
 });
 
 db.close(function(error) {
