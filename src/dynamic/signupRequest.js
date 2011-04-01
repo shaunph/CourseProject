@@ -1,7 +1,6 @@
 var db = require('SQLiteHelper');
 var qs = require('querystring');
 var upops = require('uploadOps');
-var bops = require('bufferOps.js');
 var pagemaker = require('pagemaker');
 
 exports.postReq = function(req, res, dataBuffer) {
