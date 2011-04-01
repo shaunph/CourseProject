@@ -29,7 +29,8 @@ function displayUpdate(response, id, taskObj) {
             "<input type='text' name='name' onclick='this.select()' value='"+taskObj.getTaskName()+"'><br /><br />"+
 
             "Status: "+
-            "<input type='text' name='status' onclick='this.select()' value='"+taskObj.getStatus()+"'><br /><br />"+
+            "<input type='radio' name='status' value='Open'"+checkStatus(taskObj,'Open')+"'>Open "+
+            "<input type='radio' name='status' value='Closed'"+checkStatus(taskObj,'Closed')+"'>Closed <br /><br />"+
 
             "Progress: "+
             "<input type='text' name='progress' onclick='this.select()' value='"+taskObj.getProgress()+"'><br /><br />"+
@@ -67,6 +68,13 @@ function displayUpdate(response, id, taskObj) {
     response.end();
 }
 
+/* Checks if the current radio button matches the task's status. */
+function checkStatus(taskObj, current) {
+    if (taskObj.getStatus() == current) {
+        return " checked ";
+    }
+}
+
 /* Checks if the current radio button matches the task's priority level. */
 function checkPriority(taskObj, current) {
     if (taskObj.getPriority() == current)
@@ -99,7 +107,7 @@ message = function(response) {
     page = new StandardPage();
     page.setTitle("Update Task");
 
-    page.setContent("Please indicate a valid id.");
+    page.setContent("Please indicate a valid id in the url.");
     page.standardMenus();
 
     response.write(page.toHTML());
