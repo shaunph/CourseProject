@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Main page</title>
+        <script src="js/jquery-1.5.min.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <div id='mainpagecenter'>
+        <h1>This is a placeholder for the main page</h1>
+        <p>
+            Try going <a href="does_not_exist.html">here (404)</a>, <a href="/">here (main)</a>, or  <a href="/example.js?param1=foo&param2=bar">here (dynamic)</a>.
+        </p>
+        <p>
+            <a href="signup.html">Signup page</a>
+        </p>
+
+        <p>
+            <!-- Pages linking to the task page will send an id (replace the hardcoded 1) -->
+            <a href="/task?id=1">Task page</a>
+        </p>
+
+        <p>
+            <a href="addtask.html">Add Task page</a>
+        </p>
+
+        <p>
+            <a href="veryDynamic/index.html">Example dynamic page request, using jquery</a>
+        </p>
+
+        <p>
+            <a href="members.html">Members page</a>
+        </p>
+
+        <p>
+            <form id="membersForm" method="GET" action="members">
+                <input type="submit" value="Members">
+            </form>
+        </p>
+
+        <img src="img/test.jpg" width=400/>
+
+        <p>
+            <a href="UserProfile">View User Profile</a>
+        </p>
+
+        </div>
+        <div class="feed" id="mainpagefeed"></div>
+        <script src="js/gen_feed.js" type="text/javascript"></script>
+    </body>
+</html>
