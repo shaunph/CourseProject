@@ -4,7 +4,8 @@
 # Usage: ./runserver.sh <port>
 
 # To start the server without using this script, use:
-# $ node src/js/dispatcher.js <port>
+# $ node js/dispatcher.js <port>
+# (src MUST be the working directory)
 
 if [ $# -ne 1 ]
 then
