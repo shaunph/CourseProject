@@ -77,6 +77,7 @@ db.open(dbLocation, function (error) {
 
         console.log("comment table created.");
     });
+	
 });
 
 db.close(function(error) {
