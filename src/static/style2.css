@@ -1,0 +1,445 @@
+
+html
+{
+    height: 100%;
+}
+
+
+body
+{ 
+    font-family: verdana, arial, sans-serif;
+    padding: 0px;
+    margin: 0px;
+    font-size: .74em;
+}
+
+p
+{ 
+    margin: 0px;
+    padding: 0px 0px 24px 0px;
+    line-height: 20px;
+}
+
+h1
+{ 
+    margin: 0px;
+    font-family: verdana, tahoma, arial, sans-serif;
+    font-size: 176%; 
+    font-weight: normal;
+}
+
+h2
+{ 
+    margin: 0px;
+    padding: 0px 0px 4px 0px;
+    font-size: 100%;
+    text-decoration: underline;
+    font-weight: normal;
+}
+
+img
+{
+    border: 0px;
+}
+
+/* image positioning - left, right and center */
+.left
+{ 
+    float: left; 
+    padding: 0px 8px 0px 0px;
+}
+
+.right
+{   float: right; 
+    padding: 0px 0px 0px 8px;
+}
+
+.center
+{ 
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+}
+
+/* block quote */
+blockquote
+{ 
+    margin: 20px 0px 20px 0px; 
+    padding: 10px 20px 0px 20px;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+}
+
+/* unordered list */
+ul
+{ 
+    margin: 8px 0px 0px 14px;
+    padding: 0px;
+}
+
+ul li
+{ 
+    list-style-type: square;
+    margin: 0px 0px 11px 0px; 
+    padding: 0px;
+}
+
+
+#main
+{ 
+    width: 761px;
+    margin-left: auto; 
+    margin-right: auto;
+}
+
+/* links above the logo */
+#links
+{ 
+    padding: 9px 0px 3px 19px;
+    width: 742px;
+    text-align: right;
+    height: 22px;
+}
+
+#links a, #links a:hover{text-decoration: none;}
+
+/* logo */
+#logo
+{ 
+    padding: 0px;
+    width: 759px;
+    height: 100px;
+    border-top: 1px solid;
+    border-left: 1px solid;
+    border-right: 1px solid;
+}
+
+#logo h1
+{ 
+    padding: 38px 0px 0px 19px;
+    font-family: verdana, arial, sans-serif;
+    font-size: 150%;
+    font-weight: normal;
+    letter-spacing: .3em;
+}
+
+/* main content */
+#content
+{ 
+    width: 761px;
+    height: auto;
+    padding: 0px;
+    text-align: justify;
+    overflow: hidden;
+} 
+
+/* column 1 - contains menu, news, add links and other info */
+#column1
+{ 
+    width: 243px;
+    float: left;
+    padding: 15px 0px 15px 14px;
+}
+
+#column1 h1{padding: 0px 0px 18px 0px;}
+
+#menu, #addlinks
+{ 
+    position: relative;
+    width: 216px;
+    float: left;
+    margin: 0px 0px 15px 0px;
+    padding: 8px 0px 0px 0px;
+}
+
+#menu ul, #addlinks ul
+{   
+    margin: 0px auto; 
+    padding: 0px; 
+    list-style: none; 
+    text-align: left; 
+    width: 216px;
+} 
+
+#menu li, #addlinks li 
+{ 
+    margin: 0px; 
+    list-style: none; 
+    float: left; 
+} 
+
+#menu li a, #addlinks li a 
+{ 
+    float: left; 
+    height: 14px;
+    text-decoration: none; 
+    padding: 3px 10px 4px 12px;
+    width: 194px;
+    border-bottom: 1px solid;
+} 
+
+#menu h1, #addlinks h1
+{
+    padding: 0px 0px 14px 12px;
+}
+
+.sidebaritem
+{ 
+    position: relative;
+    text-align: justify;
+    margin: 0px 0px 15px 0px;
+    padding: 8px 14px 11px 12px;
+    width: 190px;
+    float: left;
+    height: 244px;
+    min-height: 244px;
+}
+
+.sidebaritem[id]{height: auto;}
+
+/* column 2 - page content */
+#column2
+{   
+    text-align: justify;
+    padding: 0px 22px 15px 0px;
+    width: 482px;
+    float: right;
+}
+
+#column2 h1
+{ 
+    padding: 0px 0px 6px 0px; 
+    margin: 24px 0px 12px 0px; 
+    border-bottom: 2px solid;
+}
+
+.sidebaritem a, #column2 a, .sidebaritem a:hover, #column2 a:hover
+{ 
+    padding: 0px;
+    text-decoration: none;
+}
+
+/* footer */
+#footer
+{ 
+    float: left;
+    padding: 9px 0px 3px 0px;
+    width: 761px;
+    text-align: center;
+    height: 22px;
+}
+
+#footer a, #footer a:hover
+{
+    text-decoration: none;
+}
+
+/* contact page - form layout */
+form
+{
+    margin-top: 0px;
+}
+
+div.row
+{ 
+    clear: both;
+    width: 448px;
+    height: 29px;
+}
+
+div.row span.formlabel 
+{ 
+    float: left;
+    width: 150px;
+    text-align: left;
+}
+
+div.row span.forminput
+{ 
+    float: right;
+    text-align: right;
+} 
+
+div.spacer
+{ 
+    clear: both;
+    width: 80px;
+    height: 22px;
+}
+
+input, textarea
+{ 
+    width: 259px; 
+    font-family: verdana, arial, sans-serif;
+    font-size: 100%;
+    border: 1px solid;
+}
+
+body
+{ 
+    background: #FFFFFF url(img/back_2.png) repeat-x;
+    color: #3E4244;
+}
+
+blockquote
+{ 
+    background-color: #F1F4F5;
+    color: #3E4244;
+    border-color: #D4DBDE;
+}
+
+#links, #links a
+{ 
+    background-color: transparent;
+    color: #3E4244;
+}
+
+#links a:hover
+{ 
+    background-color: transparent;
+    color: #FFFFFF;
+}
+
+#logo
+{ 
+    background: #8D9299 url(img/logo_2.jpg) no-repeat;
+    color: #3E4244;
+    border-color: #FFFFFF;
+}
+
+#logo h1
+{ 
+    background-color: transparent;
+    color: #FFFFFF;
+}  
+
+#content, #column1, #column2
+{ 
+    background-color: #FFFFFF;
+    color: #3E4244;
+} 
+
+#column2 h1
+{ 
+    background: transparent;
+    color: #3E4244;
+    border-color: #F1F4F5;
+}
+
+#menu, #addlinks, .sidebaritem
+{ 
+    background: #FFFFFF url(img/box_2.png) repeat-x;
+    color: #3E4244;
+}
+
+#menu li a, #addlinks li a
+{ 
+    background-color: transparent;
+    color: #3E4244;
+    border-color: #FFFFFF;
+} 
+
+#menu li a:hover, #menu li a#selected, #addlinks li a:hover
+{ 
+    background-color: #8D9299; 
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+} 
+
+.sidebaritem a, #column2 a
+{ 
+    background-color: transparent;
+    color: #2780F9;
+}
+
+.sidebaritem a:hover, #column2 a:hover
+{ 
+    background-color: #F1F4F5;
+    color: #3E4244;
+}
+
+#footer, #footer a
+{ 
+    background-color: #8D9299;
+    color: #3E4244;
+}
+
+#footer a:hover
+{ 
+    background: #8D9299;
+    color: #FFFFFF;
+}
+
+input, textarea
+{ 
+    background-color: #FFFFFF;
+    color: #3E4244;
+    border-color: #616D7B;
+}
+
+.submit
+{
+    font-family: verdana, arial, sans-serif;
+    font-size: 100%; 
+    border: 1px solid;
+    width: 70px;
+    height: 22px;
+    cursor: pointer;
+}
+
+
+div.feedUser
+{
+    width:100%;
+    float:left;
+    text-decoration:underline;
+    font-weight: bold;
+    font-size: 14px;
+    color:#222222
+}
+
+div.feedTopic
+{
+    width:70%;
+    float:left;
+    color:#222288
+} 
+
+div.feedCreated
+{
+    width:100%;
+    float:left;
+    color:#2222DD;
+    font-style: italics;
+    font-size: 8px;
+}
+
+div.feedEntry
+{
+	width:100%;
+	float:left;
+	color:#2222DD;
+	margin: 3px;
+}
+
+div.membersList
+{
+    background: #FFFFFF url(img/box_2.png) repeat-x;
+    border-top:1px solid;
+}
+
+div.membersHeading
+{
+    font-size:16px;
+    width:33%;
+    float:left;
+    color:#000000;
+}
+
+div.membersEntry
+{
+    font-size:12px;
+    width:33%;
+    float:left;
+    color:#000000;
+}
