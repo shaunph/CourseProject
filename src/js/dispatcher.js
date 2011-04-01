@@ -55,22 +55,11 @@ function resolve(request, response) {
     var handler;
 
     // If no file is specified, we want to send a index page
-    if (pathName.charAt(pathName.length-1) == "/") { 
-        // First look for a dynamic index
-        filePath = process.cwd() + "/" + dynamicRoot + pathName + "index.js";
-        path.exists(filePath, function(exists) {
-            // If it exists, send it.
-            if (exists) {
-                handler = require(filePath);
-                handler.getReq(request,response);
-                log(request, 200, filePath);
-            }
-            // If not, check for a static index
-            else {
-                filePath = process.cwd() + "/" + docRoot + pathName + "index.html"; // Get the file location for static  
-                sendStaticObj(request, response, filePath);
-            }
-        });
+    if (pathName == "/") { 
+	    // Simply call resolve again with the pathname switch to index.html.
+	    // TODO: if somebody creates a dynamic index page, please replace this with "index"
+	    request.url = "/index.html";
+	    resolve(request, response);
     } else {
         var dynamic = true;                                         // This is used to check if we should try
                                                                     // sending static content or not.
