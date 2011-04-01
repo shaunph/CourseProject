@@ -82,11 +82,6 @@ exports.DispatcherTests = {
         });
     },
     
-    'Test sendDynamicObj Function': function (test) {
-       // Can't really test this yet
-       test.done();
-    },
-    
     'Tear-down': function (test) {
         // Put any future tear-down op's in here
         test.done();
