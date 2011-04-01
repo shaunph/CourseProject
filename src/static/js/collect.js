@@ -21,12 +21,9 @@ function clicked(form) {
     }
     }
 
-    if(!document.getElementById("NS").checked){
-    if(!document.getElementById("WiP").checked){
-        window.alert("Not all required fields are properly filled");
-            return;    
-    }
-    }    
+    if(document.getElementById("prog").value == ""){
+	document.getElementById("prog").value = "Not Started";
+    }  
 
     var ETR = document.getElementById("phrase4").value;
     var ETL = document.getElementById("phrase5").value;
