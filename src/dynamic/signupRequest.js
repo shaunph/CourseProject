@@ -1,10 +1,12 @@
 var db = require('SQLiteHelper');
 var qs = require('querystring');
+var upops = require('uploadOps');
+var bops = require('bufferOps.js');
 var pagemaker = require('pagemaker');
 
-exports.postReq = function(req, res) {
+exports.postReq = function(req, res, dataBuffer) {
 
-    var body = '';
+    /*var body = '';
     var fields = {};
 
     req.on('data', function(data) {
@@ -12,9 +14,12 @@ exports.postReq = function(req, res) {
     });
 
     req.on('end', function () {
-        fields = qs.parse(body);
+        fields = qs.parse(body);*/
+        console.log("SIGN: " + dataBuffer);
+        var parsed = upops.parseMultipartFormdata(dataBuffer);
+        console.log("SIGN: " + parsed);
         
-        db.addUser(fields.Email, fields.Username, fields.Password, function(codes) {
+        db.addUser(parsed["Email"].toString(), parsed["Username"].toString(), parsed["Password"].toString(), function(codes) {
             res.writeHead(200, {'content-type':'text/html'});
             page1 = new StandardPage();
             page1.standardMenus();
@@ -34,5 +39,5 @@ exports.postReq = function(req, res) {
             res.write(page1.toHTML());
             res.end();
         });    
-    });
+    //});
 }

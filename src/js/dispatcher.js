@@ -9,12 +9,13 @@ var exec = require('child_process').exec,
     util = require('util'),
     db = require('SQLiteHelper'),
     qs = require('querystring'),
+    bops = require('bufferOps'),
     errorPage = require(basepath + '/dynamic/error_pages/errorPage');
 
 var extTypes = [];
 extTypes["html"]="text/html";
 extTypes["htm"]="text/html";
-extTypes["js"]="aplication/javascript";
+extTypes["js"]="application/javascript";
 extTypes["css"]="text/css";
 extTypes["jpg"]="image/jpg";
 extTypes["jpeg"]="image/jpg";
@@ -53,70 +54,85 @@ function resolve(request, response) {
     var pathName = url.parse(request.url).pathname;
     var filePath;
     var handler;
+    
+    var allChunks = [];
+    chunkCount = 0;
+    
+    // Get all data sent to the server
+    request.on('data', function (chunk) {
+        allChunks[chunkCount] = chunk;
+        chunkCount++;
+    });
+    // Once the request is finished, respond
+    request.on('end', function () {
+        // Join all the chuncks
+        var dataBuffer = bops.join(allChunks);
+    
+        // If no file is specified, we want to send a index page
+        if (pathName.charAt(pathName.length-1) == "/") { 
+            // First look for a dynamic index
+            filePath = process.cwd() + "/" + dynamicRoot + pathName + "index.js";
+            path.exists(filePath, function(exists) {
+                // If it exists, send it.
+                if (exists) {
+                    handler = require(filePath);
+                    handler.getReq(request,response);
+                    log(request, 200, filePath);
+                }
+                // If not, check for a static index
+                else {
+                    filePath = process.cwd() + "/" + docRoot + pathName + "index.html"; // Get the file location for static  
+                    sendStaticObj(request, response, filePath);
+                }
+            });
+        } else {
+            var dynamic = true;                                         // This is used to check if we should try
+                                                                        // sending static content or not.
+            filePath = process.cwd() + "/" + dynamicRoot + pathName;    // Get the file location where the dynamic file would be
+            var extension = filePath.split(".").pop();                  // Get the file extension
 
-    // If no file is specified, we want to send a index page
-    if (pathName.charAt(pathName.length-1) == "/") { 
-        // First look for a dynamic index
-        filePath = process.cwd() + "/" + dynamicRoot + pathName + "index.js";
-        path.exists(filePath, function(exists) {
-            // If it exists, send it.
-            if (exists) {
-                handler = require(filePath);
-                handler.getReq(request,response);
-                log(request, 200, filePath);
+            // Check if file is a js file, or if it has no extension
+            if (extension != "js" && extension != filePath) {
+                // If not, we dont want to bother trying to send dynamic content
+                dynamic = false;
+            } 
+            // If there is no extension, append ".js"
+            else if (extension == filePath) {
+                filePath += ".js";
             }
-            // If not, check for a static index
-            else {
-                filePath = process.cwd() + "/" + docRoot + pathName + "index.html"; // Get the file location for static  
+            
+            if (dynamic == true) {
+                // NOTE: No time to do a path.exists, in the case of a post request it will take too
+                // long to execute and data chuncks will begin to arrive before node can process it.
+                try {
+                    handler = require(filePath);
+                    
+                    // If we are getting a post request, call the post function
+                    if (request.method=='POST') {
+                        handler.postReq(request, response, dataBuffer);
+                    } 
+                    // If we are getting a get request, call the get function
+                    else if (request.method=='GET') {
+                        handler.getReq(request, response, dataBuffer);
+                    }
+                    
+                    log(request, 200, filePath);
+                } catch (err) {
+                    // If there was an error, it means no such dynamic page exists
+                    // It could also mean theres an error on the dynamic page,
+                    //  in which case dynamic should not be false.
+                    dynamic = false;
+                    console.log("NON DYN: " + err);
+                }
+            }
+            
+            // If no dynamic page was found, try static
+            if (dynamic == false) {
+                filePath = process.cwd() + "/" + docRoot + pathName;    // Get the file location for static
                 sendStaticObj(request, response, filePath);
             }
-        });
-    } else {
-        var dynamic = true;                                         // This is used to check if we should try
-                                                                    // sending static content or not.
-        filePath = process.cwd() + "/" + dynamicRoot + pathName;    // Get the file location where the dynamic file would be
-        var extension = filePath.split(".").pop();                  // Get the file extension
-
-        // Check if file is a js file, or if it has no extension
-        if (extension != "js" && extension != filePath) {
-            // If not, we dont want to bother trying to send dynamic content
-            dynamic = false;
-        } 
-        // If there is no extension, append ".js"
-        else if (extension == filePath) {
-            filePath += ".js";
         }
-        
-        if (dynamic == true) {
-            // NOTE: No time to do a path.exists, in the case of a post request it will take too
-            // long to execute and data chuncks will begin to arrive before node can process it.
-            try {
-                handler = require(filePath);
-                
-                // If we are getting a post request, call the post function
-                if (request.method=='POST') {
-                    handler.postReq(request,response);
-                } 
-                // If we are getting a get request, call the get function
-                else if (request.method=='GET') {
-                    handler.getReq(request,response);
-                }
-                
-                log(request, 200, filePath);
-            } catch (err) {
-                // If there was an error, it means no such dynamic page exists
-                // It could also mean theres an error on the dynamic page,
-                //  in which case dynamic should not be false.
-                dynamic = false;
-            }
-        }
-        
-        // If no dynamic page was found, try static
-        if (dynamic == false) {
-            filePath = process.cwd() + "/" + docRoot + pathName;    // Get the file location for static
-            sendStaticObj(request, response, filePath);
-        }
-    }
+    });
 }
 
 /*
