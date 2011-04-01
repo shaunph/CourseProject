@@ -13,7 +13,7 @@ var basepath = require('basepath').mainpath,
 
 var extTypes = { "html" : "text/html",
                  "htm" : "text/html",
-                 "js" : "aplication/javascript",
+                 "js" : "text/javascript",
                  "css" : "text/css",
                  "jpg" : "image/jpg",
                  "jpeg" : "image/jpg",
