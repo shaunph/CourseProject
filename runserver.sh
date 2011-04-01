@@ -38,7 +38,7 @@ else
         echo "building db..." &&
         node js/createDatabase.js
     fi
-    if [ $? ]
+    if [ $? -eq 0 ]
     then
         node js/dispatcher.js $1
     fi
