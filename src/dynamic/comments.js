@@ -1,14 +1,25 @@
-var pagemaker = require('./../js/pagemaker');
-var slh = require("./../js/SQLiteHelper.js");
+var pagemaker = require('pagemaker');
+var slh = require('SQLiteHelper');
 var url = require('url');
+var upops = require('uploadOps');
 
 exports.getReq = function (request,response) {
     send(response,url.parse(request.url,true).query["taskid"]);
 }
 
-exports.postReq = function (request,response) {
-    //TODO: Read incoming post data and store in in the database
-    send(response,url.parse(request.url,true).query["taskid"]);
+exports.postReq = function (request,response, dataBuffer) {
+    var parsed = upops.parseMultipartFormdata(dataBuffer);
+    
+    slh.addComment(parsed["thecomment"].toString(), parsed["taskid"].toString(), "user@email.com", function(obj) {
+        if(obj.status != 0) {
+            //TODO: Send a 500 error page
+            console.log("Error saving comment: " + obj.detail);
+            return;
+        }
+        else {
+            send(response, parsed["taskid"]);
+        }
+    });
 }
 
 send = function (response, taskId) {
@@ -41,7 +52,7 @@ send = function (response, taskId) {
             page.addContent("<div><span>Enter a comment:</span></div>" +
                             "<br />");
             
-            page.addContent("<form action='comments.js' method='post'>" + 
+            page.addContent("<form action='comments.js' method='post' enctype='multipart/form-data'>" + 
                 "<textarea name='thecomment' rows='4' cols='50'></textarea><br />" +
                 "<input type='hidden' name='taskid' value=" + taskId + ">" + 
                 "<input type='submit' value='Save'>" +
