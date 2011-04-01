@@ -11,15 +11,14 @@ var basepath = require('basepath').mainpath,
     url = require('url'),
     util = require('util');
 
-var extTypes = [];
-extTypes["html"]="text/html";
-extTypes["htm"]="text/html";
-extTypes["js"]="aplication/javascript";
-extTypes["css"]="text/css";
-extTypes["jpg"]="image/jpg";
-extTypes["jpeg"]="image/jpg";
-extTypes["png"]="image/png";
-extTypes["gif"]="image/gif";
+var extTypes = { "html" : "text/html",
+                 "htm" : "text/html",
+                 "js" : "aplication/javascript",
+                 "css" : "text/css",
+                 "jpg" : "image/jpg",
+                 "jpeg" : "image/jpg",
+                 "png" : "image/png",
+                 "gif" : "image/gif" };
 
 var staticRoot = "static",
     dynamicRoot = "dynamic",
@@ -31,7 +30,7 @@ error sends an error page in response to a bad request
 function error(request, response, code, file) {
     log(request, code, file);
     response.writeHead(code, {"Content-Type": "text/html"});
-    if(code != 200) {
+    if (code !== 200) {
         errorPage.getReq(request, response, code);
     }
 }
@@ -54,14 +53,14 @@ function resolve(request, response) {
     var filePath;
 
     // If no file is specified, we want to send a index page
-    if (pathName == "/") { 
+    if (pathName === "/") { 
         // Simply call resolve again with the pathname switched to index.html.
         // TODO: if somebody creates a dynamic index page, please replace this with "index"
         request.url = "/index.html";
         resolve(request, response);
     } else {
         // Means there was no file extension i.e. dynamic
-        if (pathName.split(".").length == 1) {
+        if (pathName.split(".").length === 1) {
             filePath = basepath + dynamicRoot + pathName + ".js";
 
             // NOTE: No time to do a path.exists, in the case of a post request it will take too
@@ -69,13 +68,10 @@ function resolve(request, response) {
             try {
                 var handler = require(filePath);
 
-                // If we are getting a post request, call the post function
-                if (request.method == 'POST') {
-                    handler.postReq(request,response);
-                } 
-                // If we are getting a get request, call the get function
-                else if (request.method == 'GET') {
-                    handler.getReq(request,response);
+                if (request.method === 'POST') {
+                    handler.postReq(request, response);
+		} else if (request.method === 'GET') {
+                    handler.getReq(request, response);
                 }
                 log(request, 200, filePath);
             } catch (err) {
@@ -100,12 +96,12 @@ GET request for a static object
 function sendStaticObj(request, response, file) {
     var extension = file.split(".").pop();
 
-    path.exists(file, function(exists) {
+    path.exists(file, function (exists) {
         if (exists) {
             log(request, 200, file);
             response.writeHead(200, {'Content-Type': extTypes[extension]});
 
-            if(extension == "html" || extension == "htm") {
+            if (extension === "html" || extension === "htm") {
                 pagemaker.ParsePage(file, function (html) {
                     response.end(html);
                 });
@@ -120,12 +116,12 @@ function sendStaticObj(request, response, file) {
 }
 
 function init(args) {
-    if (args.length != 3) {
+    if (args.length !== 3) {
         console.log("Usage: node dispatcher <port>");
     } else {
         /* if node is run from the js dir, cd back to the project root */
         dirArray = process.cwd().split("/");
-        if (dirArray.pop() == "js") {
+        if (dirArray.pop() === "js") {
             process.chdir(dirArray.join("/"));
         }
 
