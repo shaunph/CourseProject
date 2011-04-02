@@ -9,7 +9,9 @@ var basepath = require('basepath').mainpath,
     path = require('path'),
     qs = require('querystring'),
     url = require('url'),
-    util = require('util');
+    util = require('util'),
+    bops = require('bufferOps'),
+    errorPage = require(basepath + '/dynamic/error_pages/errorPage');
 
 var extTypes = { "html" : "text/html",
                  "htm" : "text/html",
@@ -51,40 +53,54 @@ order is dynamic followed by static.
 function resolve(request, response) {
     var pathName = url.parse(request.url).pathname;
     var filePath;
+    
+    var allChunks = [];
+    chunkCount = 0;
 
-    // If no file is specified, we want to send a index page
-    if (pathName.charAt(pathName.length - 1) === "/") { 
-        // TODO: if somebody creates a dynamic index page, please replace this with "index"
-        request.url += "index.html";
-        pathName += "index.html";
-    }
-    // Means there was no file extension i.e. dynamic
-    if (pathName.split(".").length === 1) {
-        filePath = basepath + dynamicRoot + pathName + ".js";
+    // Get all data sent to the server
+    request.on('data', function (chunk) {
+        allChunks[chunkCount] = chunk;
+        chunkCount++;
+    });
+    // Once the request is finished, respond
+    request.on('end', function () {
+        // Join all the chuncks
+        var dataBuffer = bops.join(allChunks);
+    
+        // If no file is specified, we want to send a index page
+        if (pathName.charAt(pathName.length - 1) === "/") { 
+            // TODO: if somebody creates a dynamic index page, please replace this with "index"
+            request.url += "index.html";
+            pathName += "index.html";
+        }
+        // Means there was no file extension i.e. dynamic
+        if (pathName.split(".").length === 1) {
+            filePath = basepath + dynamicRoot + pathName + ".js";
 
-        // NOTE: No time to do a path.exists, in the case of a post request it will take too
-        // long to execute and data chunks will begin to arrive before node can process it.
-        try {
-            var handler = require(filePath);
+            // NOTE: No time to do a path.exists, in the case of a post request it will take too
+            // long to execute and data chunks will begin to arrive before node can process it.
+            try {
+                var handler = require(filePath);
 
-            if (request.method === 'POST') {
-                handler.postReq(request, response);
-            } else if (request.method === 'GET') {
-               handler.getReq(request, response);
+                if (request.method === 'POST') {
+                    handler.postReq(request, response, dataBuffer);
+                } else if (request.method === 'GET') {
+                    handler.getReq(request, response, dataBuffer);
+                }
+                log(request, 200, filePath);
+            } catch (err) {
+                // If there was an error, it means no such dynamic page exists,
+                // or there is an error on the dynamic page.
+                // Thus we chop off the ".js" we added and try for a static page.
+                filePath = basepath + staticRoot + pathName;
+                sendStaticObj(request, response, filePath);
             }
-            log(request, 200, filePath);
-        } catch (err) {
-            // If there was an error, it means no such dynamic page exists,
-            // or there is an error on the dynamic page.
-            // Thus we chop off the ".js" we added and try for a static page.
+        } else {
+            // If no dynamic page was found, try static
             filePath = basepath + staticRoot + pathName;
             sendStaticObj(request, response, filePath);
         }
-    } else {
-        // If no dynamic page was found, try static
-        filePath = basepath + staticRoot + pathName;
-        sendStaticObj(request, response, filePath);
-    }
+    });
 }
 
 /*
