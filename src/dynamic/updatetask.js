@@ -22,7 +22,7 @@ function displayUpdate(response, id, taskObj) {
     page.addContent("Name: " + taskObj.getTaskName() + "<br /><br />");
 
     page.addContent(
-        "<form method=post action='update'>"+
+        "<form method=post action='update' enctype='multipart/form-data'>"+
 
             "<input type='hidden' name='id' value='"+id+"'>"+
             "<input type='hidden' name='name' value='"+taskObj.getTaskName()+"'>"+
