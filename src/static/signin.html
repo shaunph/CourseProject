@@ -1,25 +1,35 @@
 <!DOCTYPE html>
 <!--
-
-
+For now sign-up will be a feature of only the main page and logout will be a 
+feature of every page. Later we may want to let non-signed in users see other
+parts of the webpage but control what they are able to do unless they sign-in;
+in which case we would have them be able to sign-up from every page. 
+Later sign-up and logout should occupy a common spot on a task bar that is
+often seen on most websites in the top right hand corner of every page.
 -->
+
+<!--Until mostly working, this will be a seperate page from main-->
 <html>
+    <!-------------------->
+    <!--Remove head when implementing with other pages, keep imports-->
+    <!-------------------->
     <head>
         <title>Sign-In Page</title>
-    </head>
-    <body>
-        <!--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->
-        <!--Form for sign-in input, between the slashes this can be extracted
-            and put into other (possibly just main) pages, by convention put
-            imports into the head of the other pages. -->
         <!--Import the accompanying js file for the html and the jquery js-->
-        <script type="text/javascript" src="js/signin.js"></script>
+            <!--First import is commented out until signin.js is more polished-->
+            <!--<script type="text/javascript" src="js/signin.js"></script>-->
         <script type="text/javascript" src="js/jquery-1.5.min.js"></script>
-        <form action="signinRequest.js" id="signInData" name="signInData" method="post">
+    </head>
+
+    <body>
+        <!--Form for sign-in input -->
+        <form action="signin-request.html" id="signInData" name="signInData" method="post">
             <p>Sign-in</p>
             <!--Email/Nickname label assigned to a text field-->
             <label for="identityIn">Email/Nickname:</label>
             <br />
+            <!--When dealing with the post data, find out if id and name are
+            both needed -->
             <input type="text" id="identityIn" name="identityIn" />
             <br />
             <!--Password label assigned to a password text field-->
@@ -27,14 +37,19 @@
             <br />
             <input type="password" id="passwordIn" name="passwordIn" />            
             <br />
-            <!--Submit button-->
+            <!--Once signin.js is implemented with the database this
+            input will need to be enabled -->
             <input type="submit" id="loginButton" name="loginButton" value="Login"
-                onkeyup="hitLogin();" /><br />
+                onkeyup="hitLogin();" disabled=disabled /><br />
             <p id=loginStatus ></p>
         </form>
-		<!--////////////////////////////////////////////////////////////// -->
     </body>
 </html>
+
+
+
+
+
 
 
 
