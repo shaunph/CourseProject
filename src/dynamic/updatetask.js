@@ -32,10 +32,10 @@ function displayUpdate(response, id, taskObj) {
             "<input type='radio' name='status' value='Closed'"+checkStatus(taskObj,'Closed')+"'>Closed <br /><br />"+
 
             "Progress: "+
-            "<input type='text' name='progress' onclick='this.select()' value='"+taskObj.getProgress()+"'><br /><br />"+
+            "<input type='text' name='progress' value='"+taskObj.getProgress()+"'><br /><br />"+
 
             "Description:<br />"+
-            "<textarea name='description' onclick='this.select()' rows='10' cols='85'>"+taskObj.getDescription()+"</textarea><br /><br />"+
+            "<textarea name='description' rows='10' cols='85'>"+taskObj.getDescription()+"</textarea><br /><br />"+
 
             "Priority:<br />"+
             "<input type='radio' name='level' value='Low'"+checkPriority(taskObj,'Low')+">Low "+
