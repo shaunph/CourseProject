@@ -28,7 +28,7 @@ exports.getReq = function (request,response) {
         // This will cause the browser to refresh the page, and send the cookie to the server.
         //NOTE: If you choose to use setHeader instead of writeHead, you will need to call it BEFORE writeHead.
         //The order of execution should be setHeader->writeHead->write->end, though some steps can be skipped.
-        response.writeHead(301, {'Location': 'example.js', 'Content-Type': 'text/html', 'Set-Cookie': 'user='+params.user});
+        response.writeHead(301, {'Location': '/cookiesExample/example', 'Content-Type': 'text/html', 'Set-Cookie': 'user='+params.user});
         response.end();
     } else {
         //If the logout button was clicked, resulting in a URL of example.js?logout=Logout
