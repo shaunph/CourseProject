@@ -79,7 +79,7 @@ exports.getReq = function (request,response) {
             //The action parameter specifies which page to encode into the URL
             //The look button, when clicked, appends "look=Look" into the URL encoding
             //The logout button, when clicked, appends "logout=Logout" into the URL encoding
-            page1.addContent('<form method=get name=upform action="example.js">' + 
+            page1.addContent('<form method=get name=upform action="/cookiesExample/example">' + 
                 '<p>Direction: <input type="text" name="act" value="" /></p>'  + 
                 '<p><input type="submit" name="look" value="Look" /></p>' + 
                 '<p><input type="submit" name="logout" value="Logout" /></form></p>');
