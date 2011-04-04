@@ -44,7 +44,6 @@ function displayUpdate(response, id, taskObj) {
 
             "<input type='submit' name='changes' value='Submit Changes'>"+
             "<input type='button' name='' value='Change Estimate Values' onclick='parent.location=\'/\''>"+
-            "<input type='button' value='Reset' onclick='history.go(0)'>"+
             "<input type='button' value='Go Back' onclick='history.go(-1);return true;'>"+
 
         "</form>"
