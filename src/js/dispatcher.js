@@ -1,4 +1,5 @@
 var basepath = require('basepath').mainpath,
+    errorPage = require(basepath + '/dynamic/error_pages/errorPage');
     exec = require('child_process').exec,
     db = require('SQLiteHelper'),
     fs = require('fs'),
@@ -10,7 +11,6 @@ var basepath = require('basepath').mainpath,
     url = require('url'),
     util = require('util'),
     bops = require('bufferOps'),
-    errorPage = require(basepath + '/dynamic/error_pages/errorPage');
 
 var extTypes = { "html" : "text/html",
                  "htm" : "text/html",
