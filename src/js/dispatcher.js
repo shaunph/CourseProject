@@ -1,7 +1,9 @@
+// NOTE: This list is alphabetized.
 var basepath = require('basepath').mainpath,
-    errorPage = require(basepath + '/dynamic/error_pages/errorPage');
-    exec = require('child_process').exec,
+    bops = require('bufferOps'),
     db = require('SQLiteHelper'),
+    errorPage = require(basepath + '/dynamic/error_pages/errorPage'),
+    exec = require('child_process').exec,
     fs = require('fs'),
     http = require('http'),
     os = require('os'),
@@ -9,8 +11,7 @@ var basepath = require('basepath').mainpath,
     path = require('path'),
     qs = require('querystring'),
     url = require('url'),
-    util = require('util'),
-    bops = require('bufferOps'),
+    util = require('util');
 
 var extTypes = { "html" : "text/html",
                  "htm" : "text/html",
