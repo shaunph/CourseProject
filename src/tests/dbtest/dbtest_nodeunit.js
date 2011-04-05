@@ -87,7 +87,7 @@ exports.DataBaseTests = {
         var succeeded = false;
         slh.addTask(someTask,
                     function (retV) {
-                        if (retV.status == -1) {
+                        if (retV.status == -2) {
                             succeeded = true;
                         
                         }
