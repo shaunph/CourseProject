@@ -51,7 +51,7 @@ exports.getReq = function (req, res) {
 	// stores it in lookup. This is the specific table to be displayed.
 	// If no table of this name exists, none is rendered 
 	var lookup = url.parse(req.url , true).query.table;
-	var page = new StandardPage();
+	var page = new StandardPage(req);
 
 	// inital setup of page
 	page.standardMenus();
