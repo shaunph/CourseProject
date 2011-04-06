@@ -24,7 +24,7 @@ function addTaskFailed(response, aTask) {
         tPage.standardMenus();
         tPage.addContent("<h1>Error adding new task:" + aTask.getTaskName() + "</h1>");
         for(i=0; i<obj.rows.length; i++){
-            if ((obj.rows[i]!=undefined) && (obj.rows[i].taskName.toLowerCase() == aTask.getTaskName().toLowerCase())){
+            if((obj.rows[i]!=undefined) && (obj.rows[i].taskName.toLowerCase() == aTask.getTaskName().toLowerCase())){
 
                 tPage.addContent("<h1> THE TASK NAME WAS TAKEN </h1> <br />");
                 tPage.addContent("<b>This is the task currently in the database:</b> <br /><br />");
@@ -58,31 +58,30 @@ exports.postReq = function (request, response, dataBuffer) {
     //checks the task table for a like-named task and collects its location if there
     // makes use of example in documentation
 
-    db.addTask(aTask, function(status) {
+        db.addTask(aTask, function(status) {
 
-        if (status.status == 0) { //if -1, then the task was not in the database
+            if(status.status == 0) { //if -1, then the task was not in the database
 
-        //dynamic pages based off example shown by Mitchel on the main site 
-            response.writeHead(200, {'Content-Type': 'text/html'});
-            tPage = new StandardPage();
-            tPage.setTitle('Post-Task Page');
-            tPage.setContent("<h1> THE FOLLOWING TASK WAS ADDED </h1> <br />");
-            tPage.standardMenus();
-            tPage.addContent("<div align='left'> Task Name: " + aTask.getTaskName() + " <br /><br />");
-            tPage.addContent("Description: " + aTask.getDescription() + " <br /><br />");
-            tPage.addContent("Time Left: " + aTask.getTimeLeft() + " <br /><br />");
-            tPage.addContent("Time Spent: " + aTask.getTimeSpent() + " <br /><br />");
-            tPage.addContent("Priority: " + aTask.getPriority() + " <br /><br />");
-            tPage.addContent("Progress: " + aTask.getProgress() + " <br /><br />");
-            tPage.addContent("Status: " + aTask.getStatus() + " <br /><br />");
-            tPage.addContent("<a href='index.html'><b>Back to Main</b></a> </div>");
-            response.write(tPage.toHTML());
-            response.end(); 
-        }
-        else { //otherwise, the name was taken and the stored task shown
-            addTaskFailed(response, aTask);
-        }
-    });
+            //dynamic pages based off example shown by Mitchel on the main site 
+                response.writeHead(200, {'Content-Type': 'text/html'});
+                tPage = new StandardPage();
+                tPage.setTitle('Post-Task Page');
+                tPage.setContent("<h1> THE FOLLOWING TASK WAS ADDED </h1> <br />");
+                tPage.standardMenus();
+                tPage.addContent("<div align='left'> Task Name: " + aTask.getTaskName() + " <br /><br />");
+                tPage.addContent("Description: " + aTask.getDescription() + " <br /><br />");
+                tPage.addContent("Time Left: " + aTask.getTimeLeft() + " <br /><br />");
+                tPage.addContent("Time Spent: " + aTask.getTimeSpent() + " <br /><br />");
+                tPage.addContent("Priority: " + aTask.getPriority() + " <br /><br />");
+                tPage.addContent("Progress: " + aTask.getProgress() + " <br /><br />");
+                tPage.addContent("Status: " + aTask.getStatus() + " <br /><br />");
+                tPage.addContent("<a href='index.html'><b>Back to Main</b></a> </div>");
+                response.write(tPage.toHTML());
+                response.end(); 
+            } else { //otherwise, the name was taken and the stored task shown
+                addTaskFailed(response, aTask);
+            }
+        });
     } catch (error) {
         addTaskFailed(response, aTask);
     }
