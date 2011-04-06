@@ -28,7 +28,7 @@ exports.getReq = function (request,response) {
         // This will cause the browser to refresh the page, and send the cookie to the server.
         //NOTE: If you choose to use setHeader instead of writeHead, you will need to call it BEFORE writeHead.
         //The order of execution should be setHeader->writeHead->write->end, though some steps can be skipped.
-        response.writeHead(301, {'Location': '/cookiesExample/example', 'Content-Type': 'text/html', 'Set-Cookie': 'user='+params.user});
+        response.writeHead(301, {'Location': 'example', 'Content-Type': 'text/html', 'Set-Cookie': 'user='+params.user});
         response.end();
     } else {
         //If the logout button was clicked, resulting in a URL of example.js?logout=Logout
@@ -79,7 +79,7 @@ exports.getReq = function (request,response) {
             //The action parameter specifies which page to encode into the URL
             //The look button, when clicked, appends "look=Look" into the URL encoding
             //The logout button, when clicked, appends "logout=Logout" into the URL encoding
-            page1.addContent('<form method=get name=upform action="/cookiesExample/example">' + 
+            page1.addContent('<form method=get name=upform action="example">' + 
                 '<p>Direction: <input type="text" name="act" value="" /></p>'  + 
                 '<p><input type="submit" name="look" value="Look" /></p>' + 
                 '<p><input type="submit" name="logout" value="Logout" /></form></p>');
