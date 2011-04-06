@@ -12,7 +12,7 @@ var db = require('SQLiteHelper'),
 
 Jaml.register('option', function(opt){
 	option({onClick:"document.location='viewTable?table=" + opt + "'"},opt);
-})
+});
 
 Jaml.register('tableselectform', function(input){
 	form({id:"form1"},
