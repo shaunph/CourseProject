@@ -59,7 +59,7 @@ function displayUpdate(response, id, taskObj) {
             "<input type='button' name='Submit' value='Upload Attachment' onclick='LimitAttach(this.form, this.form.uploadfile.value)'>"+
         "</form>"
     );
-	
+
     page.standardMenus();
 
     response.write(page.toHTML());

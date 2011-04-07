@@ -22,7 +22,21 @@ result = function(response, results) {
     page.setContent("");
 
     try {
-        db.updateTask(results["id"].toString(), results["description"].toString(), results["level"].toString(), results["progress"].toString(), results["status"].toString(), function(callback) {});
+        var tId = results["id"].toString(),
+            tDescription = results["description"].toString(),
+            tLevel = results["level"].toString(),
+            tProgress = results["progress"].toString(),
+            tStatus = results["status"].toString();
+
+        if (tDescription.trim().length == 0) {
+            tDescription = "No Description";
+        }
+
+        if (tProgress.trim().length == 0) {
+            tProgress = "Unknown";
+        }
+
+        db.updateTask(tId, tDescription, tLevel, tProgress, tStatus, function(callback) {});
         page.addContent("Task was updated successfully.<br />");
     } catch(e) {
         page.addContent("Error occurred. Could not update task.<br />");
