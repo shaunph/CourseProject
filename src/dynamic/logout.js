@@ -7,10 +7,10 @@ module.exports.getReq = function(req, res) {
         var page = new StandardPage();
         page.standardMenus();
         page.setTitle("Logout");
-        page.setContent("<h1>Logout successfull</h1>");
+        page.setContent("<h1>Logout successful</h1>");
 
         res.writeHead(200, {    'Content-Type': 'text/html', 
-                                'Set-Cookie':   'Email=' + cookies.Email + '; expires=Thu, 01-Jan-1970 00:00:01 GMT;' + ";" +
+                                'Set-Cookie':   'Email=' + cookies.Email + '; expires=Thu, 01-Jan-1970 00:00:01 GMT;' + ';' +
                                                 'Nickname=' + cookies.Nickname + '; expires=Thu, 01-Jan-1970 00:00:01 GMT;'});
         res.end(page.toHTML());
     } catch(err) {

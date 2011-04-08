@@ -17,7 +17,7 @@ module.exports.postReq = function(request, response, dataBuffer) {
                     if(parsed["Password"].toString() == codes.rows[0].password) {
                         //success
                         response.writeHead(200, {   'content-type':'text/html', 
-                                                    'set-cookie':   'Email='+codes.rows[0].email + " ; ;" +
+                                                    'set-cookie':   'Email='+codes.rows[0].email + ' ; ; ' +
                                                                     'Nickname='+codes.rows[0].nickname
                                             });
                         var page = new StandardPage(request);
@@ -33,6 +33,7 @@ module.exports.postReq = function(request, response, dataBuffer) {
                         page.setTitle("Login Denied");
                         page.setContent("<h1> Denied </h1>");
                         page.addContent("<h2> Username and password don't match </h2>");
+                        page.addContent("<p><a href=\"/login.html\">Try again</a></p>");
                         page.standardMenus();
                         response.end(page.toHTML());
                     }
@@ -43,6 +44,7 @@ module.exports.postReq = function(request, response, dataBuffer) {
                 var page = new StandardPage(request);
                 page.setTitle("Login");
                 page.setContent("<h1>User not found</h1>");
+                page.addContent("<p><a href=\"/login.html\">Try again</a></p>");
                 page.standardMenus();
                 response.end(page.toHTML());
             }
@@ -50,7 +52,8 @@ module.exports.postReq = function(request, response, dataBuffer) {
                 response.writeHead(200, {'content-type':'text/html'});
                 var page = new StandardPage(request);
                 page.setTitle("Login - Error");
-                page.setContent("<h1>There was a server error</h1>");
+                page.setContent("<h1>There was a server error</h1>"); 
+                page.addContent("<p><a href=\"/login.html\">Try again</a></p>");
                 page.standardMenus();
                 response.end(page.toHTML());               
             }
