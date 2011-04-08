@@ -13,6 +13,7 @@ var pagemake = require('pagemaker');
  */
 exports.getReq = function (request,response) {
     response.writeHead(200, {'Content-Type': 'text/html'});
+    response.write("<h1>Feeds</h1>");
     
     db.getRecentActivity(function (error){
         if (error.status != 0){
