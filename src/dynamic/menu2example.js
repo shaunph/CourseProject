@@ -1,9 +1,9 @@
 var pagemaker = require('pagemaker');
 
-exports.getReq = function (request,response) {
+exports.getReq = function (request, response) {
     response.writeHead(200, {'Content-Type': 'text/html'});
     
-    page1 = new StandardPage();
+    var page1 = new StandardPage();
     page1.setTitle("onClick Menu Demo");
     page1.setContent("<h1> Try the menu!</h1>");
 

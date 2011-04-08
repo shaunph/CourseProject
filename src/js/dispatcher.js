@@ -93,7 +93,6 @@ function resolve(request, response) {
                 // If there was an error, it means no such dynamic page exists,
                 // or there is an error on the dynamic page.
                 // Thus we chop off the ".js" we added and try for a static page.
-		console.log(err.message);
                 filePath = basepath + staticRoot + pathName;
                 sendStaticObj(request, response, filePath);
             }
