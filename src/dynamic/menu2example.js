@@ -11,7 +11,8 @@ exports.getReq = function (request,response) {
 
     page1.addOnClickItem("Big Feed", "pullGenFeedsTo('column2')");
     page1.addOnClickItem("Nest this Page", "pullURLTo('/menu2example','column2')");
-    page1.addOnClickItem("Alert", "alert('This menu item works properly')");
+    page1.addOnClickItem("Alert", "alertfunc();");
+    page1.addContent("<script type='text/javascript'>function alertfunc() { alert('This menu item works properly') }</script>");
 
     response.write(page1.toHTML());
     
