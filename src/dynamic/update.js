@@ -29,7 +29,7 @@ result = function(response, results) {
             tStatus = results["status"].toString();
 
         if (tDescription.trim().length == 0) {
-            tDescription = "No Description";
+            tDescription = results["oDescription"].toString();
         }
 
         if (tProgress.trim().length == 0) {

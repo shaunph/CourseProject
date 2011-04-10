@@ -36,6 +36,7 @@ function displayUpdate(response, id, taskObj) {
 
             "Description:<br />"+
             "<textarea name='description' rows='10' cols='85'>"+taskObj.getDescription()+"</textarea><br /><br />"+
+            "<input type='hidden' name='oDescription' value='"+taskObj.getDescription()+"'>"+
 
             "Priority:<br />"+
             "<input type='radio' name='level' value='Low'"+checkPriority(taskObj,'Low')+">Low "+
