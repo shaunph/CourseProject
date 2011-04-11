@@ -1,7 +1,9 @@
+// NOTE: This list is alphabetized.
 var basepath = require('basepath').mainpath,
-    errorPage = require(basepath + 'dynamic/error_pages/errorPage'),
-    exec = require('child_process').exec,
+    bops = require('bufferOps'),
     db = require('SQLiteHelper'),
+    errorPage = require(basepath + '/dynamic/error_pages/errorPage'),
+    exec = require('child_process').exec,
     fs = require('fs'),
     http = require('http'),
     os = require('os'),
@@ -9,9 +11,7 @@ var basepath = require('basepath').mainpath,
     path = require('path'),
     qs = require('querystring'),
     url = require('url'),
-    util = require('util'),
-    bops = require('bufferOps'),
-    errorPage = require(basepath + '/dynamic/error_pages/errorPage');
+    util = require('util');
 
 var extTypes = { "html" : "text/html",
                  "htm" : "text/html",
@@ -20,6 +20,7 @@ var extTypes = { "html" : "text/html",
                  "jpg" : "image/jpg",
                  "jpeg" : "image/jpg",
                  "png" : "image/png",
+                 "ico" : "image/vnd.microsoft.icon",
                  "gif" : "image/gif" };
 
 var staticRoot = "static",
@@ -109,14 +110,13 @@ GET request for a static object
 */
 function sendStaticObj(request, response, file) {
     var extension = file.split(".").pop();
-
     path.exists(file, function (exists) {
         if (exists) {
             log(request, 200, file);
             response.writeHead(200, {'Content-Type': extTypes[extension]});
 
             if (extension === "html" || extension === "htm") {
-                pagemaker.ParsePage(file, function (html) {
+                pagemaker.ParsePage(file, request, function (html) {
                     response.end(html);
                 });
 
