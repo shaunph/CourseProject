@@ -17,7 +17,7 @@ write the actual file, once one can determine the current user
 exports.postReq = function (request, response, dataBuffer) {
     //Extract the file from the data Buffer.
     try {
-        page1 = new StandardPage();
+        page1 = new StandardPage(request);
         page1.setTitle("Test Page");
         page1.setContent("This is a dynamically generated test page <br />");
         page1.standardMenus();

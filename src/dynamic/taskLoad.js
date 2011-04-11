@@ -64,7 +64,7 @@ exports.postReq = function (request, response, dataBuffer) {
 
             //dynamic pages based off example shown by Mitchel on the main site 
                 response.writeHead(200, {'Content-Type': 'text/html'});
-                tPage = new StandardPage();
+                tPage = new StandardPage(request);
                 tPage.setTitle('Post-Task Page');
                 tPage.setContent("<h1> THE FOLLOWING TASK WAS ADDED </h1> <br />");
                 tPage.standardMenus();
