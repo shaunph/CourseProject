@@ -4,7 +4,7 @@ var url = require('url');
 var upops = require('uploadOps');
 
 exports.getReq = function (request,response) {
-    send(response,url.parse(request.url,true).query["taskid"]);
+    send(response,request,url.parse(request.url,true).query["taskid"]);
 }
 
 exports.postReq = function (request,response, dataBuffer) {
@@ -22,12 +22,12 @@ exports.postReq = function (request,response, dataBuffer) {
     });
 }
 
-send = function (response, taskId) {
+send = function (response,request, taskId) {
     response.writeHead(200, {'Content-Type': 'text/html'});
 
     // If taskid isn't set, return an error
     if (taskId == undefined) {
-        var page = new StandardPage();
+        var page = new StandardPage(request);
             
         page.addContent("<div><span>Error: No Task ID defined.</span></div>" +
                             "<br />");
@@ -45,7 +45,7 @@ send = function (response, taskId) {
                 return;
             }
 
-            var page = new StandardPage();
+            var page = new StandardPage(request);
             page.setTitle("Comments for task " + taskId);
             
             // Add comment form

@@ -4,7 +4,7 @@ var	//db = require('SQLiteHelper'),
 	url = require('url');
 
 exports.getReq = function(request, response) {
-	test(response);
+	test(request, response);
 	//loadTask(response, url.parse(request.url,true).query);
 }
 
@@ -12,10 +12,10 @@ exports.getReq = function(request, response) {
  * Takes in response and a task object as parameters.
  * Defines the response to be an html page and displays a form with fields where the task object's attributes are displayed.
  */
-function displayUpdate(response, taskObj) {
+function displayUpdate(request, response, taskObj) {
 	response.writeHead(200, {'Content-Type': 'text/html'});
 
-	page1 = new StandardPage();
+	page1 = new StandardPage(request);
 	page1.setTitle("Update Task");
 	
 	page1.setContent("Id: " + taskObj.getId() + "<br /><br />");
@@ -75,16 +75,16 @@ function checkPriority(taskObj, current) {
 /*
  * Loads a task
  */
-function loadTask(response, param){
+function loadTask(request, response, param){
 	db.getTask(param["id"], function(callback){
 		var row = callback.row[0];
 		var loadedTask = new task.Task(row.taskName, row.description, row.timeSpent, row.timeLeft, row.priority, row.status, row.user, row.date);
-		displayUpdate(response, loadedTask);
+		displayUpdate(request, response, loadedTask);
 	});
 }
 
 /* Test coding for a task object */
 function test(response) {
 	var taskObj = new task.task("taskName", "desc", "0", "0", "low", "status", "user", "date");
-	displayUpdate(response, taskObj);
+	displayUpdate(request, response, taskObj);
 }
