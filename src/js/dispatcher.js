@@ -116,7 +116,7 @@ function sendStaticObj(request, response, file) {
             response.writeHead(200, {'Content-Type': extTypes[extension]});
 
             if (extension === "html" || extension === "htm") {
-                pagemaker.ParsePage(file, function (html) {
+                pagemaker.ParsePage(file, request, function (html) {
                     response.end(html);
                 });
 

@@ -31,8 +31,8 @@ exports.getReq = function (request,response) {
     loadTask(request, response, (url.parse(request.url, true).query)['id']);
 }
 
-function displayTaskPage(response, id, taskValues) {
-    var taskPage = new StandardPage();
+function displayTaskPage(request, response, id, taskValues) {
+    var taskPage = new StandardPage(request);
     taskPage.setTitle(taskValues.getTaskName() + " Details");
     
     taskPage.setContent("<h3>Description</h3>");
@@ -73,7 +73,7 @@ function loadTask(request, response, id) {
             } else {
                 var loadedTask = new task.task(loadRow.taskName, loadRow.description, loadRow.timeSpent,
                         loadRow.timeLeft, loadRow.priority, loadRow.progress, loadRow.status, loadRow.user);
-                displayTaskPage(response, id, loadedTask);
+                displayTaskPage(request, response, id, loadedTask);
             }
     });
 }
