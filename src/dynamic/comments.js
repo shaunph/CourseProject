@@ -10,16 +10,20 @@ exports.getReq = function (request,response) {
 exports.postReq = function (request,response, dataBuffer) {
     var parsed = upops.parseMultipartFormdata(dataBuffer);
     
-    slh.addComment(parsed["thecomment"].toString(), parsed["taskid"].toString(), "user@email.com", function(obj) {
+    slh.addComment(parsed["thecomment"].toString(), parsed["taskid"].toString(),
+    parsed["email"].toString(), function(obj) {
         if(obj.status != 0) {
             //TODO: Send a 500 error page
             console.log("Error saving comment: " + obj.detail);
             return;
         }
         else {
-            send(response, parsed["taskid"]);
+            // Once comment has been added, display the comments for the task
+            send(response, request, url.parse(request.url,true).query["taskid"]);
         }
     });
+
+
 }
 
 send = function (response,request, taskId) {
@@ -52,9 +56,10 @@ send = function (response,request, taskId) {
             page.addContent("<div><span>Enter a comment:</span></div>" +
                             "<br />");
             
-            page.addContent("<form action='comments.js' method='post' enctype='multipart/form-data'>" + 
+            page.addContent("<form action='comments?taskid=" + taskId + "' method='post' enctype='multipart/form-data'>" + 
                 "<textarea name='thecomment' rows='4' cols='50'></textarea><br />" +
-                "<input type='hidden' name='taskid' value=" + taskId + ">" + 
+                "<input type='hidden' name='taskid' value='" + taskId + "'>" + 
+		"<input type='hidden' name='email' value='1@1.1'>" + 
                 "<input type='submit' value='Save'>" +
                 "</form>");
             
@@ -65,9 +70,9 @@ send = function (response,request, taskId) {
                 page.addContent("<div><span>There are currently no comments for this task.</span></div>" +
                             "<br />");
             }
-            // Otherwise, display all comments
+            // Otherwise, display all comments (newest on top)
             else {
-                for (i = 0; i < numComments; i++) {
+                for (i = numComments-1; i >= 0; i--) {
                     page.addContent("<div>" +
                             "<span>" + obj.rows[i].email + " says: </span>" +
                             "<br />" +
