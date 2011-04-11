@@ -1,25 +1,28 @@
 var pagemaker = require('pagemaker'),
-    url = require('url'),
-    loadTask = require('loadTask').loadTask;
-
+    url = require('url'),   
+    taskOps = require('taskOps');
+    
 var displayTaskPage = function (request, response, id, taskValues) {
     response.writeHead(200, {'Content-Type': 'text/html'});
 
     var taskPage = new StandardPage();
     taskPage.standardMenus();
-
-    var taskName = taskValues.getTaskName();
-    var open = (taskValues.getStatus() === "Open");
     
+    // Format task name to display and add Update task menu item
+    var taskName = taskValues.getTaskName();
+    var displayName;
+    var open = (taskValues.getStatus() === "Open");    
     if (open) {
-        taskName = taskName + " Details";
-        //taskPage.addOnClickItem("Update Task", "/updatetask?id=" + id);
+        displayName = taskName + " Details";
+        taskPage.addMenuItem("Update Task", "/updatetask.html");
+        // Will use the following when dynamic update task is merged to mainline:
+        // taskPage.addMenuItem("Update Task", "/updatetask?id=" + id);
     } else {
-        taskName = taskName + " Details: Closed";
+        displayName = taskName + " Details: Closed";
     }
-
-    taskPage.setTitle(taskName);
-    taskPage.setContent("<h1>" + taskName + "</h1>");
+    
+    taskPage.setTitle(displayName);
+    taskPage.setContent("<h1>" + displayName + "</h1>");
 
     taskPage.addContent("<h3>Description</h3>");
     taskPage.addContent(taskValues.getDescription());
@@ -42,10 +45,22 @@ var displayTaskPage = function (request, response, id, taskValues) {
     taskPage.addContent("<h3>User</h3>");
     taskPage.addContent(taskValues.getUser());
     
+    taskPage.addContent("<script type='text/javascript'>var confirmation = " + confirmation + "</script>");
+    taskPage.addOnClickItem("Delete Task", "confirmation('" + taskName + "');");
+    
     response.write(taskPage.toHTML());
     response.end();
 };
 
 exports.getReq = function (request, response) {
-    loadTask(request, response, (url.parse(request.url, true).query).id, displayTaskPage);
+    taskOps.loadTask(request, response, (url.parse(request.url, true).query).id, displayTaskPage);
 };
+
+var confirmation = function(taskName) {
+    var answer = confirm("Are you sure you want to delete " + taskName + "?");
+    
+    if (answer) {
+        // TODO: Remove the task the user is currently viewing.
+        alert("Not yet implemented.\nTask should now be deleted and user should be redirected to task list.");
+    }
+}
