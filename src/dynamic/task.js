@@ -1,7 +1,16 @@
 var pagemaker = require('pagemaker'),
     url = require('url'),   
     taskOps = require('taskOps');
+
+var confirmation = function(taskName) {
+    var answer = confirm("Are you sure you want to delete " + taskName + "?");
     
+    if (answer) {
+        // TODO: Remove the task the user is currently viewing.
+        alert("Not yet implemented.\nTask should now be deleted and user should be redirected to task list.");
+    }
+};
+
 var displayTaskPage = function (request, response, id, taskValues) {
     response.writeHead(200, {'Content-Type': 'text/html'});
 
@@ -55,12 +64,3 @@ var displayTaskPage = function (request, response, id, taskValues) {
 exports.getReq = function (request, response) {
     taskOps.loadTask(request, response, (url.parse(request.url, true).query).id, displayTaskPage);
 };
-
-var confirmation = function(taskName) {
-    var answer = confirm("Are you sure you want to delete " + taskName + "?");
-    
-    if (answer) {
-        // TODO: Remove the task the user is currently viewing.
-        alert("Not yet implemented.\nTask should now be deleted and user should be redirected to task list.");
-    }
-}
