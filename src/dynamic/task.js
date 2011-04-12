@@ -51,7 +51,7 @@ function displayTaskPage(request, response, id, taskValues) {
     taskPage.addContent(taskValues.getUser());
     
     // TODO : Disable this link if task status is marked as closed
-    taskPage.addMenuItem("Update Task", "/updatetask.html");
+    taskPage.addMenuItem("Update Task", "/updatetask?id=");
     taskPage.addMenuItem("home", "/index.html");
 
     response.writeHead(200, {'Content-Type': 'text/html'});
