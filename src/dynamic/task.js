@@ -49,6 +49,10 @@ function displayTaskPage(request, response, id, taskValues) {
 
     taskPage.addContent("<h3>User</h3>");
     taskPage.addContent(taskValues.getUser());
+    taskPage.addContent("<br />");
+
+    taskPage.addContent("<br />");
+    taskPage.addContent("<a href='/comments?taskid=" + id + "'>View Comments</a>");
     
     // TODO : Disable this link if task status is marked as closed
     taskPage.addMenuItem("Update Task", "/updatetask?id=");
