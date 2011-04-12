@@ -2,6 +2,10 @@ var pagemaker = require('pagemaker'),
     url = require('url'),   
     taskOps = require('taskOps');
 
+/*
+ * confirmation is a function for the 'Delete Task' functionality 
+ * that should be passed to the client side.
+ */
 var confirmation = function(taskName) {
     var answer = confirm("Are you sure you want to delete " + taskName + "?");
     
@@ -14,7 +18,7 @@ var confirmation = function(taskName) {
 var displayTaskPage = function (request, response, id, taskValues) {
     response.writeHead(200, {'Content-Type': 'text/html'});
 
-    var taskPage = new StandardPage();
+    var taskPage = new StandardPage(request);
     taskPage.standardMenus();
     //taskPage.addMenuItem("Task List", "/tasklisthere");	// Fix link when task list is up
 
@@ -53,6 +57,7 @@ var displayTaskPage = function (request, response, id, taskValues) {
     taskPage.addContent("<h3>User</h3>");
     taskPage.addContent(taskValues.getUser());
     
+	// Passing confirmation function to client side
     taskPage.addContent("<script type='text/javascript'>var confirmation = " + confirmation + "</script>");
     taskPage.addOnClickItem("Delete Task", "confirmation('" + taskName + "');");
     
