@@ -23,9 +23,7 @@ var displayTaskPage = function (request, response, id, taskValues) {
     var open = (taskValues.getStatus() === "Open");    
     if (open) {
         displayName = taskName + " Details";
-        taskPage.addMenuItem("Update Task", "/updatetask.html");
-        // Will use the following when dynamic update task is merged to mainline:
-        // taskPage.addMenuItem("Update Task", "/updatetask?id=" + id);
+        taskPage.addMenuItem("Update Task", "/updatetask?id=" + id);
     } else {
         displayName = taskName + " Details: Closed";
     }
