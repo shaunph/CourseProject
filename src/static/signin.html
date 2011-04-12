@@ -7,7 +7,7 @@
         <script type="text/javascript" src="js/jquery-1.5.min.js"></script>
     </head>
     <body>
-        <form action="signinRequest.js" id="signInData" name="signInData" method="post">
+        <form action="signinRequest.js?statusDiv=loginStatus" id="signInData" name="signInData" method="post">
             <p>Sign-in</p>
             <!--Email/Nickname label assigned to a text field-->
             <label for="identityIn">Email/Nickname:</label>
@@ -20,12 +20,14 @@
             <input type="password" id="passwordIn" name="passwordIn" />            
             <br />
             <!--Submit button-->
-            <input type="submit" id="loginButton" name="loginButton" value="Login"
-                onclick="hitLogin();" /><br />
-            <p id=loginStatus ></p>
+            <input type="submit" id="loginButton" name="loginButton" value="Login" /><br />
+            <div id="loginStatus"></div>
         </form>
     </body>
 </html>
+
+
+
 
 
 

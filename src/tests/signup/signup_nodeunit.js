@@ -30,15 +30,25 @@ exports.SignupTests = {
     'Test Sign-Up (add user) Function': function (test) {
        // test.expect(1);
         
-        var Email = "test@testsitedoesntexist.com";
-        var Username = "testnick";
-        var Password = "testpass";
+        var rawData = '------------3LHiH0UxLZwxUADIEhdOXh' + 
+                      'Content-Disposition: form-data; name="Email"' +
+
+                      'test@testsitedoesntexist.com' +
+                      '------------3LHiH0UxLZwxUADIEhdOXh' +
+                      'Content-Disposition: form-data; name="Username"' +
+
+                      'testnick' +
+                      '------------3LHiH0UxLZwxUADIEhdOXh' +
+                      'Content-Disposition: form-data; name="Password"' +
+
+                      'testpass' +
+                      '------------3LHiH0UxLZwxUADIEhdOXh--' +
+
         
-        var rawData = "Email=" + Email + "&Username=" + Username + "&Password=" + Password;
         var encoding = 'utf8';
         
         // Send request, trying to add user
-        getReq = server.request(method='POST', '/signupRequest', {'Content-Length': rawData.length, 'Content-Type': 'application/x-www-form-urlencoded'});
+        getReq = server.request(method='POST', '/signupRequest', {'Content-Length': rawData.length, 'Content-Type': 'multipart/form-data'});
         getReq.end(rawData, encoding);
         getReq.on('response', function (response) {
                 test.ok(response.statusCode == 200, "Server responded with error code " + response.statusCode + " to request for /signupRequest");
