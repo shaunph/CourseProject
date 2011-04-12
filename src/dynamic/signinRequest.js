@@ -16,12 +16,11 @@ exports.postReq = function(request, response){
 	request.on('end', function(){
         queryFields = querystring.parse(rawData);
 
-		//Trace: userExists -> queryGetBoolean -> accessDB && safeCallback
         db.userExists(queryFields.identityIn, function(code){
 
         	if (code.exists == true){
 
-				//TEMP, replace with redirect to home
+				//Replace with redirect to home
 	            response.writeHead(200, {'content-type':'text/html' , 'Location': 'src/static/signin.html'});
 	            page1 = new StandardPage();
 	            page1.standardMenus();
@@ -31,7 +30,7 @@ exports.postReq = function(request, response){
 
 			}else if (code.exists == false){
             	
-				//TEMP, send back to signin.html with error display.
+				//Change to send client back to signin.html with error display.
 				response.writeHead(200, {'content-type':'text/html'});
             	page1 = new StandardPage();
             	page1.standardMenus();
@@ -41,19 +40,16 @@ exports.postReq = function(request, response){
 
 			}else{
 
-				//TEMP, replace with redirect to 404
-
-				response.writeHead(200, {'content-type':'text/html'});
+				//Add redirect to 404.
+				response.writeHead(404, {'content-type':'text/html'});
             	page1 = new StandardPage();
             	page1.standardMenus();
 				page1.setTitle("Internal Error");
             	page1.setContent("<h1>Replace this with 404.</h1> <br />");
 			}
 
-            //response.write(page1.toHTML());
-			//response.write("/signin.html");
+            response.write(page1.toHTML());
             response.end();
-
 
         });
     });
