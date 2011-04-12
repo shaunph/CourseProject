@@ -16,7 +16,8 @@ var displayTaskPage = function (request, response, id, taskValues) {
 
     var taskPage = new StandardPage();
     taskPage.standardMenus();
-    
+    //taskPage.addMenuItem("Task List", "/tasklisthere");	// Fix link when task list is up
+
     // Format task name to display and add Update task menu item
     var taskName = taskValues.getTaskName();
     var displayName;
