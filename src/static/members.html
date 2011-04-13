@@ -6,17 +6,19 @@
 </head>
 <body>
 <h1>Members</h1><br/>
-
 <form>
-    <input type=button value="Refresh" onclick="membersLoad('membersList', 'members');"><br/><br/><br/>
+    <button type=button class="rounded" onclick="membersLoad('membersList', 'members');">
+        <span>Refresh</span>
+    </button>
+    <br/><br/><br/>
     <input type=text id="searchBox" value="Enter search term" onfocus="clearBox('searchBox')"><br/>
-    <input type=button id="searchButton" value="Search"
-           onclick="membersLoad('membersList',
+    <button type=button class="rounded" id="searchButton" onclick="membersLoad('membersList',
                'members?searchTerm=' + $('#searchBox').val() + '&caseCheckBox=' + $('#caseCheckBox:checked').val());">
-    <br />
+        <span>Search</span>
+    </button>
+    <br/>
     <label>Case sensitive: </label><input type=checkbox id="caseCheckBox">
 </form>
-
 <div class="membersList" id="membersList"></div>
 </body>
 </html>

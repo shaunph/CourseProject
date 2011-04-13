@@ -19,4 +19,4 @@ function clearBox(field) {
     $('#' + field).val("");
 }
 
-membersLoad('membersList', 'members.js?');
+membersLoad('membersList', 'members');
