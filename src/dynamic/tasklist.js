@@ -34,74 +34,42 @@ function loadTaskList(parameters, response) {
                 "<div class='taskListHeading'>Creator</div>" +
                 "</h4></div>");
 
-        for(i = 0; i < obj.rows.length; i++) {
-	
-                rowID = obj.rows[i].taskid;
-                rowName = obj.rows[i].taskName;
-                rowPriority = obj.rows[i].priority;
-                rowProgress = obj.rows[i].progress;
-                rowStatus = obj.rows[i].status;
-                rowUser = obj.rows[i].user;
-                //rowDesc = obj.rows[i].description;
-                if(rowPriority == "High") 
-                {
-                        taskListPage = taskListPage.concat("<div class='row'>" +
-                        "<div class='taskOutput'><a href=\"task?id=" + rowID + "\">"+ rowName + "</a></div>" +
-                        "<div class='taskOutput'>" + rowPriority + "</div>" +
-                        "<div class='taskOutput'>" + rowProgress + "</div>" +
-                        "<div class='taskOutput'>" + rowStatus + "</div>" +
-                        "<div class='taskOutput'>" + rowUser + "</div>" +
-                        "</div>");
-                }
 
-        }
+        taskListPage = taskListPage.concat(prioritizer("High", obj));
+        taskListPage = taskListPage.concat(prioritizer("Medium", obj));
+        taskListPage = taskListPage.concat(prioritizer("Low", obj));
 
-        for(i = 0; i < obj.rows.length; i++) {
-	
-                rowID = obj.rows[i].taskid;
-                rowName = obj.rows[i].taskName;
-                rowPriority = obj.rows[i].priority;
-                rowProgress = obj.rows[i].progress;
-                rowStatus = obj.rows[i].status;
-                rowUser = obj.rows[i].user;
-                //rowDesc = obj.rows[i].description;
-                if(rowPriority == "Medium") 
-                {
-                        taskListPage = taskListPage.concat("<div class='row'>" +
-                        "<div class='taskOutput'><a href=\"task?id=" + rowID + "\">"+ rowName + "</a></div>" +
-                        "<div class='taskOutput'>" + rowPriority + "</div>" +
-                        "<div class='taskOutput'>" + rowProgress + "</div>" +
-                        "<div class='taskOutput'>" + rowStatus + "</div>" +
-                        "<div class='taskOutput'>" + rowUser + "</div>" +
-                        "</div>");
-                }
-
-        }
-        for(i = 0; i < obj.rows.length; i++) {
-	
-                rowID = obj.rows[i].taskid;
-                rowName = obj.rows[i].taskName;
-                rowPriority = obj.rows[i].priority;
-                rowProgress = obj.rows[i].progress;
-                rowStatus = obj.rows[i].status;
-                rowUser = obj.rows[i].user;
-                //rowDesc = obj.rows[i].description;
-                if(rowPriority == "Low") 
-                {
-                        taskListPage = taskListPage.concat("<div class='row'>" +
-                        "<div class='taskOutput'><a href=\"task?id=" + rowID + "\">"+ rowName + "</a></div>" +
-                        "<div class='taskOutput'>" + rowPriority + "</div>" +
-                        "<div class='taskOutput'>" + rowProgress + "</div>" +
-                        "<div class='taskOutput'>" + rowStatus + "</div>" +
-                        "<div class='taskOutput'>" + rowUser + "</div>" +
-                        "</div>");
-                }
-
-        }
         response.write(taskListPage);
         response.end();
 
 });
 
 
+}
+
+function prioritizer(currentPriority, obj)
+{
+      var pageSection = "";
+      for(i = 0; i < obj.rows.length; i++) 
+      {
+            rowID = obj.rows[i].taskid;
+            rowName = obj.rows[i].taskName;
+            rowPriority = obj.rows[i].priority;
+            rowProgress = obj.rows[i].progress;
+            rowStatus = obj.rows[i].status;
+            rowUser = obj.rows[i].user;
+            //rowDesc = obj.rows[i].description;
+            if(rowPriority == currentPriority) 
+            {
+               pageSection = pageSection.concat("<div class='row'>" +
+                 "<div class='taskOutput'><a href=\"task?id=" + rowID + "\">"+ rowName + "</a></div>" +
+                 "<div class='taskOutput'>" + rowPriority + "</div>" +
+                 "<div class='taskOutput'>" + rowProgress + "</div>" +
+                 "<div class='taskOutput'>" + rowStatus + "</div>" +
+                 "<div class='taskOutput'>" + rowUser + "</div>" +
+                  "</div>");
+            }
+
+      }
+      return pageSection;
 }
