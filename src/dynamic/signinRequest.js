@@ -18,33 +18,33 @@ exports.postReq = function(request, response){
 
         db.userExists(queryFields.identityIn, function(code){
 
-        	if (code.exists == true){
+            if (code.exists == true){
 
-				//Replace with redirect to home
-	            response.writeHead(200, {'content-type':'text/html' , 'Location': 'src/static/signin.html'});
+                //Replace with redirect to home
+                response.writeHead(200, {'content-type':'text/html' , 'Location': 'src/static/signin.html'});
 	            page1 = new StandardPage();
 	            page1.standardMenus();
-            	page1.setTitle("Sign-in");
-            	page1.setContent("<h1>Sign-in complete! (Redirect to home).</h1> <br />");
-				//Set-Cookie here
+                page1.setTitle("Sign-in");
+                page1.setContent("<h1>Sign-in complete! (Redirect to home).</h1> <br />");
+                //Set-Cookie here
 
-			}else if (code.exists == false){
+            }else if (code.exists == false){
             	
-				//Change to send client back to signin.html with error display.
-				response.writeHead(200, {'content-type':'text/html'});
+                //Change to send client back to signin.html with error display.
+                response.writeHead(200, {'content-type':'text/html'});
             	page1 = new StandardPage();
             	page1.standardMenus();
             	page1.setTitle("Sign-in");
             	page1.setContent("<h1>Sign-in failed. (Redirect to sign-in page).</h1> <br />" +
 					"<a href='signin.html'>GO back to signin</a>");
 
-			}else{
+            }else{
 
-				//Add redirect to 404.
-				response.writeHead(404, {'content-type':'text/html'});
+                //Add redirect to 404.
+                response.writeHead(404, {'content-type':'text/html'});
             	page1 = new StandardPage();
             	page1.standardMenus();
-				page1.setTitle("Internal Error");
+                page1.setTitle("Internal Error");
             	page1.setContent("<h1>Replace this with 404.</h1> <br />");
 			}
 
