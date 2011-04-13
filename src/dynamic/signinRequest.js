@@ -22,8 +22,8 @@ exports.postReq = function(request, response){
 
                 //Replace with redirect to home
                 response.writeHead(200, {'content-type':'text/html' , 'Location': 'src/static/signin.html'});
-	            page1 = new StandardPage();
-	            page1.standardMenus();
+                page1 = new StandardPage();
+                page1.standardMenus();
                 page1.setTitle("Sign-in");
                 page1.setContent("<h1>Sign-in complete! (Redirect to home).</h1> <br />");
                 //Set-Cookie here
