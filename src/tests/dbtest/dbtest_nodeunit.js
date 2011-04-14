@@ -83,7 +83,7 @@ exports.DataBaseTests = {
     'Test That Tasks Can Be Added': function (test) {
         test.expect(1);
         
-        var someTask = new task.task("taskname","descr","0","0","Low","Not Started","Open","test@testsitedoesntexist.com");
+        var someTask = new task.task("taskname","descr",0,0,"Low","Not Started","Open","test@testsitedoesntexist.com");
         var succeeded = false;
         slh.addTask(someTask,
                     function (retV) {
