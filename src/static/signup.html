@@ -1,35 +1,37 @@
 <!DOCTYPE html>
+<!-- Client-side html page that lets the user to register -->
 <html>
     <head>
         <title>Sign Up</title>
         <script type="text/javascript" src="js/jquery-1.5.min.js"></script>
         <script type="text/javascript" src="js/signup.js"></script>
-        
     </head>
     <body>
-
+        <!-- Form that sends the input to src/dynamic/signupRequest.js -->
         <form action="signupRequest" id="signupForm" method="post" enctype="multipart/form-data">
-            <label>Email: <br /><input type=email id=Email name=Email onchange="checkAvailability('Email');" required></label> 
-                <div id="EmailAvailable" style="display:inline;"></div>
-            <br />
-
-            <label>Confirm Email: </label> <br /><input type=email id=EmailConf onkeyup="verify('Email');" required>
-                <div id="EmailValid" style="display:inline;"></div>
-            <br />
-            
-            <label>Username (optional): </label> <br /><input id=Username name=Username onchange="checkAvailability('Username');" >
-                <div id="UsernameAvailable" style="display:inline;"></div>
-            <br />
-            
-            <label>Password: </label> <br /><input type=password id=Password name=Password onkeyup="verify('Password');" required >
-                <div id=PasswordStrength style="display:inline;"></div>
-            <br />
-            
-            <label>Confirm Password: </label> <br /><input type=Password id=PasswordConf onkeyup="verify('Password');" required>
-                <div id="PasswordValid" style="display:inline;"></div>
-            <br />
-            
-            <br /><input id="submitButton" type=submit value="Sign up" disabled=disabled ><br />
+            <!-- User enters their email -->
+            <label>Email: </label> <br />
+                <input type=email id=Email name=Email onchange="checkAvailability('Email');" required>
+                <div id="EmailAvailable" style="display:inline;"></div><br />
+            <!-- User email field to confirm that the email is identical to the first entry -->
+            <label>Confirm Email: </label> <br />
+                <input type=email id=EmailConf onkeyup="verify('Email');" required>
+                <div id="EmailValid" style="display:inline;"></div><br />
+            <!-- Optional nickname field to alternatively identify the user -->            
+            <label>Username (optional): </label> <br />
+                <input id=Username name=Username onchange="checkAvailability('Username');">
+                <div id="UsernameAvailable" style="display:inline;"></div><br />
+            <!-- User password -->            
+            <label>Password: </label> <br />
+                <input type=password id=Password name=Password onkeyup="verify('Password');" required>
+                <div id=PasswordStrength style="display:inline;"></div><br />
+            <!-- Confirm that the password entered is identical to the first entry -->            
+            <label>Confirm Password: </label> <br />
+                <input type=Password id=PasswordConf onkeyup="verify('Password');" required>
+                <div id="PasswordValid" style="display:inline;"></div><br /><br />
+            <!-- Once all the above info is confirmed with signup.js, submitButton
+                 is enabled to send to signupRequest.js -->
+            <input id="submitButton" type=submit value="Sign up" disabled=disabled ><br />
         </form>
     </body>
 </html>
