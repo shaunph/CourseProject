@@ -81,7 +81,7 @@ exports.TaskTests = {
         test.done();
     },
 
-	"Test 4: Task Time Spent can only be a Positive Number": function(test) {
+    "Test 4: Task Time Spent can only be a Positive Number": function(test) {
         test.expect(15);
         
         var timeSpentTask = new task("name", "", 0, 0, "Low", "", "Open", "test@test.com");
@@ -103,8 +103,8 @@ exports.TaskTests = {
         
         test.done();
     },
-	
-	"Test 5: Task Time Left can only be a Positive Number": function(test) {
+    
+    "Test 5: Task Time Left can only be a Positive Number": function(test) {
         test.expect(15);
         
         var timeLeftTask = new task("name", "", 0, 0, "Low", "", "Open", "test@test.com");
@@ -126,7 +126,7 @@ exports.TaskTests = {
         
         test.done();
     },
-	
+    
     "Test 6: Task Priority must be a valid String (Low, Medium, High)": function(test) {
         test.expect(15);
 

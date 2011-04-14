@@ -87,15 +87,15 @@ function loadTask(request, response, param){
     db.getTask(param["id"], function(callback){
         try {
             var row = callback.rows[0];
-			if (row.status !== "Closed") {
-				var loadedTask = new task(row.taskName, row.description, row.timeSpent, row.timeLeft, row.priority, row.progress, row.status, row.user);
-           		displayUpdate(request, response, param["id"], loadedTask);
-			} else {
-				message(request, response, param["id"]);
-			}
+            if (row.status !== "Closed") {
+                var loadedTask = new task(row.taskName, row.description, row.timeSpent, row.timeLeft, row.priority, row.progress, row.status, row.user);
+                   displayUpdate(request, response, param["id"], loadedTask);
+            } else {
+                message(request, response, param["id"]);
+            }
         } catch (e) {
             message(request, response);
-		}
+        }
     });
 }
 
@@ -106,20 +106,20 @@ message = function(request, response, id) {
     response.writeHead(200, {
         'Content-Type': 'text/html'
     });
-	
+    
     page = new StandardPage(request);
-	page.setTitle("Update Task");
-	page.standardMenus();
+    page.setTitle("Update Task");
+    page.standardMenus();
 
-	if (id) {	// If id is not undefined
-   		page.setContent("This task is closed and not available for update.");
-		
-    	response.write(page.toHTML());
-    	response.end();
-	} else {
-    	page.setContent("Please indicate a valid id in the url.");
+    if (id) {    // If id is not undefined
+        page.setContent("This task is closed and not available for update.");
+        
+        response.write(page.toHTML());
+        response.end();
+    } else {
+        page.setContent("Please indicate a valid id in the url.");
 
-	    response.write(page.toHTML());
-    	response.end();
-	}
+        response.write(page.toHTML());
+        response.end();
+    }
 }
