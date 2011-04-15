@@ -13,7 +13,7 @@ exports.getReq = function (request, response, dataBuffer) {
     search(request, response, (url.parse(request.url,true).query));
 } 
 
-search = function (request, response, param) {
+pSearch = function (request, response, param) {
 
     var user = "noManIsAnIsland";
     var pass;
