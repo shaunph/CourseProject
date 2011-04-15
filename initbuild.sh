@@ -14,14 +14,7 @@ then
     cd lib/node-sqlite/ &&
     ./build.sh &&
     cd ../../
-else
-    echo "Node sqlite has already been built."
 fi
 
-if [ ! -d db ]
-then
-    echo "building db..." &&
-    node js/createDatabase.js
-else
-    echo "db has already been built."
-fi
+echo "building db..." &&
+node js/createDatabase.js
