@@ -10,7 +10,8 @@ exports.getReq = function (request,response) {
 exports.postReq = function (request,response, dataBuffer) {
     var parsed = upops.parseMultipartFormdata(dataBuffer);
     
-    slh.addComment(parsed["thecomment"].toString(), parsed["taskid"].toString(),
+    //Add comment to the database (truncated to 500 characters)
+    slh.addComment(parsed["thecomment"].toString().substring(0,500), parsed["taskid"].toString(),
     parsed["email"].toString(), function(obj) {
         if(obj.status != 0) {
             //TODO: Send a 500 error page
@@ -57,12 +58,29 @@ send = function (response,request, taskId) {
                 // Add comment form
                 page.addContent("<div><span>Enter a comment:</span></div>" +
                         "<br />");
+                        
+                page.addContent("<script type='text/javascript'>" +
+                    "function validate(form) {" +
+                        "var c = document.getElementById('thecomment');" +
+                        "if(c.value == ''){" +
+                            "window.alert('Please enter a comment');" +
+                            "return;" +
+                        "}" +
+                        "else if(c.value.length > '500'){" +
+                            "window.alert('This comment exceeds the maximum length of 500 characters.');" +
+                            "return;" +
+                        "}" +
+                        "form.form.submit();" +
+                    "}" +
+                    "</script>");
 
                 page.addContent("<form action='comments?taskid=" + taskId + "' method='post' enctype='multipart/form-data'>" + 
-                        "<textarea name='thecomment' rows='4' cols='50'></textarea><br />" +
+                        "<textarea name='thecomment' id='thecomment' rows='4' cols='50'></textarea><br />" +
                         "<input type='hidden' name='taskid' value='" + taskId + "'>" + 
                         "<input type='hidden' name='email' value='"+cookies.Email+"'>" + 
-                        "<input type='submit' value='Save'>" +
+                        "<button type='button' class='rounded' id='enter' onclick='validate(this)'>" +
+                        "<span>Save</span>" +
+                        "</button>" +
                         "</form>");
             }
             else {
@@ -80,12 +98,14 @@ send = function (response,request, taskId) {
             // Otherwise, display all comments (newest on top)
             else {
                 for (i = numComments-1; i >= 0; i--) {
-                    page.addContent("<div>" +
+                    page.addContent("<div class='commentBox'>" +
                             "<span>" + obj.rows[i].email + " says: </span>" +
                             "<br />" +
+                            "<span class='timeStamp'>" + obj.rows[i].created + "</span>" +
+                            "<br /><br />" +
                             "<span>" + obj.rows[i].thecomment + "</span>" +
                             "</div>" +
-                            "<br />");
+                            "<br /><br />");
                 }
             }
             
