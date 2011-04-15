@@ -12,6 +12,28 @@ function clicked(form) {
         }
     }
 
+    if (document.getElementById("phrase2").value.length > 20) {
+	window.alert("task name is too long"); 
+        return;
+    }
+    if (document.getElementById("phrase3").value.length > 750) {
+	window.alert("Description is too long"); 
+        return;
+    }
+    if (document.getElementById("phrase4").value.length > 10) {
+	window.alert("ETR is too long"); 
+        return;
+    }
+    if (document.getElementById("phrase5").value.length > 10) {
+	window.alert("Time spent is too long"); 
+        return;
+    }
+    if (document.getElementById("prog").value.length > 20) {
+	window.alert("progress description is too long");         
+        return;
+    }
+
+
     if(!document.getElementById("low").checked){
     if(!document.getElementById("medium").checked){
             if(!document.getElementById("high").checked){
