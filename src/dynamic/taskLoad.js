@@ -51,8 +51,8 @@ exports.postReq = function (request, response, dataBuffer) {
     //Extract the file from the data Buffer.
     try {
         var parsed = upops.parseMultipartFormdata(dataBuffer);
-        aTask = new tsk.task(parsed["tNom"].toString(), parsed["desc"].toString(), parsed["timeS"].toString(), 
-        parsed["ETR"].toString(), parsed["priority"].toString(), 
+        aTask = new tsk.task(parsed["tNom"].toString(), parsed["desc"].toString(), parseInt(parsed["timeS"]), 
+        parseInt(parsed["ETR"]), parsed["priority"].toString(), 
             parsed["prog"].toString(), "Open", parsed["uNom"].toString());          
 
     //checks the task table for a like-named task and collects its location if there
@@ -64,7 +64,7 @@ exports.postReq = function (request, response, dataBuffer) {
 
             //dynamic pages based off example shown by Mitchel on the main site 
                 response.writeHead(200, {'Content-Type': 'text/html'});
-                tPage = new StandardPage();
+                tPage = new StandardPage(request);
                 tPage.setTitle('Post-Task Page');
                 tPage.setContent("<h1> THE FOLLOWING TASK WAS ADDED </h1> <br />");
                 tPage.standardMenus();

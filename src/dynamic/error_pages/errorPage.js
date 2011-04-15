@@ -25,7 +25,7 @@ exports.getReq = function(request, response, code) {
 
 function respond404(request, response) {
 
-    var page404 = new StandardPage();
+    var page404 = new StandardPage(request);
     page404.standardMenus();
     page404.setTitle("404 Page not found");
     page404.setContent("<h3>I swear it was here before...</h3>");
@@ -37,7 +37,7 @@ function respond404(request, response) {
 
 function respond500(request, response) {
 
-    var page500 = new StandardPage();
+    var page500 = new StandardPage(request);
     page500.standardMenus();
     page500.setTitle("500 Server error");
     page500.setContent("<h3>Don't worry, we've got a great warranty...</h3>");

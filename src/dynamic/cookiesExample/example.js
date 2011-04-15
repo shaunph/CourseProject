@@ -41,7 +41,7 @@ exports.getReq = function (request,response) {
         //If the user is logged in
         } else if (cookies.user!=undefined) {
             //Begin dynamic page generation
-            page1 = new StandardPage();
+            page1 = new StandardPage(request);
             //Set the title
             page1.setTitle("Cookies Game");
             //Set the initial content
