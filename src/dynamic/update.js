@@ -8,16 +8,16 @@ var db = require('SQLiteHelper'),
  */
 exports.postReq = function(request, response, dataBuffer) {
     var results = upops.parseMultipartFormdata(dataBuffer);
-    result(response, results);
+    result(request, response, results);
 }
 
 /*
  * Updates the specified task and displays a message.
  */
-result = function(response, results) {
+result = function(request, response, results) {
     response.writeHead(200, {'Content-Type': 'text/html'});
 
-    page = new StandardPage();
+    page = new StandardPage(request);
     page.setTitle("Update Results");
     page.setContent("");
 

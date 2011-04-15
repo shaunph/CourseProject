@@ -4,9 +4,9 @@
 function looking() {
 
     if(document.getElementById("phrase2").value == ""){
-        window.alert("Please Enter search parameters");
+        window.alert("Please Enter the email you want");
     }
     else {
-	document.location="/searchResult?p1="+ document.getElementById("phrase2").value;
+	document.location="/sendPwd?p1="+ document.getElementById("phrase2").value;
     }
 }

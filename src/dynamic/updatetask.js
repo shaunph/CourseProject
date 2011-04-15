@@ -4,17 +4,17 @@ var db = require('SQLiteHelper'),
     url = require('url');
 
 exports.getReq = function(request, response) {
-    loadTask(response, url.parse(request.url,true).query);
+    loadTask(request, response, url.parse(request.url,true).query);
 }
 
 /* 
  * Takes in response and a task object as parameters.
  * Defines the response to be an html page and displays a form with fields where the task object's attributes are displayed.
  */
-function displayUpdate(response, id, taskObj) {
+function displayUpdate(request, response, id, taskObj) {
     response.writeHead(200, {'Content-Type': 'text/html'});
 
-    page = new StandardPage();
+    page = new StandardPage(request);
     page.setTitle("Update Task");
 
     page.setContent("User: " + taskObj.getUser() + "<br /><br />");
@@ -83,32 +83,43 @@ function checkPriority(taskObj, current) {
 /*
  * Loads a task
  */
-function loadTask(response, param){
+function loadTask(request, response, param){
     db.getTask(param["id"], function(callback){
         try {
             var row = callback.rows[0];
-            var loadedTask = new task(row.taskName, row.description, row.timeSpent, row.timeLeft, row.priority, row.progress, row.status, row.user);
-            displayUpdate(response, param["id"], loadedTask);
+            if (row.status !== "Closed") {
+                var loadedTask = new task(row.taskName, row.description, row.timeSpent, row.timeLeft, row.priority, row.progress, row.status, row.user);
+                   displayUpdate(request, response, param["id"], loadedTask);
+            } else {
+                message(request, response, param["id"]);
+            }
         } catch (e) {
-            message(response);
-		}
+            message(request, response);
+        }
     });
 }
 
 /*
  * Sends a temporary page that indicates what's wrong
  */
-message = function(response) {
+message = function(request, response, id) {
     response.writeHead(200, {
         'Content-Type': 'text/html'
     });
-
-    page = new StandardPage();
+    
+    page = new StandardPage(request);
     page.setTitle("Update Task");
-
-    page.setContent("Please indicate a valid id in the url.");
     page.standardMenus();
 
-    response.write(page.toHTML());
-    response.end();
+    if (id) {    // If id is not undefined
+        page.setContent("This task is closed and not available for update.");
+        
+        response.write(page.toHTML());
+        response.end();
+    } else {
+        page.setContent("Please indicate a valid id in the url.");
+
+        response.write(page.toHTML());
+        response.end();
+    }
 }
