@@ -4,6 +4,8 @@ Based on dynamic examples by Mitchell
 gets the users password in order to send it to the user via email
 */
 
+var basepath = require('basepath').mainpath;
+var emailPass = require(basepath + 'dynamic/emailPass');
 var upops = require('uploadOps');
 var pagemaker = require('pagemaker');
 var db = require('SQLiteHelper');
@@ -33,7 +35,8 @@ pSearch = function (request, response, param) {
                 }
             }
             if (user != "noManIsAnIsland") {
-                sPage.addContent("your password has been found, TODO: send it via email");
+                sPage.addContent("Your password has been found. Emailing to " + user);
+                emailPass.sendPass(user, pass);
             }
             else {
                 sPage.addContent("Entered email not found");
