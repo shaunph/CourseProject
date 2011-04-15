@@ -17,8 +17,9 @@ module.exports.postReq = function(request, response, dataBuffer) {
                     if(parsed["Password"].toString() == codes.rows[0].password) {
                         //success
                         response.writeHead(200, {   'content-type':'text/html', 
-                                                    'set-cookie':   'Email='+codes.rows[0].email + ' ; ; ' +
-                                                                    'Nickname='+codes.rows[0].nickname
+                                                    'set-cookie':   'Email='+codes.rows[0].email,
+                                                    'Set-cookie':   'Nickname='+codes.rows[0].nickname
+                                                    // Case difference between 'set' and 'Set' is important! Don't change it!
                                             });
                         var page = new StandardPage(request);
                         page.setTitle("Login Successful");
