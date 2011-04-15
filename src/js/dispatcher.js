@@ -80,22 +80,29 @@ function resolve(request, response) {
 
             // NOTE: No time to do a path.exists, in the case of a post request it will take too
             // long to execute and data chunks will begin to arrive before node can process it.
-            try {
-                var handler = require(filePath);
+            path.exists(filePath, function (exists) {
+                if (exists) {
+                    // If the dynamic page exists, try to send it
+                    try {
+                        var handler = require(filePath);
 
-                if (request.method === 'POST') {
-                    handler.postReq(request, response, dataBuffer);
-                } else if (request.method === 'GET') {
-                    handler.getReq(request, response, dataBuffer);
+                        if (request.method === 'POST') {
+                            handler.postReq(request, response, dataBuffer);
+                        } else if (request.method === 'GET') {
+                            handler.getReq(request, response, dataBuffer);
+                        }
+                        log(request, 200, filePath);
+                    } catch (err) {
+                        // If there was a problem, send a 500 error
+                        console.log("500 Error: " + err);
+                        error(request, response, 500, filePath);
+                    }
+                } else {
+                    // If not, try static
+                    filePath = basepath + staticRoot + pathName;
+                    sendStaticObj(request, response, filePath);
                 }
-                log(request, 200, filePath);
-            } catch (err) {
-                // If there was an error, it means no such dynamic page exists,
-                // or there is an error on the dynamic page.
-                // Thus we chop off the ".js" we added and try for a static page.
-                filePath = basepath + staticRoot + pathName;
-                sendStaticObj(request, response, filePath);
-            }
+            });
         } else {
             // If no dynamic page was found, try static
             filePath = basepath + staticRoot + pathName;
@@ -112,18 +119,26 @@ function sendStaticObj(request, response, file) {
     var extension = file.split(".").pop();
     path.exists(file, function (exists) {
         if (exists) {
-            log(request, 200, file);
-            response.writeHead(200, {'Content-Type': extTypes[extension]});
+            // If it exists, try sending it
+            try {
+                log(request, 200, file);
+                response.writeHead(200, {'Content-Type': extTypes[extension]});
 
-            if (extension === "html" || extension === "htm") {
-                pagemaker.ParsePage(file, request, function (html) {
-                    response.end(html);
-                });
+                if (extension === "html" || extension === "htm") {
+                    pagemaker.ParsePage(file, request, function (html) {
+                        response.end(html);
+                    });
 
-            } else {
-                util.pump(fs.createReadStream(file), response, function () {});
+                } else {
+                    util.pump(fs.createReadStream(file), response, function () {});
+                }
+            } catch (err) {
+                // If there was a problem, send a 500 error
+                console.log("500 Error: " + err);
+                error(request, response, 500, file);
             }
         } else {
+            // If it doesn't exist, send a 404
             error(request, response, 404, file);
         }
     });
