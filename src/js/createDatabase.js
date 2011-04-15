@@ -44,10 +44,10 @@ db.open(dbLocation, function (error) {
 
     db.execute("CREATE TABLE task (" +
         "taskid INTEGER PRIMARY KEY AUTOINCREMENT," +
-        "taskName TEXT UNIQUE," +
+        "taskName TEXT," +
         "description TEXT," +
-        "timeSpent TEXT," +
-        "timeLeft TEXT," +
+        "timeSpent NUMBER," +
+        "timeLeft NUMBER," +
         "priority TEXT," +
         "progress TEXT," +
         "status TEXT," +
@@ -60,6 +60,18 @@ db.open(dbLocation, function (error) {
             }
 
             console.log("Task table created.");
+	
+            db.execute("CREATE UNIQUE INDEX taskIndex" 
+                +" ON task (taskName COLLATE NOCASE)",
+                function(error) {
+                    if(error) {
+                        console.log("Error creating task table.");
+                        throw error;
+                    }
+
+                    console.log("Task index created.");
+                }
+            );
         }
     );
 
@@ -80,8 +92,4 @@ db.open(dbLocation, function (error) {
 	
 });
 
-db.close(function(error) {
-    if(error)
-        throw error;
-});
 
