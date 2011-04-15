@@ -1,7 +1,7 @@
 /* 
-Author of original code: Mitchell Ludwig
+Based on dynamic examples by Mitchell
 
-This is a modified version of the file upload code by Mitchell used to store tasks in the database (changed by Justin Kelly)
+gets the users password in order to send it to the user via email
 */
 
 var upops = require('uploadOps');
