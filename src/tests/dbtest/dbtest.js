@@ -176,36 +176,6 @@ function addTaskTest(){
 }
 
 /*
- *
- *
- *
- */
- 
- function addCommentsTest(){
-    dbtest.addToLog("attempting to add a comment...");
-
-    var taskObj = new task.Task("dummy comment",
-        "Find out where that noise is coming from",
-        "High",
-        "Work in progress",
-        "test@thisdomainshouldnotexist.com",
-        new Date());
-
-    slh.addTask(taskObj,
-        function(error){
-            if (error.status == -1){
-                dbtest.addToLog("user task added successfully\n");
-                dbtest.callNext();
-            }
-            else {
-                dbtest.addToLog("failed to add task("
-                    + error.detail.message +")\n");
-                dbtest.callNext();
-            }
-    });
-}
-
-/*
  * removeTaskTest()
  *
  * tests whether or not a task can be removed
