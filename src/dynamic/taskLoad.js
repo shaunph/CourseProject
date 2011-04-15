@@ -63,15 +63,10 @@ exports.postReq = function (request, response, dataBuffer) {
     //Extract the file from the data Buffer.
     try {
         var parsed = upops.parseMultipartFormdata(dataBuffer);
-<<<<<<< HEAD
         aTask = new tsk.task(parsed["tNom"].toString(), parsed["desc"].toString(), parsed["timeS"].toString(), 
         parsed["ETR"].toString(), parsed["priority"].toString(), 
             parsed["prog"].toString(), "Open", user.toString());
-=======
-        aTask = new tsk.task(parsed["tNom"].toString(), parsed["desc"].toString(), parseInt(parsed["timeS"]), 
-        parseInt(parsed["ETR"]), parsed["priority"].toString(), 
-            parsed["prog"].toString(), "Open", parsed["uNom"].toString());          
->>>>>>> 0143d8981d4fcebdda2cf9dc9e372bfbff98ba7f
+
 
     //checks the task table for a like-named task and collects its location if there
     // makes use of example in documentation
