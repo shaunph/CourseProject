@@ -10,7 +10,7 @@ var db = require('SQLiteHelper');
 var url = require('url');
 
 exports.getReq = function (request, response, dataBuffer) {
-    search(request, response, (url.parse(request.url,true).query));
+    pSearch(request, response, (url.parse(request.url,true).query));
 } 
 
 pSearch = function (request, response, param) {
