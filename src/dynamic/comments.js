@@ -11,7 +11,7 @@ exports.postReq = function (request,response, dataBuffer) {
     var parsed = upops.parseMultipartFormdata(dataBuffer);
     
     //Add comment to the database (truncated to 500 characters)
-    slh.addComment(parsed["thecomment"].toString().substring(0,500), parsed["taskid"].toString(),
+    slh.addComment(parsed["thecomment"].toString().substring(0,1024), parsed["taskid"].toString(),
     parsed["email"].toString(), function(obj) {
         if(obj.status != 0) {
             //TODO: Send a 500 error page
@@ -62,11 +62,11 @@ send = function (response,request, taskId) {
                 page.addContent("<script type='text/javascript'>" +
                     "function validate(form) {" +
                         "var c = document.getElementById('thecomment');" +
-                        "if(c.value == ''){" +
+                        "if(!/\\S/.test(c.value)){" +
                             "window.alert('Please enter a comment');" +
                             "return;" +
                         "}" +
-                        "else if(c.value.length > '500'){" +
+                        "else if(c.value.length > '1024'){" +
                             "window.alert('This comment exceeds the maximum length of 500 characters.');" +
                             "return;" +
                         "}" +
