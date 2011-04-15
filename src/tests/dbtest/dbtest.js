@@ -146,6 +146,30 @@ function userExistsTest(){
 }
 
 /*
+ * addCommentsTest()
+ *
+ * tests whether or not a comment can be added.
+ *
+ */
+function addCommentsTest(){
+    dbtest.addToLog("attempting to add a comment...");
+    slh.addUser("test@thisdomainshouldnotexist.com", 
+        "testuser", 
+        "thereismorethanoneofeverything", 
+        function(error){
+            if (error.status == 0){
+                dbtest.addToLog("user added successfully\n");
+                dbtest.callNext();
+            }
+            else {
+                dbtest.addToLog("failed to add user("
+                    + error.detail.message +")\n");
+                dbtest.callNext();
+            }
+    });
+}
+
+/*
  * addTaskTest()
  *
  * tests whether or not a task can be added.
@@ -155,6 +179,36 @@ function addTaskTest(){
     dbtest.addToLog("attempting to add a task...");
 
     var taskObj = new task.Task("noise task",
+        "Find out where that noise is coming from",
+        "High",
+        "Work in progress",
+        "test@thisdomainshouldnotexist.com",
+        new Date());
+
+    slh.addTask(taskObj,
+        function(error){
+            if (error.status == -1){
+                dbtest.addToLog("user task added successfully\n");
+                dbtest.callNext();
+            }
+            else {
+                dbtest.addToLog("failed to add task("
+                    + error.detail.message +")\n");
+                dbtest.callNext();
+            }
+    });
+}
+
+/*
+ *
+ *
+ *
+ */
+ 
+ function addCommentsTest(){
+    dbtest.addToLog("attempting to add a comment...");
+
+    var taskObj = new task.Task("dummy comment",
         "Find out where that noise is coming from",
         "High",
         "Work in progress",
