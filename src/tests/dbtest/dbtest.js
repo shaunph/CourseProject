@@ -146,30 +146,6 @@ function userExistsTest(){
 }
 
 /*
- * addCommentsTest()
- *
- * tests whether or not a comment can be added.
- *
- */
-function addCommentsTest(){
-    dbtest.addToLog("attempting to add a comment...");
-    slh.addUser("test@thisdomainshouldnotexist.com", 
-        "testuser", 
-        "thereismorethanoneofeverything", 
-        function(error){
-            if (error.status == 0){
-                dbtest.addToLog("user added successfully\n");
-                dbtest.callNext();
-            }
-            else {
-                dbtest.addToLog("failed to add user("
-                    + error.detail.message +")\n");
-                dbtest.callNext();
-            }
-    });
-}
-
-/*
  * addTaskTest()
  *
  * tests whether or not a task can be added.
