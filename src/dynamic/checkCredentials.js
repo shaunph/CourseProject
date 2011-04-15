@@ -20,6 +20,12 @@ module.exports.postReq = function(request, response, dataBuffer) {
                                                     'set-cookie':   'Email='+codes.rows[0].email,
                                                     'Set-cookie':   'Nickname='+codes.rows[0].nickname
                                                     // Case difference between 'set' and 'Set' is important! Don't change it!
+                                                    // If you do, the original 'set-cookie' will be overwritten in the passed array
+                                                    // by the second 'set-cookie.' Setting the second one to be 'Set-cookie' creates
+                                                    // two cookie entries instead of one.
+                                                    // NORMALLY, you would just have these entries separated by semicolons, but for some
+                                                    // reason, the cookies aren't accepting that (I tested this over and over and this was the only
+                                                    // way that seemed to work)
                                             });
                         var page = new StandardPage(request);
                         page.setTitle("Login Successful");
