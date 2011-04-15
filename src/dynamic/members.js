@@ -29,15 +29,11 @@ function loadMembers(parameters, response) {
 
     response.writeHead(200, {'Content-Type' : 'text/html'});
 
-    console.log("Getting table...");
-
     slh.getTable("user", function(obj) {
         if(obj.status != 0) {
             console.log("error getting user table: " + obj.detail);
             return;
         }
-
-        console.log("Table retrieved.");
 
         var searchTerm;
         var rowEmail;

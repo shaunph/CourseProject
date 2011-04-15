@@ -14,15 +14,11 @@ function loadTaskList(parameters, response) {
 
     response.writeHead(200, {'Content-Type' : 'text/html'});
 
-    console.log("Getting tasks table...");
-
     slh.getTable("task", function(obj) {
         if(obj.status != 0) {
             console.log("error getting tasks table: " + obj.detail);
             return;
         }
-
-        console.log("Tasks Table retrieved.");
 
         var taskListPage = "";
         taskListPage = taskListPage.concat("<h4>" +
