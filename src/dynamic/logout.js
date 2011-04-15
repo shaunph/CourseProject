@@ -10,8 +10,9 @@ module.exports.getReq = function(req, res) {
         page.setContent("<h1>Logout successful</h1>");
 
         res.writeHead(200, {    'Content-Type': 'text/html', 
-                                'Set-Cookie':   'Email=' + cookies.Email + '; expires=Thu, 01-Jan-1970 00:00:01 GMT;' + ';' +
-                                                'Nickname=' + cookies.Nickname + '; expires=Thu, 01-Jan-1970 00:00:01 GMT;'});
+                                'Set-Cookie':   'Email=' + cookies.Email + '; expires=Thu, 01-Jan-1970 00:00:01 GMT',
+                                'Set-cookie':   'Nickname=' + cookies.Nickname + '; expires=Thu, 01-Jan-1970 00:00:01 GMT'});
+                                // Case difference between 'cookie' and 'Cookie' is important! Don't change it!
         res.end(page.toHTML());
     } catch(err) {
         console.log("There was an error: " + err);
