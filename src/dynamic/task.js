@@ -20,7 +20,7 @@ var displayTaskPage = function (request, response, id, taskValues) {
 
     var taskPage = new StandardPage(request);
     taskPage.standardMenus();
-    //taskPage.addMenuItem("Task List", "/tasklisthere");	// Fix link when task list is up
+    //taskPage.addMenuItem("Task List", "/tasklisthere");    // Fix link when task list is up
 
     // Format task name to display and add Update task menu item
     var taskName = taskValues.getTaskName();
@@ -61,7 +61,7 @@ var displayTaskPage = function (request, response, id, taskValues) {
     taskPage.addContent("<br />");
     taskPage.addContent("<a href='/comments?taskid=" + id + "'>View Comments</a>");
     
-	// Passing confirmation function to client side
+    // Passing confirmation function to client side
     taskPage.addContent("<script type='text/javascript'>var confirmation = " + confirmation + "</script>");
     taskPage.addOnClickItem("Delete Task", "confirmation('" + taskName + "');");
     
