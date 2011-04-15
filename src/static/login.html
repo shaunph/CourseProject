@@ -1,1 +1,19 @@
-<html><title>Login Page</title><body>    <p>        <form method="POST" action="/checkCredentials" id="LoginForm" enctype="multipart/form-data">            <label for="Email">Email: </label><br />                <input name="Email" id="Email" type="text" required /><br />            <label for="Password">Password: </label><br />                <input name="Password" id="Password" type="password" required /> <br />            <br />            <input id="loginButton" type="submit" value="login" /><br />        </form>        <br />        <br />        <br />        <br />        <a href="getPass.html"><b>Forgot your Password?</b></a>    </p></body></html>
+<html>
+<title>Login Page</title>
+<body>
+    <p>
+        <form method="POST" action="/checkCredentials" id="LoginForm" enctype="multipart/form-data">
+            <label for="Email">Email: </label><br />
+                <input name="Email" id="Email" type="text" required /><br />
+            <label for="Password">Password: </label><br />
+                <input name="Password" id="Password" type="password" required /> <br />
+            <br />
+            <button class="rounded" id="loginButton" type="submit" >
+                <span>login</span>
+            </button><br />
+        </form>
+    </p>
+	<br />        <br />        <br />        <br />        <a href="getPass.html"><b>Forgot your Password?</b></a>
+</body>
+</html>
+
