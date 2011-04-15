@@ -56,6 +56,10 @@ var displayTaskPage = function (request, response, id, taskValues) {
 
     taskPage.addContent("<h3>User</h3>");
     taskPage.addContent(taskValues.getUser());
+    taskPage.addContent("<br />");
+
+    taskPage.addContent("<br />");
+    taskPage.addContent("<a href='/comments?taskid=" + id + "'>View Comments</a>");
     
     // Passing confirmation function to client side
     taskPage.addContent("<script type='text/javascript'>var confirmation = " + confirmation + "</script>");
