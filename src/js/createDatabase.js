@@ -89,7 +89,7 @@ db.open(dbLocation, function (error) {
 
         console.log("comment table created.");
     });
-
+	
 });
 
 

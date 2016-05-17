@@ -9,7 +9,7 @@ $ ./runserver <port>
 where port is a positive integer > 1023. To run the server on a different
 environment, use
 
-$ node js/dispatcher.js <node>
+$ node js/dispatcher.js <port>
 
 To interact with the server with your internet browser, browse host:port
 where host is the hostname of the machine you are running the server
